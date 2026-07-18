@@ -1,0 +1,77 @@
+"use client"
+
+import { type Row } from "@tanstack/react-table"
+import { Edit, Eye, MoreHorizontal, Trash2 } from "lucide-react"
+
+import { Button } from "@/components/ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { PermissionGate } from "@/features/central/auth/components/permission-gate"
+import { usePermissions } from "@/features/central/permissions/components/permissions-provider"
+import type { PermissionItem } from "@/types/central/rbac"
+
+type DataTableRowActionsProps<TData> = {
+  row: Row<TData>
+}
+
+export function DataTableRowActions<TData>({
+  row,
+}: DataTableRowActionsProps<TData>) {
+  const permission = row.original as PermissionItem
+  const { setOpen, setCurrentRow } = usePermissions()
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        render={
+          <Button variant="ghost" className="flex size-8 p-0">
+            <MoreHorizontal className="size-4" />
+            <span className="sr-only">Open menu</span>
+          </Button>
+        }
+      />
+      <DropdownMenuContent align="end" className="w-48">
+        <PermissionGate permissions="permissions.view">
+          <DropdownMenuItem
+            onClick={() => {
+              setCurrentRow(permission)
+              setOpen("view")
+            }}
+          >
+            <Eye className="mr-2 size-4" />
+            View
+          </DropdownMenuItem>
+        </PermissionGate>
+        <PermissionGate permissions="permissions.update">
+          <DropdownMenuItem
+            onClick={() => {
+              setCurrentRow(permission)
+              setOpen("update")
+            }}
+          >
+            <Edit className="mr-2 size-4" />
+            Edit
+          </DropdownMenuItem>
+        </PermissionGate>
+        <DropdownMenuSeparator />
+        <PermissionGate permissions="permissions.delete">
+          <DropdownMenuItem
+            variant="destructive"
+            onClick={() => {
+              setCurrentRow(permission)
+              setOpen("delete")
+            }}
+          >
+            <Trash2 className="mr-2 size-4" />
+            Delete
+          </DropdownMenuItem>
+        </PermissionGate>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}

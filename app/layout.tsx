@@ -1,10 +1,14 @@
-import { Geist, Geist_Mono, Nunito_Sans } from "next/font/google"
+import { Geist_Mono, Nunito_Sans } from "next/font/google"
+import { NuqsAdapter } from "nuqs/adapters/next/app"
 
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
-import { cn } from "@/lib/utils";
+import { Toaster } from "@/components/ui/sonner"
+import { TooltipProvider } from "@/components/ui/tooltip"
+import { QueryProvider } from "@/lib/providers/query-provider"
+import { cn } from "@/lib/utils"
 
-const nunitoSans = Nunito_Sans({subsets:['latin'],variable:'--font-sans'})
+const nunitoSans = Nunito_Sans({ subsets: ["latin"], variable: "--font-sans" })
 
 const fontMono = Geist_Mono({
   subsets: ["latin"],
@@ -20,10 +24,24 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={cn("antialiased", fontMono.variable, "font-sans", nunitoSans.variable)}
+      className={cn(
+        "antialiased",
+        fontMono.variable,
+        "font-sans",
+        nunitoSans.variable
+      )}
     >
       <body>
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <NuqsAdapter>
+            <QueryProvider>
+              <TooltipProvider>
+                {children}
+                <Toaster richColors position="top-center" />
+              </TooltipProvider>
+            </QueryProvider>
+          </NuqsAdapter>
+        </ThemeProvider>
       </body>
     </html>
   )
