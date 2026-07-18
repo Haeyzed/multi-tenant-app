@@ -1,650 +1,583 @@
 "use client"
 
 
+import {zodResolver} from "@hookform/resolvers/zod"
 
-import { zodResolver } from "@hookform/resolvers/zod"
-
-import { useQuery } from "@tanstack/react-query"
+import {useQuery} from "@tanstack/react-query"
 
 import * as React from "react"
 
-import { Controller, useForm } from "react-hook-form"
+import {Controller, useForm} from "react-hook-form"
 
 
-
-import { Button } from "@/components/ui/button"
+import {Button} from "@/components/ui/button"
 
 import {
-
   Combobox,
-
   ComboboxContent,
-
   ComboboxEmpty,
-
   ComboboxInput,
-
   ComboboxItem,
-
   ComboboxList,
-
 } from "@/components/ui/combobox"
 
-import {
+import {Field, FieldContent, FieldError, FieldGroup, FieldLabel,} from "@/components/ui/field"
 
-  Field,
-
-  FieldContent,
-
-  FieldError,
-
-  FieldGroup,
-
-  FieldLabel,
-
-} from "@/components/ui/field"
-
-import { Input } from "@/components/ui/input"
+import {Input} from "@/components/ui/input"
 
 import {
-
   ResponsiveDialog,
-
   ResponsiveDialogClose,
-
   ResponsiveDialogContent,
-
   ResponsiveDialogDescription,
-
   ResponsiveDialogFooter,
-
   ResponsiveDialogHeader,
-
   ResponsiveDialogTitle,
-
 } from "@/components/ui/responsive-dialog"
 
-import { Spinner } from "@/components/ui/spinner"
+import {Spinner} from "@/components/ui/spinner"
 
-import { useInvoices } from "@/features/central/billing/invoices/components/invoices-provider"
+import {useInvoices} from "@/features/central/billing/invoices/components/invoices-provider"
 
-import { InvoicesFormDialog } from "@/features/central/billing/invoices/components/invoices-form-dialog"
+import {InvoicesFormDialog} from "@/features/central/billing/invoices/components/invoices-form-dialog"
 
-import { InvoicesViewDialog } from "@/features/central/billing/invoices/components/invoices-view-dialog"
+import {InvoicesViewDialog} from "@/features/central/billing/invoices/components/invoices-view-dialog"
 
 import {
-
   useChargeInvoice,
-
   useSendInvoicePaymentLink,
-
   useVoidInvoice,
-
 } from "@/features/central/billing/invoices/hooks/use-invoice-query"
 
-import {
+import {type ChargeInvoiceFormValues, chargeInvoiceSchema,} from "@/features/central/billing/invoices/schemas"
 
-  type ChargeInvoiceFormValues,
+import {getPaymentGatewayOptions} from "@/lib/services/central/payment-gateway-service"
 
-  chargeInvoiceSchema,
-
-} from "@/features/central/billing/invoices/schemas"
-
-import { getPaymentGatewayOptions } from "@/lib/services/central/payment-gateway-service"
-
-import { toastApiError, toastApiSuccess } from "@/lib/toast-api"
-
+import {toastApiError, toastApiSuccess} from "@/lib/toast-api"
 
 
 type Option = { label: string; value: string }
 
 
-
 export function InvoicesDialogs() {
 
-  const { open, setOpen, currentRow, setCurrentRow } = useInvoices()
+    const {open, setOpen, currentRow, setCurrentRow} = useInvoices()
 
-  const voidInvoice = useVoidInvoice()
+    const voidInvoice = useVoidInvoice()
 
-  const chargeInvoice = useChargeInvoice()
+    const chargeInvoice = useChargeInvoice()
 
-  const sendPaymentLink = useSendInvoicePaymentLink()
+    const sendPaymentLink = useSendInvoicePaymentLink()
 
 
+    const chargeForm = useForm<ChargeInvoiceFormValues>({
 
-  const chargeForm = useForm<ChargeInvoiceFormValues>({
+        resolver: zodResolver(chargeInvoiceSchema),
 
-    resolver: zodResolver(chargeInvoiceSchema),
-
-    defaultValues: { gateway: "", amount: undefined },
-
-  })
-
-
-
-  const { data: gatewayOptions = [] } = useQuery({
-
-    queryKey: ["central", "payment-gateways", "options"],
-
-    queryFn: () => getPaymentGatewayOptions(),
-
-    enabled: open === "charge",
-
-  })
-
-
-
-  const handleClose = React.useCallback(() => {
-
-    setOpen(null)
-
-    setTimeout(() => {
-
-      setCurrentRow(null)
-
-      chargeForm.reset({ gateway: "", amount: undefined })
-
-    }, 300)
-
-  }, [setOpen, setCurrentRow, chargeForm])
-
-
-
-  const runSendLink = () => {
-
-    if (!currentRow) {
-
-      return
-
-    }
-
-
-
-    sendPaymentLink.mutate(
-
-      { id: currentRow.id },
-
-      {
-
-        onSuccess: (result) => {
-
-          toastApiSuccess(
-
-            result.message,
-
-            `Payment link sent to ${result.data.email}`
-
-          )
-
-          handleClose()
-
-        },
-
-        onError: (error) => {
-
-          toastApiError(error, "Failed to send payment link")
-
-        },
-
-      }
-
-    )
-
-  }
-
-
-
-  const runVoid = () => {
-
-    if (!currentRow) {
-
-      return
-
-    }
-
-
-
-    voidInvoice.mutate(currentRow.id, {
-
-      onSuccess: (result) => {
-
-        toastApiSuccess(
-
-          result.message,
-
-          `Invoice ${currentRow.number} voided successfully`
-
-        )
-
-        handleClose()
-
-      },
-
-      onError: (error) => {
-
-        toastApiError(error, "Failed to void invoice")
-
-      },
+        defaultValues: {gateway: "", amount: undefined},
 
     })
 
-  }
+
+    const {data: gatewayOptions = []} = useQuery({
+
+        queryKey: ["central", "payment-gateways", "options"],
+
+        queryFn: () => getPaymentGatewayOptions(),
+
+        enabled: open === "charge",
+
+    })
 
 
+    const handleClose = React.useCallback(() => {
 
-  const onChargeSubmit = (values: ChargeInvoiceFormValues) => {
+        setOpen(null)
 
-    if (!currentRow) {
+        setTimeout(() => {
 
-      return
+            setCurrentRow(null)
+
+            chargeForm.reset({gateway: "", amount: undefined})
+
+        }, 300)
+
+    }, [setOpen, setCurrentRow, chargeForm])
+
+
+    const runSendLink = () => {
+
+        if (!currentRow) {
+
+            return
+
+        }
+
+
+        sendPaymentLink.mutate(
+            {id: currentRow.id},
+
+            {
+
+                onSuccess: (result) => {
+
+                    toastApiSuccess(
+                        result.message,
+
+                        `Payment link sent to ${result.data.email}`
+                    )
+
+                    handleClose()
+
+                },
+
+                onError: (error) => {
+
+                    toastApiError(error, "Failed to send payment link")
+
+                },
+
+            }
+        )
 
     }
 
 
+    const runVoid = () => {
 
-    chargeInvoice.mutate(
+        if (!currentRow) {
 
-      {
+            return
 
-        id: currentRow.id,
-
-        values: {
-
-          gateway: values.gateway || undefined,
-
-          amount: values.amount || undefined,
-
-        },
-
-      },
-
-      {
-
-        onSuccess: (result) => {
-
-          toastApiSuccess(result.message, "Invoice charged successfully")
-
-          if (result.data.checkout_url) {
-
-            window.open(result.data.checkout_url, "_blank", "noopener,noreferrer")
-
-          }
-
-          handleClose()
-
-        },
-
-        onError: (error) => {
-
-          toastApiError(error, "Failed to charge invoice")
-
-        },
-
-      }
-
-    )
-
-  }
+        }
 
 
+        voidInvoice.mutate(currentRow.id, {
 
-  return (
+            onSuccess: (result) => {
 
-    <>
+                toastApiSuccess(
+                    result.message,
 
-      <InvoicesFormDialog
-
-        open={open === "create"}
-
-        onOpenChange={(val) => {
-
-          if (!val) {
-
-            setOpen(null)
-
-          }
-
-        }}
-
-      />
-
-
-
-      {currentRow ? (
-
-        <>
-
-          <InvoicesViewDialog
-
-            key={`invoice-view-${currentRow.id}`}
-
-            open={open === "view"}
-
-            onOpenChange={(val) => {
-
-              if (!val) {
+                    `Invoice ${currentRow.number} voided successfully`
+                )
 
                 handleClose()
 
-              }
+            },
 
-            }}
+            onError: (error) => {
 
-            invoice={currentRow}
+                toastApiError(error, "Failed to void invoice")
 
-          />
+            },
 
+        })
 
+    }
 
-          <ResponsiveDialog
 
-            open={open === "send-link"}
+    const onChargeSubmit = (values: ChargeInvoiceFormValues) => {
 
-            onOpenChange={(val) => !val && handleClose()}
+        if (!currentRow) {
 
-          >
+            return
 
-            <ResponsiveDialogContent className="sm:max-w-md">
+        }
 
-              <ResponsiveDialogHeader>
 
-                <ResponsiveDialogTitle>Send payment link</ResponsiveDialogTitle>
+        chargeInvoice.mutate(
+            {
 
-                <ResponsiveDialogDescription>
+                id: currentRow.id,
 
-                  Email a signed payment link for invoice{" "}
+                values: {
 
-                  <strong>{currentRow.number}</strong> to the tenant owner.
+                    gateway: values.gateway || undefined,
 
-                </ResponsiveDialogDescription>
+                    amount: values.amount || undefined,
 
-              </ResponsiveDialogHeader>
+                },
 
-              <ResponsiveDialogFooter>
+            },
 
-                <ResponsiveDialogClose
+            {
 
-                  render={<Button variant="outline">Cancel</Button>}
+                onSuccess: (result) => {
 
-                />
+                    toastApiSuccess(result.message, "Invoice charged successfully")
 
-                <Button
+                    if (result.data.checkout_url) {
 
-                  disabled={sendPaymentLink.isPending}
+                        window.open(result.data.checkout_url, "_blank", "noopener,noreferrer")
 
-                  onClick={runSendLink}
+                    }
 
-                >
+                    handleClose()
 
-                  {sendPaymentLink.isPending ? <Spinner /> : null}
+                },
 
-                  Send link
+                onError: (error) => {
 
-                </Button>
+                    toastApiError(error, "Failed to charge invoice")
 
-              </ResponsiveDialogFooter>
+                },
 
-            </ResponsiveDialogContent>
+            }
+        )
 
-          </ResponsiveDialog>
+    }
 
 
+    return (
 
-          <ResponsiveDialog
+        <>
 
-            open={open === "void"}
+            <InvoicesFormDialog
 
-            onOpenChange={(val) => !val && handleClose()}
+                open={open === "create"}
 
-          >
+                onOpenChange={(val) => {
 
-            <ResponsiveDialogContent className="sm:max-w-md">
+                    if (!val) {
 
-              <ResponsiveDialogHeader>
+                        setOpen(null)
 
-                <ResponsiveDialogTitle>Void invoice</ResponsiveDialogTitle>
+                    }
 
-                <ResponsiveDialogDescription>
+                }}
 
-                  Void invoice <strong>{currentRow.number}</strong>? This
+            />
 
-                  cannot be undone.
 
-                </ResponsiveDialogDescription>
+            {currentRow ? (
 
-              </ResponsiveDialogHeader>
+                <>
 
-              <ResponsiveDialogFooter>
+                    <InvoicesViewDialog
 
-                <ResponsiveDialogClose
+                        key={`invoice-view-${currentRow.id}`}
 
-                  render={<Button variant="outline">Cancel</Button>}
+                        open={open === "view"}
 
-                />
+                        onOpenChange={(val) => {
 
-                <Button
+                            if (!val) {
 
-                  variant="destructive"
+                                handleClose()
 
-                  disabled={voidInvoice.isPending}
-
-                  onClick={runVoid}
-
-                >
-
-                  {voidInvoice.isPending ? <Spinner /> : null}
-
-                  Void
-
-                </Button>
-
-              </ResponsiveDialogFooter>
-
-            </ResponsiveDialogContent>
-
-          </ResponsiveDialog>
-
-
-
-          <ResponsiveDialog
-
-            open={open === "charge"}
-
-            onOpenChange={(val) => !val && handleClose()}
-
-          >
-
-            <ResponsiveDialogContent className="sm:max-w-md">
-
-              <ResponsiveDialogHeader>
-
-                <ResponsiveDialogTitle>Charge invoice</ResponsiveDialogTitle>
-
-                <ResponsiveDialogDescription>
-
-                  Attempt to charge invoice <strong>{currentRow.number}</strong>{" "}
-
-                  through a payment gateway.
-
-                </ResponsiveDialogDescription>
-
-              </ResponsiveDialogHeader>
-
-
-
-              <form
-
-                id="charge-invoice-form"
-
-                className="space-y-4"
-
-                onSubmit={chargeForm.handleSubmit(onChargeSubmit)}
-
-              >
-
-                <FieldGroup>
-
-                  <Field>
-
-                    <FieldLabel>Gateway</FieldLabel>
-
-                    <FieldContent>
-
-                      <Controller
-
-                        control={chargeForm.control}
-
-                        name="gateway"
-
-                        render={({ field }) => {
-
-                          const selected =
-
-                            gatewayOptions.find(
-
-                              (option) => option.value === field.value
-
-                            ) ?? null
-
-                          return (
-
-                            <Combobox
-
-                              items={gatewayOptions}
-
-                              itemToStringValue={(item: Option) => item.label}
-
-                              value={selected}
-
-                              onValueChange={(item: Option | null) =>
-
-                                field.onChange(item?.value ?? "")
-
-                              }
-
-                            >
-
-                              <ComboboxInput
-
-                                placeholder="Select gateway..."
-
-                                showClear
-
-                              />
-
-                              <ComboboxContent>
-
-                                <ComboboxEmpty>No gateways found.</ComboboxEmpty>
-
-                                <ComboboxList>
-
-                                  {(item: Option) => (
-
-                                    <ComboboxItem key={item.value} value={item}>
-
-                                      {item.label}
-
-                                    </ComboboxItem>
-
-                                  )}
-
-                                </ComboboxList>
-
-                              </ComboboxContent>
-
-                            </Combobox>
-
-                          )
+                            }
 
                         }}
 
-                      />
+                        invoice={currentRow}
 
-                    </FieldContent>
-
-                  </Field>
-
-                  <Field>
-
-                    <FieldLabel>Amount (optional)</FieldLabel>
-
-                    <FieldContent>
-
-                      <Input
-
-                        type="number"
-
-                        min="0.01"
-
-                        step="0.01"
-
-                        placeholder={String(currentRow.balance_due)}
-
-                        {...chargeForm.register("amount")}
-
-                      />
-
-                      <FieldError
-
-                        errors={
-
-                          chargeForm.formState.errors.amount
-
-                            ? [chargeForm.formState.errors.amount]
-
-                            : []
-
-                        }
-
-                      />
-
-                    </FieldContent>
-
-                  </Field>
-
-                </FieldGroup>
-
-              </form>
+                    />
 
 
+                    <ResponsiveDialog
 
-              <ResponsiveDialogFooter>
+                        open={open === "send-link"}
 
-                <ResponsiveDialogClose
+                        onOpenChange={(val) => !val && handleClose()}
 
-                  render={<Button variant="outline">Cancel</Button>}
+                    >
 
-                />
+                        <ResponsiveDialogContent className="sm:max-w-md">
 
-                <Button
+                            <ResponsiveDialogHeader>
 
-                  type="submit"
+                                <ResponsiveDialogTitle>Send payment link</ResponsiveDialogTitle>
 
-                  form="charge-invoice-form"
+                                <ResponsiveDialogDescription>
 
-                  disabled={chargeInvoice.isPending}
+                                    Email a signed payment link for invoice{" "}
 
-                >
+                                    <strong>{currentRow.number}</strong> to the tenant owner.
 
-                  {chargeInvoice.isPending ? <Spinner /> : null}
+                                </ResponsiveDialogDescription>
 
-                  Charge
+                            </ResponsiveDialogHeader>
 
-                </Button>
+                            <ResponsiveDialogFooter>
 
-              </ResponsiveDialogFooter>
+                                <ResponsiveDialogClose
 
-            </ResponsiveDialogContent>
+                                    render={<Button variant="outline">Cancel</Button>}
 
-          </ResponsiveDialog>
+                                />
+
+                                <Button
+
+                                    disabled={sendPaymentLink.isPending}
+
+                                    onClick={runSendLink}
+
+                                >
+
+                                    {sendPaymentLink.isPending ? <Spinner/> : null}
+
+                                    Send link
+
+                                </Button>
+
+                            </ResponsiveDialogFooter>
+
+                        </ResponsiveDialogContent>
+
+                    </ResponsiveDialog>
+
+
+                    <ResponsiveDialog
+
+                        open={open === "void"}
+
+                        onOpenChange={(val) => !val && handleClose()}
+
+                    >
+
+                        <ResponsiveDialogContent className="sm:max-w-md">
+
+                            <ResponsiveDialogHeader>
+
+                                <ResponsiveDialogTitle>Void invoice</ResponsiveDialogTitle>
+
+                                <ResponsiveDialogDescription>
+
+                                    Void invoice <strong>{currentRow.number}</strong>? This
+
+                                    cannot be undone.
+
+                                </ResponsiveDialogDescription>
+
+                            </ResponsiveDialogHeader>
+
+                            <ResponsiveDialogFooter>
+
+                                <ResponsiveDialogClose
+
+                                    render={<Button variant="outline">Cancel</Button>}
+
+                                />
+
+                                <Button
+
+                                    variant="destructive"
+
+                                    disabled={voidInvoice.isPending}
+
+                                    onClick={runVoid}
+
+                                >
+
+                                    {voidInvoice.isPending ? <Spinner/> : null}
+
+                                    Void
+
+                                </Button>
+
+                            </ResponsiveDialogFooter>
+
+                        </ResponsiveDialogContent>
+
+                    </ResponsiveDialog>
+
+
+                    <ResponsiveDialog
+
+                        open={open === "charge"}
+
+                        onOpenChange={(val) => !val && handleClose()}
+
+                    >
+
+                        <ResponsiveDialogContent className="sm:max-w-md">
+
+                            <ResponsiveDialogHeader>
+
+                                <ResponsiveDialogTitle>Charge invoice</ResponsiveDialogTitle>
+
+                                <ResponsiveDialogDescription>
+
+                                    Attempt to charge invoice <strong>{currentRow.number}</strong>{" "}
+
+                                    through a payment gateway.
+
+                                </ResponsiveDialogDescription>
+
+                            </ResponsiveDialogHeader>
+
+
+                            <form
+
+                                id="charge-invoice-form"
+
+                                className="space-y-4"
+
+                                onSubmit={chargeForm.handleSubmit(onChargeSubmit)}
+
+                            >
+
+                                <FieldGroup>
+
+                                    <Field>
+
+                                        <FieldLabel>Gateway</FieldLabel>
+
+                                        <FieldContent>
+
+                                            <Controller
+
+                                                control={chargeForm.control}
+
+                                                name="gateway"
+
+                                                render={({field}) => {
+
+                                                    const selected =
+
+                                                        gatewayOptions.find(
+                                                            (option) => option.value === field.value
+                                                        ) ?? null
+
+                                                    return (
+
+                                                        <Combobox
+
+                                                            items={gatewayOptions}
+
+                                                            itemToStringValue={(item: Option) => item.label}
+
+                                                            value={selected}
+
+                                                            onValueChange={(item: Option | null) =>
+
+                                                                field.onChange(item?.value ?? "")
+
+                                                            }
+
+                                                        >
+
+                                                            <ComboboxInput
+
+                                                                placeholder="Select gateway..."
+
+                                                                showClear
+
+                                                            />
+
+                                                            <ComboboxContent>
+
+                                                                <ComboboxEmpty>No gateways found.</ComboboxEmpty>
+
+                                                                <ComboboxList>
+
+                                                                    {(item: Option) => (
+
+                                                                        <ComboboxItem key={item.value} value={item}>
+
+                                                                            {item.label}
+
+                                                                        </ComboboxItem>
+
+                                                                    )}
+
+                                                                </ComboboxList>
+
+                                                            </ComboboxContent>
+
+                                                        </Combobox>
+
+                                                    )
+
+                                                }}
+
+                                            />
+
+                                        </FieldContent>
+
+                                    </Field>
+
+                                    <Field>
+
+                                        <FieldLabel>Amount (optional)</FieldLabel>
+
+                                        <FieldContent>
+
+                                            <Input
+
+                                                type="number"
+
+                                                min="0.01"
+
+                                                step="0.01"
+
+                                                placeholder={String(currentRow.balance_due)}
+
+                                                {...chargeForm.register("amount")}
+
+                                            />
+
+                                            <FieldError
+
+                                                errors={
+
+                                                    chargeForm.formState.errors.amount
+
+                                                        ? [chargeForm.formState.errors.amount]
+
+                                                        : []
+
+                                                }
+
+                                            />
+
+                                        </FieldContent>
+
+                                    </Field>
+
+                                </FieldGroup>
+
+                            </form>
+
+
+                            <ResponsiveDialogFooter>
+
+                                <ResponsiveDialogClose
+
+                                    render={<Button variant="outline">Cancel</Button>}
+
+                                />
+
+                                <Button
+
+                                    type="submit"
+
+                                    form="charge-invoice-form"
+
+                                    disabled={chargeInvoice.isPending}
+
+                                >
+
+                                    {chargeInvoice.isPending ? <Spinner/> : null}
+
+                                    Charge
+
+                                </Button>
+
+                            </ResponsiveDialogFooter>
+
+                        </ResponsiveDialogContent>
+
+                    </ResponsiveDialog>
+
+                </>
+
+            ) : null}
 
         </>
 
-      ) : null}
-
-    </>
-
-  )
+    )
 
 }
 
