@@ -6,6 +6,7 @@ import {
   Edit,
   Eye,
   KeyRound,
+  LockIcon,
   MoreHorizontal,
   PauseCircle,
   PlayCircle,
@@ -23,6 +24,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { PermissionGate } from "@/features/central/auth/components/permission-gate"
+import { permissions } from "@/features/central/auth/components/permissions"
 import { useUsers } from "@/features/central/users/components/users-provider"
 import type { CentralUser } from "@/types/central/user"
 
@@ -47,7 +49,15 @@ export function DataTableRowActions<TData>({
         }
       />
       <DropdownMenuContent align="end" className="w-48">
-        <PermissionGate permissions="users.view">
+        <PermissionGate
+          permissions={[permissions.users.view]}
+          fallback={
+            <DropdownMenuItem disabled className="text-muted-foreground opacity-50">
+              <LockIcon className="mr-2 size-4" />
+              View
+            </DropdownMenuItem>
+          }
+        >
           <DropdownMenuItem
             onClick={() => {
               setCurrentRow(user)
@@ -58,7 +68,15 @@ export function DataTableRowActions<TData>({
             View
           </DropdownMenuItem>
         </PermissionGate>
-        <PermissionGate permissions="users.update">
+        <PermissionGate
+          permissions={[permissions.users.update]}
+          fallback={
+            <DropdownMenuItem disabled className="text-muted-foreground opacity-50">
+              <LockIcon className="mr-2 size-4" />
+              Edit
+            </DropdownMenuItem>
+          }
+        >
           <DropdownMenuItem
             onClick={() => {
               setCurrentRow(user)
@@ -69,7 +87,15 @@ export function DataTableRowActions<TData>({
             Edit
           </DropdownMenuItem>
         </PermissionGate>
-        <PermissionGate permissions="users.assign-roles">
+        <PermissionGate
+          permissions={[permissions.users.assignRoles]}
+          fallback={
+            <DropdownMenuItem disabled className="text-muted-foreground opacity-50">
+              <LockIcon className="mr-2 size-4" />
+              Assign roles
+            </DropdownMenuItem>
+          }
+        >
           <DropdownMenuItem
             onClick={() => {
               setCurrentRow(user)
@@ -80,7 +106,15 @@ export function DataTableRowActions<TData>({
             Assign roles
           </DropdownMenuItem>
         </PermissionGate>
-        <PermissionGate permissions="users.assign-permissions">
+        <PermissionGate
+          permissions={[permissions.users.assignPermissions]}
+          fallback={
+            <DropdownMenuItem disabled className="text-muted-foreground opacity-50">
+              <LockIcon className="mr-2 size-4" />
+              Assign permissions
+            </DropdownMenuItem>
+          }
+        >
           <DropdownMenuItem
             onClick={() => {
               setCurrentRow(user)
@@ -91,7 +125,15 @@ export function DataTableRowActions<TData>({
             Assign permissions
           </DropdownMenuItem>
         </PermissionGate>
-        <PermissionGate permissions="users.view">
+        <PermissionGate
+          permissions={[permissions.users.view]}
+          fallback={
+            <DropdownMenuItem disabled className="text-muted-foreground opacity-50">
+              <LockIcon className="mr-2 size-4" />
+              Security
+            </DropdownMenuItem>
+          }
+        >
           <DropdownMenuItem
             onClick={() => {
               setCurrentRow(user)
@@ -102,7 +144,15 @@ export function DataTableRowActions<TData>({
             Security
           </DropdownMenuItem>
         </PermissionGate>
-        <PermissionGate permissions="users.view-activity">
+        <PermissionGate
+          permissions={[permissions.users.viewActivity]}
+          fallback={
+            <DropdownMenuItem disabled className="text-muted-foreground opacity-50">
+              <LockIcon className="mr-2 size-4" />
+              Activities
+            </DropdownMenuItem>
+          }
+        >
           <DropdownMenuItem
             onClick={() => {
               setCurrentRow(user)
@@ -114,7 +164,15 @@ export function DataTableRowActions<TData>({
           </DropdownMenuItem>
         </PermissionGate>
         <DropdownMenuSeparator />
-        <PermissionGate permissions="users.manage-status">
+        <PermissionGate
+          permissions={[permissions.users.manageStatus]}
+          fallback={
+            <DropdownMenuItem disabled className="text-muted-foreground opacity-50">
+              <LockIcon className="mr-2 size-4" />
+              {user.status === "active" ? "Suspend" : "Activate"}
+            </DropdownMenuItem>
+          }
+        >
           {user.status === "active" ? (
             <DropdownMenuItem
               onClick={() => {
@@ -138,7 +196,15 @@ export function DataTableRowActions<TData>({
           )}
         </PermissionGate>
         <DropdownMenuSeparator />
-        <PermissionGate permissions="users.delete">
+        <PermissionGate
+          permissions={[permissions.users.delete]}
+          fallback={
+            <DropdownMenuItem disabled className="text-muted-foreground opacity-50">
+              <LockIcon className="mr-2 size-4" />
+              Delete
+            </DropdownMenuItem>
+          }
+        >
           <DropdownMenuItem
             variant="destructive"
             onClick={() => {

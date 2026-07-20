@@ -4,6 +4,7 @@ import { type Row } from "@tanstack/react-table"
 import {
   Edit,
   Eye,
+  LockIcon,
   MoreHorizontal,
   Shield,
   Trash2,
@@ -18,6 +19,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { PermissionGate } from "@/features/central/auth/components/permission-gate"
+import { permissions } from "@/features/central/auth/components/permissions"
 import { useRoles } from "@/features/central/roles/components/roles-provider"
 import type { CentralRole } from "@/types/central/rbac"
 
@@ -45,7 +47,15 @@ export function DataTableRowActions<TData>({
         }
       />
       <DropdownMenuContent align="end" className="w-52">
-        <PermissionGate permissions="roles.view">
+        <PermissionGate
+          permissions={[permissions.roles.view]}
+          fallback={
+            <DropdownMenuItem disabled className="text-muted-foreground opacity-50">
+              <LockIcon className="mr-2 size-4" />
+              View
+            </DropdownMenuItem>
+          }
+        >
           <DropdownMenuItem
             onClick={() => {
               setCurrentRow(role)
@@ -56,7 +66,15 @@ export function DataTableRowActions<TData>({
             View
           </DropdownMenuItem>
         </PermissionGate>
-        <PermissionGate permissions="roles.update">
+        <PermissionGate
+          permissions={[permissions.roles.update]}
+          fallback={
+            <DropdownMenuItem disabled className="text-muted-foreground opacity-50">
+              <LockIcon className="mr-2 size-4" />
+              Edit
+            </DropdownMenuItem>
+          }
+        >
           <DropdownMenuItem
             onClick={() => {
               setCurrentRow(role)
@@ -67,7 +85,15 @@ export function DataTableRowActions<TData>({
             Edit
           </DropdownMenuItem>
         </PermissionGate>
-        <PermissionGate permissions="roles.assign-permissions">
+        <PermissionGate
+          permissions={[permissions.roles.assignPermissions]}
+          fallback={
+            <DropdownMenuItem disabled className="text-muted-foreground opacity-50">
+              <LockIcon className="mr-2 size-4" />
+              Manage permissions
+            </DropdownMenuItem>
+          }
+        >
           <DropdownMenuItem
             onClick={() => {
               setCurrentRow(role)
@@ -79,7 +105,15 @@ export function DataTableRowActions<TData>({
           </DropdownMenuItem>
         </PermissionGate>
         <DropdownMenuSeparator />
-        <PermissionGate permissions="roles.delete">
+        <PermissionGate
+          permissions={[permissions.roles.delete]}
+          fallback={
+            <DropdownMenuItem disabled className="text-muted-foreground opacity-50">
+              <LockIcon className="mr-2 size-4" />
+              Delete
+            </DropdownMenuItem>
+          }
+        >
           <DropdownMenuItem
             variant="destructive"
             disabled={isSuperAdmin}

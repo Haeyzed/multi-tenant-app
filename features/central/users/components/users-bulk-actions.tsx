@@ -12,6 +12,7 @@ import {
     ActionBarSelection,
 } from "@/components/ui/action-bar"
 import { PermissionGate } from "@/features/central/auth/components/permission-gate"
+import { permissions } from "@/features/central/auth/components/permissions"
 import { useUsers } from "@/features/central/users/components/users-provider"
 import type { CentralUser } from "@/types/central/user"
 
@@ -48,19 +49,19 @@ export function UsersBulkActions<TData>({
                 <ActionBarSelection>
                     {selectedRows.length} selected
                 </ActionBarSelection>
-                <PermissionGate permissions="users.manage-status">
+                <PermissionGate permissions={[permissions.users.manageStatus]}>
                     <ActionBarItem onClick={() => openBulk("activateMany")}>
                         <PlayCircle className="size-4" />
                         Activate
                     </ActionBarItem>
                 </PermissionGate>
-                <PermissionGate permissions="users.manage-status">
+                <PermissionGate permissions={[permissions.users.manageStatus]}>
                     <ActionBarItem onClick={() => openBulk("suspendMany")}>
                         <PauseCircle className="size-4" />
                         Suspend
                     </ActionBarItem>
                 </PermissionGate>
-                <PermissionGate permissions="users.delete">
+                <PermissionGate permissions={[permissions.users.delete]}>
                     <ActionBarItem onClick={() => openBulk("deleteMany")}>
                         <Trash2 className="size-4" />
                         Delete

@@ -1,7 +1,7 @@
 "use client"
 
 import { type Row } from "@tanstack/react-table"
-import { Edit, Eye, MoreHorizontal, Trash2 } from "lucide-react"
+import { Edit, Eye, LockIcon, MoreHorizontal, Trash2 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { PermissionGate } from "@/features/central/auth/components/permission-gate"
+import { permissions } from "@/features/central/auth/components/permissions"
 import { useLanguagesContext } from "@/features/central/world/languages/components/languages-provider"
 import type { Language } from "@/types/central/world"
 
@@ -36,7 +37,15 @@ export function DataTableRowActions<TData>({
         }
       />
       <DropdownMenuContent align="end" className="w-48">
-        <PermissionGate permissions="world.view">
+        <PermissionGate
+          permissions={[permissions.world.view]}
+          fallback={
+            <DropdownMenuItem disabled className="text-muted-foreground opacity-50">
+              <LockIcon className="mr-2 size-4" />
+              View
+            </DropdownMenuItem>
+          }
+        >
           <DropdownMenuItem
             onClick={() => {
               setCurrentRow(language)
@@ -47,7 +56,15 @@ export function DataTableRowActions<TData>({
             View
           </DropdownMenuItem>
         </PermissionGate>
-        <PermissionGate permissions="world.update">
+        <PermissionGate
+          permissions={[permissions.world.update]}
+          fallback={
+            <DropdownMenuItem disabled className="text-muted-foreground opacity-50">
+              <LockIcon className="mr-2 size-4" />
+              Edit
+            </DropdownMenuItem>
+          }
+        >
           <DropdownMenuItem
             onClick={() => {
               setCurrentRow(language)
@@ -59,7 +76,15 @@ export function DataTableRowActions<TData>({
           </DropdownMenuItem>
         </PermissionGate>
         <DropdownMenuSeparator />
-        <PermissionGate permissions="world.delete">
+        <PermissionGate
+          permissions={[permissions.world.delete]}
+          fallback={
+            <DropdownMenuItem disabled className="text-muted-foreground opacity-50">
+              <LockIcon className="mr-2 size-4" />
+              Delete
+            </DropdownMenuItem>
+          }
+        >
           <DropdownMenuItem
             variant="destructive"
             onClick={() => {

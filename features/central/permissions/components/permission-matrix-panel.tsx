@@ -14,13 +14,10 @@ import {
   useSyncRolePermissions,
 } from "@/features/central/roles/hooks/use-role-query"
 import { useQueryErrorToast } from "@/hooks/use-query-error-toast"
-import { useCentralAuth } from "@/lib/providers/central-auth-provider"
 import { toastApiError, toastApiSuccess } from "@/lib/toast-api"
 import { cn } from "@/lib/utils"
 
 export function PermissionMatrixPanel() {
-  const { hasPermission, isSuperAdmin } = useCentralAuth()
-  const canEdit = isSuperAdmin || hasPermission(permissions.users.roles.assignPermission)
   const { data, isLoading, error } = useGetPermissionMatrix()
   const syncRolePermissions = useSyncRolePermissions()
   const [draftMatrix, setDraftMatrix] = React.useState<Record<string, string[]>>(
@@ -51,10 +48,6 @@ export function PermissionMatrixPanel() {
       permissionName: string,
       checked: boolean
   ) => {
-    if (!canEdit) {
-      return
-    }
-
     const roleKey = String(roleId)
     const current = draftMatrix[roleKey] ?? []
     const next = checked
@@ -70,10 +63,6 @@ export function PermissionMatrixPanel() {
 
   // Toggle ALL permissions globally for a specific role
   const toggleAllForRole = (roleId: number, checked: boolean) => {
-    if (!canEdit) {
-      return
-    }
-
     const roleKey = String(roleId)
     const next = checked ? [...allPermissionNames] : []
 
@@ -90,10 +79,6 @@ export function PermissionMatrixPanel() {
       groupPermissions: string[],
       checked: boolean
   ) => {
-    if (!canEdit) {
-      return
-    }
-
     const roleKey = String(roleId)
     const current = draftMatrix[roleKey] ?? []
 
@@ -109,7 +94,7 @@ export function PermissionMatrixPanel() {
   }
 
   const handleSave = async () => {
-    if (!canEdit || dirtyRoles.size === 0) {
+    if (dirtyRoles.size === 0) {
       return
     }
 
@@ -143,7 +128,7 @@ export function PermissionMatrixPanel() {
 
   return (
       <PermissionGate
-          permissions={[permissions.users.permissions.view]}
+          permissions={[permissions.permissions.view]}
           fallback={
             <div className="flex flex-col items-center justify-center rounded-xl border border-dashed p-12 text-center">
               <LockIcon className="text-muted-foreground mb-2 size-8" />
@@ -156,21 +141,28 @@ export function PermissionMatrixPanel() {
       >
         <div className="space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <p className="text-muted-foreground text-sm">
-              {canEdit
-                  ? "Toggle permissions per role, then save your changes."
-                  : "Read-only view of role permissions."}
-            </p>
-            {canEdit ? (
-                <Button
-                    onClick={handleSave}
-                    disabled={isSaving || dirtyRoles.size === 0}
-                >
-                  {isSaving ? <Spinner /> : null}
-                  Save changes
-                  {dirtyRoles.size > 0 ? ` (${dirtyRoles.size})` : ""}
-                </Button>
-            ) : null}
+            <PermissionGate
+              permissions={[permissions.roles.assignPermissions]}
+              fallback={
+                <p className="text-muted-foreground text-sm">
+                  Read-only view of role permissions.
+                </p>
+              }
+            >
+              <p className="text-muted-foreground text-sm">
+                Toggle permissions per role, then save your changes.
+              </p>
+            </PermissionGate>
+            <PermissionGate permissions={[permissions.roles.assignPermissions]}>
+              <Button
+                  onClick={handleSave}
+                  disabled={isSaving || dirtyRoles.size === 0}
+              >
+                {isSaving ? <Spinner /> : null}
+                Save changes
+                {dirtyRoles.size > 0 ? ` (${dirtyRoles.size})` : ""}
+              </Button>
+            </PermissionGate>
           </div>
 
           <div className="overflow-x-auto rounded-lg border">
@@ -201,21 +193,21 @@ export function PermissionMatrixPanel() {
                             {role.users_count} users
                           </span>
                           </div>
-                          {canEdit && (
-                              <div className="flex items-center gap-1.5 pt-1">
-                                <Checkbox
-                                    checked={isAllSelected || (isSomeSelected ? "indeterminate" : false)}
-                                    disabled={!canEdit || isSaving}
-                                    onCheckedChange={(val) =>
-                                        toggleAllForRole(role.id, !!val)
-                                    }
-                                    aria-label={`Select all permissions for ${role.name}`}
-                                />
-                                <span className="text-muted-foreground text-[11px] font-normal">
-                              Select all
-                            </span>
-                              </div>
-                          )}
+                          <PermissionGate permissions={[permissions.roles.assignPermissions]}>
+                            <div className="flex items-center gap-1.5 pt-1">
+                              <Checkbox
+                                  checked={isAllSelected || (isSomeSelected ? "indeterminate" : false)}
+                                  disabled={isSaving}
+                                  onCheckedChange={(val) =>
+                                      toggleAllForRole(role.id, !!val)
+                                  }
+                                  aria-label={`Select all permissions for ${role.name}`}
+                              />
+                              <span className="text-muted-foreground text-[11px] font-normal">
+                                Select all
+                              </span>
+                            </div>
+                          </PermissionGate>
                         </div>
                       </th>
                   )
@@ -250,25 +242,25 @@ export function PermissionMatrixPanel() {
                                   key={`group-${group.group}-role-${role.id}`}
                                   className="border-b px-4 py-2 text-center"
                               >
-                                {canEdit && (
-                                    <div className="flex justify-center">
-                                      <Checkbox
-                                          checked={
-                                              isGroupAllSelected ||
-                                              (isGroupSomeSelected ? "indeterminate" : false)
-                                          }
-                                          disabled={!canEdit || isSaving}
-                                          onCheckedChange={(val) =>
-                                              toggleGroupForRole(
-                                                  role.id,
-                                                  groupPermissionNames,
-                                                  !!val
-                                              )
-                                          }
-                                          aria-label={`Select all ${group.group} permissions for ${role.name}`}
-                                      />
-                                    </div>
-                                )}
+                                <PermissionGate permissions={[permissions.roles.assignPermissions]}>
+                                  <div className="flex justify-center">
+                                    <Checkbox
+                                        checked={
+                                            isGroupAllSelected ||
+                                            (isGroupSomeSelected ? "indeterminate" : false)
+                                        }
+                                        disabled={isSaving}
+                                        onCheckedChange={(val) =>
+                                            toggleGroupForRole(
+                                                role.id,
+                                                groupPermissionNames,
+                                                !!val
+                                            )
+                                        }
+                                        aria-label={`Select all ${group.group} permissions for ${role.name}`}
+                                    />
+                                  </div>
+                                </PermissionGate>
                               </td>
                           )
                         })}
@@ -293,20 +285,22 @@ export function PermissionMatrixPanel() {
                                           isDirty && "bg-primary/5"
                                       )}
                                   >
-                                    <div className="flex justify-center">
-                                      <Checkbox
-                                          checked={checked}
-                                          disabled={!canEdit || isSaving}
-                                          onCheckedChange={(value) =>
-                                              togglePermission(
-                                                  role.id,
-                                                  permission.name,
-                                                  !!value
-                                              )
-                                          }
-                                          aria-label={`${permission.name} for ${role.name}`}
-                                      />
-                                    </div>
+                                    <PermissionGate permissions={[permissions.roles.assignPermissions]}>
+                                      <div className="flex justify-center">
+                                        <Checkbox
+                                            checked={checked}
+                                            disabled={isSaving}
+                                            onCheckedChange={(value) =>
+                                                togglePermission(
+                                                    role.id,
+                                                    permission.name,
+                                                    !!value
+                                                )
+                                            }
+                                            aria-label={`${permission.name} for ${role.name}`}
+                                        />
+                                      </div>
+                                    </PermissionGate>
                                   </td>
                               )
                             })}

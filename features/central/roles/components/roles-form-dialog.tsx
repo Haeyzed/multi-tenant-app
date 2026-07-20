@@ -24,6 +24,8 @@ import {
   ResponsiveDialogTitle,
 } from "@/components/ui/responsive-dialog"
 import { Spinner } from "@/components/ui/spinner"
+import { PermissionGate } from "@/features/central/auth/components/permission-gate"
+import { permissions } from "@/features/central/auth/components/permissions"
 import {
   useCreateRole,
   useGetPermissions,
@@ -35,9 +37,9 @@ import {
   type UpdateRoleFormValues,
 } from "@/features/central/roles/schemas"
 import { handleFormApiError } from "@/lib/form-api-errors"
-import { useCentralAuth } from "@/lib/providers/central-auth-provider"
 import { toastApiSuccess } from "@/lib/toast-api"
 import type { CentralRole } from "@/types/central/rbac"
+import { LockIcon } from "lucide-react"
 
 type RolesFormDialogProps = {
   open: boolean
@@ -54,11 +56,7 @@ export function RolesFormDialog({
   const createRole = useCreateRole()
   const updateRole = useUpdateRole()
   const isSubmitting = createRole.isPending || updateRole.isPending
-  const { hasPermission } = useCentralAuth()
-  const canAssignPermissions = hasPermission("roles.assign-permissions")
-  const { data: permissionGroups } = useGetPermissions(
-    open && canAssignPermissions
-  )
+  const { data: permissionGroups } = useGetPermissions(open)
 
   const form = useForm<StoreRoleFormValues>({
     resolver: zodResolver(storeRoleSchema),
@@ -99,7 +97,7 @@ export function RolesFormDialog({
     if (isUpdate && currentRow) {
       const updateValues: UpdateRoleFormValues = {
         name: data.name,
-        permissions: canAssignPermissions ? data.permissions : undefined,
+        permissions: data.permissions,
       }
 
       updateRole.mutate(
@@ -117,11 +115,7 @@ export function RolesFormDialog({
       return
     }
 
-    createRole.mutate(
-      {
-        name: data.name,
-        permissions: canAssignPermissions ? data.permissions : undefined,
-      },
+    createRole.mutate(data,
       {
         onSuccess: (result) => {
           toastApiSuccess(result.message, "Role created successfully")
@@ -172,7 +166,7 @@ export function RolesFormDialog({
               </FieldContent>
             </Field>
 
-            {canAssignPermissions ? (
+            <PermissionGate permissions={[permissions.roles.assignPermissions]}>
               <Field>
                 <FieldLabel>Permissions</FieldLabel>
                 <FieldContent>
@@ -212,7 +206,7 @@ export function RolesFormDialog({
                   />
                 </FieldContent>
               </Field>
-            ) : null}
+            </PermissionGate>
           </FieldGroup>
         </form>
 
@@ -220,10 +214,20 @@ export function RolesFormDialog({
           <ResponsiveDialogClose
             render={<Button variant="outline">Cancel</Button>}
           />
-          <Button type="submit" form="role-form" disabled={isSubmitting}>
-            {isSubmitting ? <Spinner /> : null}
-            {isUpdate ? "Save changes" : "Create role"}
-          </Button>
+          <PermissionGate
+            permissions={[isUpdate ? permissions.roles.update : permissions.roles.create]}
+            fallback={
+              <Button disabled variant="outline">
+                <LockIcon className="mr-1.5 size-3.5" />
+                {isUpdate ? "Save changes (Locked)" : "Create role (Locked)"}
+              </Button>
+            }
+          >
+            <Button type="submit" form="role-form" disabled={isSubmitting}>
+              {isSubmitting ? <Spinner /> : null}
+              {isUpdate ? "Save changes" : "Create role"}
+            </Button>
+          </PermissionGate>
         </ResponsiveDialogFooter>
       </ResponsiveDialogContent>
     </ResponsiveDialog>

@@ -5,6 +5,7 @@ import { useQueryClient } from "@tanstack/react-query"
 
 import { Button } from "@/components/ui/button"
 import { PermissionGate } from "@/features/central/auth/components/permission-gate"
+import { permissions } from "@/features/central/auth/components/permissions"
 import { useMonitoring } from "@/features/central/monitoring/components/monitoring-provider"
 import { monitoringQueryKey } from "@/features/central/monitoring/hooks/use-monitoring-query"
 
@@ -24,7 +25,7 @@ export function MonitoringPrimaryButtons() {
         <RefreshCwIcon className="size-4" />
         <span>Refresh</span>
       </Button>
-      <PermissionGate permissions="monitoring.manage">
+      <PermissionGate permissions={[permissions.monitoring.manage]}>
         <Button
           variant="destructive"
           className="gap-1"

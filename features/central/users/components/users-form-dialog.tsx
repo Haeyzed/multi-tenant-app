@@ -34,6 +34,8 @@ import {
     ResponsiveDialogTitle,
 } from "@/components/ui/responsive-dialog"
 import { Spinner } from "@/components/ui/spinner"
+import { PermissionGate } from "@/features/central/auth/components/permission-gate"
+import { permissions } from "@/features/central/auth/components/permissions"
 import { useGetRoles } from "@/features/central/roles/hooks/use-role-query"
 import {
     useCreateUser,
@@ -46,9 +48,9 @@ import {
     type UpdateUserFormValues,
 } from "@/features/central/users/schemas"
 import { handleFormApiError } from "@/lib/form-api-errors"
-import { useCentralAuth } from "@/lib/providers/central-auth-provider"
 import { toastApiError, toastApiSuccess } from "@/lib/toast-api"
 import type { CentralUser, UserStatus } from "@/types/central/user"
+import { LockIcon } from "lucide-react"
 
 type UsersFormDialogProps = {
     open: boolean
@@ -75,10 +77,7 @@ export function UsersFormDialog({
     const uploadAvatar = useUploadUserAvatar()
     const isSubmitting =
         createUser.isPending || updateUser.isPending || uploadAvatar.isPending
-    const { hasPermission } = useCentralAuth()
-    const canAssignRoles = hasPermission("users.assign-roles")
-    const canViewRoles = hasPermission("roles.view")
-    const { data: rolesData } = useGetRoles(open && (canAssignRoles || canViewRoles))
+    const { data: rolesData } = useGetRoles(open)
     const roleOptions = rolesData?.data ?? []
 
     const form = useForm<StoreUserFormValues>({
@@ -155,7 +154,7 @@ export function UsersFormDialog({
                 email: data.email,
                 phone: data.phone,
                 timezone: data.timezone,
-                roles: canAssignRoles ? data.roles : undefined,
+                roles: data.roles,
             }
 
             updateUser.mutate(
@@ -173,15 +172,7 @@ export function UsersFormDialog({
             return
         }
 
-        createUser.mutate(
-            {
-                ...data,
-                roles: canAssignRoles ? data.roles : undefined,
-                password: data.password || undefined,
-                password_confirmation: data.password
-                    ? data.password_confirmation
-                    : undefined,
-            },
+        createUser.mutate(data,
             {
                 onSuccess: (result) => {
                     toastApiSuccess(result.message, "User created successfully")
@@ -391,7 +382,7 @@ export function UsersFormDialog({
                             </>
                         ) : null}
 
-                        {canAssignRoles ? (
+                        <PermissionGate permissions={[permissions.users.assignRoles]}>
                             <Field>
                                 <FieldLabel>Roles</FieldLabel>
                                 <FieldContent>
@@ -426,7 +417,7 @@ export function UsersFormDialog({
                                     />
                                 </FieldContent>
                             </Field>
-                        ) : null}
+                        </PermissionGate>
                     </FieldGroup>
                 </form>
 
@@ -434,10 +425,20 @@ export function UsersFormDialog({
                     <ResponsiveDialogClose
                         render={<Button variant="outline">Cancel</Button>}
                     />
-                    <Button type="submit" form="user-form" disabled={isSubmitting}>
-                        {isSubmitting ? <Spinner /> : null}
-                        {isUpdate ? "Save changes" : "Create user"}
-                    </Button>
+                    <PermissionGate
+                        permissions={[isUpdate ? permissions.users.update : permissions.users.create]}
+                        fallback={
+                            <Button disabled variant="outline">
+                                <LockIcon className="mr-1.5 size-3.5" />
+                                {isUpdate ? "Save changes (Locked)" : "Create user (Locked)"}
+                            </Button>
+                        }
+                    >
+                        <Button type="submit" form="user-form" disabled={isSubmitting}>
+                            {isSubmitting ? <Spinner /> : null}
+                            {isUpdate ? "Save changes" : "Create user"}
+                        </Button>
+                    </PermissionGate>
                 </ResponsiveDialogFooter>
             </ResponsiveDialogContent>
         </ResponsiveDialog>
