@@ -7,12 +7,25 @@ import { StatesPrimaryButtons } from "@/features/central/world/states/components
 import { StatesProvider } from "@/features/central/world/states/components/states-provider"
 import { StatesStats } from "@/features/central/world/states/components/states-stats"
 import { StatesTable } from "@/features/central/world/states/components/states-table"
+import {Header} from "@/components/layout/header";
+import {Search} from "@/components/search";
+import {ThemeSwitch} from "@/components/theme-switch";
+import {ConfigDrawer} from "@/components/config-drawer";
+import {ProfileDropdown} from "@/features/central/shell/profile-dropdown";
+import {Main} from "@/components/layout/main";
+import {permissions} from "@/features/central/auth/components/permissions";
 
 export default function StatesPage() {
   return (
-    <CentralAuthGuard permissions="world.view">
+    <CentralAuthGuard permissions={permissions.world.view}>
       <StatesProvider>
-        <div className="flex flex-1 flex-col gap-4 sm:gap-6">
+        <Header fixed>
+          <Search className='me-auto' />
+          <ThemeSwitch />
+          <ConfigDrawer />
+          <ProfileDropdown />
+        </Header>
+        <Main className='flex flex-1 flex-col gap-4 sm:gap-6'>
           <PageHeader
             title="States"
             description="Manage state and province reference data by country."
@@ -22,7 +35,7 @@ export default function StatesPage() {
           <StatesStats />
           <StatesTable />
           <StatesDialogs />
-        </div>
+        </Main>
       </StatesProvider>
     </CentralAuthGuard>
   )

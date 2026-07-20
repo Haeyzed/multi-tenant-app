@@ -7,12 +7,25 @@ import { CurrenciesPrimaryButtons } from "@/features/central/world/currencies/co
 import { CurrenciesProvider } from "@/features/central/world/currencies/components/currencies-provider"
 import { CurrenciesStats } from "@/features/central/world/currencies/components/currencies-stats"
 import { CurrenciesTable } from "@/features/central/world/currencies/components/currencies-table"
+import {Header} from "@/components/layout/header";
+import {Search} from "@/components/search";
+import {ThemeSwitch} from "@/components/theme-switch";
+import {ConfigDrawer} from "@/components/config-drawer";
+import {ProfileDropdown} from "@/features/central/shell/profile-dropdown";
+import {Main} from "@/components/layout/main";
+import {permissions} from "@/features/central/auth/components/permissions";
 
 export default function CurrenciesPage() {
   return (
-    <CentralAuthGuard permissions="world.view">
+    <CentralAuthGuard permissions={permissions.world.view}>
       <CurrenciesProvider>
-        <div className="flex flex-1 flex-col gap-4 sm:gap-6">
+        <Header fixed>
+          <Search className='me-auto' />
+          <ThemeSwitch />
+          <ConfigDrawer />
+          <ProfileDropdown />
+        </Header>
+        <Main className='flex flex-1 flex-col gap-4 sm:gap-6'>
           <PageHeader
             title="Currencies"
             description="Manage currency reference data by country."
@@ -22,7 +35,7 @@ export default function CurrenciesPage() {
           <CurrenciesStats />
           <CurrenciesTable />
           <CurrenciesDialogs />
-        </div>
+        </Main>
       </CurrenciesProvider>
     </CentralAuthGuard>
   )

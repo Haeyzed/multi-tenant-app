@@ -7,12 +7,25 @@ import { CountriesPrimaryButtons } from "@/features/central/world/countries/comp
 import { CountriesProvider } from "@/features/central/world/countries/components/countries-provider"
 import { CountriesStats } from "@/features/central/world/countries/components/countries-stats"
 import { CountriesTable } from "@/features/central/world/countries/components/countries-table"
+import {Header} from "@/components/layout/header";
+import {Search} from "@/components/search";
+import {ThemeSwitch} from "@/components/theme-switch";
+import {ConfigDrawer} from "@/components/config-drawer";
+import {ProfileDropdown} from "@/features/central/shell/profile-dropdown";
+import {Main} from "@/components/layout/main";
+import {permissions} from "@/features/central/auth/components/permissions";
 
 export default function CountriesPage() {
   return (
-    <CentralAuthGuard permissions="world.view">
+    <CentralAuthGuard permissions={permissions.world.view}>
       <CountriesProvider>
-        <div className="flex flex-1 flex-col gap-4 sm:gap-6">
+        <Header fixed>
+          <Search className='me-auto' />
+          <ThemeSwitch />
+          <ConfigDrawer />
+          <ProfileDropdown />
+        </Header>
+        <Main className='flex flex-1 flex-col gap-4 sm:gap-6'>
           <PageHeader
             title="Countries"
             description="Manage country reference data used across the platform."
@@ -22,7 +35,7 @@ export default function CountriesPage() {
           <CountriesStats />
           <CountriesTable />
           <CountriesDialogs />
-        </div>
+        </Main>
       </CountriesProvider>
     </CentralAuthGuard>
   )

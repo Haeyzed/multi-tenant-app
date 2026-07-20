@@ -13,7 +13,7 @@ import { ProfileDropdown } from "@/features/central/shell/profile-dropdown"
 
 export default function SettingsPage() {
   return (
-    <CentralAuthGuard permissions={permissions.platform.settings.view}>
+    <CentralAuthGuard permissions={permissions.settings.view}>
       <Header fixed>
         <Search className="me-auto" />
         <ThemeSwitch />

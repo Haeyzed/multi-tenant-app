@@ -18,7 +18,7 @@ import {permissions} from "@/features/central/auth/components/permissions";
 
 export default function PlansPage() {
   return (
-      <CentralAuthGuard permissions={permissions.billing.plans.view}>
+      <CentralAuthGuard permissions={permissions.plans.view}>
       <PlansProvider>
         <Header fixed>
           <Search className='me-auto' />
