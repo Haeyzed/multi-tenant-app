@@ -7,6 +7,7 @@ import { Toaster } from "@/components/ui/sonner"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { QueryProvider } from "@/lib/providers/query-provider"
 import { cn } from "@/lib/utils"
+import {NavigationProgress} from "@/components/navigation-progress";
 
 const nunitoSans = Nunito_Sans({ subsets: ["latin"], variable: "--font-sans" })
 
@@ -32,6 +33,7 @@ export default function RootLayout({
       )}
     >
       <body>
+        <NavigationProgress />
         <ThemeProvider>
           <NuqsAdapter>
             <QueryProvider>

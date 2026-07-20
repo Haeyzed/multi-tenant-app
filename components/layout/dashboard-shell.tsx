@@ -41,12 +41,7 @@ export function DashboardShell({
                 "peer-data-[variant=inset]:has-data-[layout=fixed]:h-[calc(100svh-(var(--spacing)*4))]"
               )}
             >
-              <Header>
-                {commandMenu ? <Search className="me-auto" /> : null}
-                <ThemeSwitch />
-                <ConfigDrawer />
-              </Header>
-              <Main>{children}</Main>
+              {children}
             </SidebarInset>
           </SidebarProvider>
         </LayoutProvider>
