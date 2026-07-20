@@ -8,12 +8,25 @@ import { PlansPrimaryButtons } from "@/features/central/plans/components/plans-p
 import { PlansProvider } from "@/features/central/plans/components/plans-provider"
 import { PlansStats } from "@/features/central/plans/components/plans-stats"
 import { PlansTable } from "@/features/central/plans/components/plans-table"
+import {Header} from "@/components/layout/header";
+import {Search} from "@/components/search";
+import {ThemeSwitch} from "@/components/theme-switch";
+import {ConfigDrawer} from "@/components/config-drawer";
+import {ProfileDropdown} from "@/features/central/shell/profile-dropdown";
+import {Main} from "@/components/layout/main";
+import {permissions} from "@/features/central/auth/components/permissions";
 
 export default function PlansPage() {
   return (
-    <CentralAuthGuard permissions="plans.view">
+      <CentralAuthGuard permissions={permissions.billing.plans.view}>
       <PlansProvider>
-        <div className="flex flex-1 flex-col gap-4 sm:gap-6">
+        <Header fixed>
+          <Search className='me-auto' />
+          <ThemeSwitch />
+          <ConfigDrawer />
+          <ProfileDropdown />
+        </Header>
+        <Main className='flex flex-1 flex-col gap-4 sm:gap-6'>
           <PageHeader
             title="Plans"
             description="Configure billing plans available to tenants."
@@ -24,7 +37,7 @@ export default function PlansPage() {
           <PlansTable />
           <PlansDialogs />
           <PlansBulkDialogs />
-        </div>
+        </Main>
       </PlansProvider>
     </CentralAuthGuard>
   )
