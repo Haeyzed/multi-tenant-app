@@ -13,11 +13,13 @@ import { permissions } from '@/features/central/auth/components/permissions'
 import { DashboardOverview } from '@/features/central/dashboard/components/dashboard-overview'
 import { ProfileDropdown } from '@/features/central/shell/profile-dropdown'
 import { LockIcon } from 'lucide-react'
+import {TopNav} from "@/components/layout/top-nav";
 
 export default function DashboardPage() {
   return (
       <CentralAuthGuard permissions={[permissions.dashboard.view]}>
         <Header>
+          <TopNav links={topNav} className='me-auto' />
           <Search className="me-auto" />
           <ThemeSwitch />
           <ConfigDrawer />
@@ -41,8 +43,9 @@ export default function DashboardPage() {
               </PermissionGate>
             </div>
           </div>
+
+          {/* Removed orientation="vertical" here to restore horizontal layout */}
           <Tabs
-              orientation="vertical"
               defaultValue="overview"
               className="space-y-4"
           >
@@ -69,3 +72,30 @@ export default function DashboardPage() {
       </CentralAuthGuard>
   )
 }
+
+const topNav = [
+  {
+    title: 'Overview',
+    href: 'dashboard/overview',
+    isActive: true,
+    disabled: false,
+  },
+  {
+    title: 'Customers',
+    href: 'dashboard/customers',
+    isActive: false,
+    disabled: true,
+  },
+  {
+    title: 'Products',
+    href: 'dashboard/products',
+    isActive: false,
+    disabled: true,
+  },
+  {
+    title: 'Settings',
+    href: 'dashboard/settings',
+    isActive: false,
+    disabled: true,
+  },
+]
