@@ -53,7 +53,7 @@ export default function DashboardPage() {
             <div className="w-full overflow-x-auto pb-2">
               <TabsList>
                 <TabsTrigger value="overview">Overview</TabsTrigger>
-                <TabsTrigger value="ativity">Activity</TabsTrigger>
+                <TabsTrigger value="activity">Activity</TabsTrigger>
                 {/*<TabsTrigger value="reports" disabled>*/}
                 {/*  Reports*/}
                 {/*</TabsTrigger>*/}
