@@ -14,6 +14,7 @@ import { DashboardOverview } from '@/features/central/dashboard/components/dashb
 import { ProfileDropdown } from '@/features/central/shell/profile-dropdown'
 import { LockIcon } from 'lucide-react'
 import {TopNav} from "@/components/layout/top-nav";
+import {DashboardActivitiesTab} from "@/features/central/dashboard/components/dashboard-activities-tab";
 
 export default function DashboardPage() {
   return (
@@ -52,20 +53,20 @@ export default function DashboardPage() {
             <div className="w-full overflow-x-auto pb-2">
               <TabsList>
                 <TabsTrigger value="overview">Overview</TabsTrigger>
-                <TabsTrigger value="analytics">Analytics</TabsTrigger>
-                <TabsTrigger value="reports" disabled>
-                  Reports
-                </TabsTrigger>
-                <TabsTrigger value="notifications" disabled>
-                  Notifications
-                </TabsTrigger>
+                <TabsTrigger value="ativity">Activity</TabsTrigger>
+                {/*<TabsTrigger value="reports" disabled>*/}
+                {/*  Reports*/}
+                {/*</TabsTrigger>*/}
+                {/*<TabsTrigger value="notifications" disabled>*/}
+                {/*  Notifications*/}
+                {/*</TabsTrigger>*/}
               </TabsList>
             </div>
             <TabsContent value="overview">
               <DashboardOverview />
             </TabsContent>
-            <TabsContent value="analytics" className="space-y-4">
-              {/* Analytics content */}
+            <TabsContent value="activity" className="space-y-4">
+              <DashboardActivitiesTab />
             </TabsContent>
           </Tabs>
         </Main>
