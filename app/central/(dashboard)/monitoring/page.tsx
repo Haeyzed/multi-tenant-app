@@ -9,12 +9,25 @@ import { MonitoringHealthPanels } from "@/features/central/monitoring/components
 import { MonitoringPrimaryButtons } from "@/features/central/monitoring/components/monitoring-primary-buttons"
 import { MonitoringProvider } from "@/features/central/monitoring/components/monitoring-provider"
 import { MonitoringStats } from "@/features/central/monitoring/components/monitoring-stats"
+import { permissions } from "@/features/central/auth/components/permissions"
+import { Header } from "@/components/layout/header"
+import { ThemeSwitch } from "@/components/theme-switch"
+import { ConfigDrawer } from "@/components/config-drawer"
+import { Main } from "@/components/layout/main"
+import { Search } from "@/components/search"
+import { ProfileDropdown } from "@/features/central/shell/profile-dropdown"
 
 export default function MonitoringPage() {
   return (
-    <CentralAuthGuard permissions="monitoring.view">
+    <CentralAuthGuard permissions={permissions.platform.monitoring.view}>
       <MonitoringProvider>
-        <div className="flex flex-1 flex-col gap-4 sm:gap-6">
+        <Header fixed>
+          <Search className="me-auto" />
+          <ThemeSwitch />
+          <ConfigDrawer />
+          <ProfileDropdown />
+        </Header>
+        <Main className="flex flex-1 flex-col gap-4 sm:gap-6">
           <PageHeader
             title="Monitoring"
             description="Monitor platform health, queues, infrastructure checks, and failed jobs."
@@ -32,7 +45,7 @@ export default function MonitoringPage() {
             </CardContent>
           </Card>
           <FailedJobsDialogs />
-        </div>
+        </Main>
       </MonitoringProvider>
     </CentralAuthGuard>
   )

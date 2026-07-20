@@ -8,12 +8,25 @@ import { UsersPrimaryButtons } from "@/features/central/users/components/users-p
 import { UsersProvider } from "@/features/central/users/components/users-provider"
 import { UsersStats } from "@/features/central/users/components/users-stats"
 import { UsersTable } from "@/features/central/users/components/users-table"
+import { permissions } from "@/features/central/auth/components/permissions"
+import { Header } from "@/components/layout/header"
+import { ThemeSwitch } from "@/components/theme-switch"
+import { ConfigDrawer } from "@/components/config-drawer"
+import { Main } from "@/components/layout/main"
+import { Search } from "@/components/search"
+import { ProfileDropdown } from "@/features/central/shell/profile-dropdown"
 
 export default function UsersPage() {
   return (
-    <CentralAuthGuard permissions="users.view">
+    <CentralAuthGuard permissions={permissions.users.accounts.view}>
       <UsersProvider>
-        <div className="flex flex-1 flex-col gap-4 sm:gap-6">
+        <Header fixed>
+          <Search className="me-auto" />
+          <ThemeSwitch />
+          <ConfigDrawer />
+          <ProfileDropdown />
+        </Header>
+        <Main className="flex flex-1 flex-col gap-4 sm:gap-6">
           <PageHeader
             title="Users"
             description="Manage central platform administrators and staff."
@@ -24,7 +37,7 @@ export default function UsersPage() {
           <UsersTable />
           <UsersDialogs />
           <UsersBulkDialogs />
-        </div>
+        </Main>
       </UsersProvider>
     </CentralAuthGuard>
   )

@@ -8,12 +8,25 @@ import { PermissionsPrimaryButtons } from "@/features/central/permissions/compon
 import { PermissionsProvider } from "@/features/central/permissions/components/permissions-provider"
 import { PermissionsStats } from "@/features/central/permissions/components/permissions-stats"
 import { PermissionsTable } from "@/features/central/permissions/components/permissions-table"
+import { permissions } from "@/features/central/auth/components/permissions"
+import { Header } from "@/components/layout/header"
+import { ThemeSwitch } from "@/components/theme-switch"
+import { ConfigDrawer } from "@/components/config-drawer"
+import { Main } from "@/components/layout/main"
+import { Search } from "@/components/search"
+import { ProfileDropdown } from "@/features/central/shell/profile-dropdown"
 
 export default function PermissionsPage() {
   return (
-    <CentralAuthGuard permissions="permissions.view">
+    <CentralAuthGuard permissions={permissions.users.permissions.view}>
       <PermissionsProvider>
-        <div className="flex flex-1 flex-col gap-4 sm:gap-6">
+        <Header fixed>
+          <Search className="me-auto" />
+          <ThemeSwitch />
+          <ConfigDrawer />
+          <ProfileDropdown />
+        </Header>
+        <Main className="flex flex-1 flex-col gap-4 sm:gap-6">
           <PageHeader
             title="Permissions"
             description="Manage the platform permission catalog."
@@ -24,7 +37,7 @@ export default function PermissionsPage() {
           <PermissionsTable />
           <PermissionsDialogs />
           <PermissionsBulkDialogs />
-        </div>
+        </Main>
       </PermissionsProvider>
     </CentralAuthGuard>
   )

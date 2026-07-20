@@ -8,12 +8,25 @@ import { RolesPrimaryButtons } from "@/features/central/roles/components/roles-p
 import { RolesProvider } from "@/features/central/roles/components/roles-provider"
 import { RolesStats } from "@/features/central/roles/components/roles-stats"
 import { RolesTable } from "@/features/central/roles/components/roles-table"
+import { permissions } from "@/features/central/auth/components/permissions"
+import { Header } from "@/components/layout/header"
+import { ThemeSwitch } from "@/components/theme-switch"
+import { ConfigDrawer } from "@/components/config-drawer"
+import { Main } from "@/components/layout/main"
+import { Search } from "@/components/search"
+import { ProfileDropdown } from "@/features/central/shell/profile-dropdown"
 
 export default function RolesPage() {
   return (
-    <CentralAuthGuard permissions="roles.view">
+    <CentralAuthGuard permissions={permissions.users.roles.view}>
       <RolesProvider>
-        <div className="flex flex-1 flex-col gap-4 sm:gap-6">
+        <Header fixed>
+          <Search className="me-auto" />
+          <ThemeSwitch />
+          <ConfigDrawer />
+          <ProfileDropdown />
+        </Header>
+        <Main className="flex flex-1 flex-col gap-4 sm:gap-6">
           <PageHeader
             title="Roles"
             description="Manage platform roles and their permissions."
@@ -24,7 +37,7 @@ export default function RolesPage() {
           <RolesTable />
           <RolesDialogs />
           <RolesBulkDialogs />
-        </div>
+        </Main>
       </RolesProvider>
     </CentralAuthGuard>
   )

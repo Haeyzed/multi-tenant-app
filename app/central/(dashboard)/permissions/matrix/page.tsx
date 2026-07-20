@@ -8,11 +8,24 @@ import { Button } from "@/components/ui/button"
 import { CentralAuthGuard } from "@/features/central/auth/components/auth-guard"
 import { PermissionMatrixPanel } from "@/features/central/permissions/components/permission-matrix-panel"
 import { centralRoutes } from "@/features/central/shell/routes"
+import { permissions } from "@/features/central/auth/components/permissions"
+import { Header } from "@/components/layout/header"
+import { ThemeSwitch } from "@/components/theme-switch"
+import { ConfigDrawer } from "@/components/config-drawer"
+import { Main } from "@/components/layout/main"
+import { Search } from "@/components/search"
+import { ProfileDropdown } from "@/features/central/shell/profile-dropdown"
 
 export default function PermissionMatrixPage() {
   return (
-    <CentralAuthGuard permissions="permissions.view">
-      <div className="flex flex-1 flex-col gap-4 sm:gap-6">
+    <CentralAuthGuard permissions={permissions.users.permissions.view}>
+      <Header fixed>
+        <Search className="me-auto" />
+        <ThemeSwitch />
+        <ConfigDrawer />
+        <ProfileDropdown />
+      </Header>
+      <Main className="flex flex-1 flex-col gap-4 sm:gap-6">
         <div className="space-y-4">
           <Button
             variant="ghost"
@@ -29,7 +42,7 @@ export default function PermissionMatrixPage() {
           />
         </div>
         <PermissionMatrixPanel />
-      </div>
+      </Main>
     </CentralAuthGuard>
   )
 }

@@ -7,12 +7,25 @@ import { SubscriptionsPrimaryButtons } from "@/features/central/billing/subscrip
 import { SubscriptionsProvider } from "@/features/central/billing/subscriptions/components/subscriptions-provider"
 import { SubscriptionsStats } from "@/features/central/billing/subscriptions/components/subscriptions-stats"
 import { SubscriptionsTable } from "@/features/central/billing/subscriptions/components/subscriptions-table"
+import { permissions } from "@/features/central/auth/components/permissions"
+import { Header } from "@/components/layout/header"
+import { ThemeSwitch } from "@/components/theme-switch"
+import { ConfigDrawer } from "@/components/config-drawer"
+import { Main } from "@/components/layout/main"
+import { Search } from "@/components/search"
+import { ProfileDropdown } from "@/features/central/shell/profile-dropdown"
 
 export default function SubscriptionsPage() {
   return (
-    <CentralAuthGuard permissions="subscriptions.view">
+    <CentralAuthGuard permissions={permissions.billing.subscriptions.view}>
       <SubscriptionsProvider>
-        <div className="flex flex-1 flex-col gap-4 sm:gap-6">
+        <Header fixed>
+          <Search className="me-auto" />
+          <ThemeSwitch />
+          <ConfigDrawer />
+          <ProfileDropdown />
+        </Header>
+        <Main className="flex flex-1 flex-col gap-4 sm:gap-6">
           <PageHeader
             title="Subscriptions"
             description="Manage tenant subscription lifecycles."
@@ -22,7 +35,7 @@ export default function SubscriptionsPage() {
           <SubscriptionsStats />
           <SubscriptionsTable />
           <SubscriptionsDialogs />
-        </div>
+        </Main>
       </SubscriptionsProvider>
     </CentralAuthGuard>
   )
