@@ -19,7 +19,7 @@ import { ProfileDropdown } from "@/features/central/shell/profile-dropdown"
 
 export default function MonitoringPage() {
   return (
-    <CentralAuthGuard permissions={permissions.platform.monitoring.view}>
+    <CentralAuthGuard permissions={permissions.monitoring.view}>
       <MonitoringProvider>
         <Header fixed>
           <Search className="me-auto" />

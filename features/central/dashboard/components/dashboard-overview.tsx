@@ -40,11 +40,6 @@ export function DashboardOverview() {
 
   return (
     <div className="flex flex-1 flex-col gap-4 sm:gap-6">
-      <PageHeader
-        title="Dashboard"
-        description="Overview of your central platform activity."
-      />
-
       {overviewQuery.isLoading ? (
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           {Array.from({ length: 4 }).map((_, index) => (

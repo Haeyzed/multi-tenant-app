@@ -18,7 +18,7 @@ import { ProfileDropdown } from "@/features/central/shell/profile-dropdown"
 
 export default function PermissionMatrixPage() {
   return (
-    <CentralAuthGuard permissions={permissions.users.permissions.view}>
+    <CentralAuthGuard permissions={permissions.permissions.view}>
       <Header fixed>
         <Search className="me-auto" />
         <ThemeSwitch />

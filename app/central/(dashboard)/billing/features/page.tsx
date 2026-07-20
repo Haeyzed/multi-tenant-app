@@ -16,7 +16,7 @@ import { ProfileDropdown } from "@/features/central/shell/profile-dropdown"
 
 export default function FeaturesPage() {
   return (
-    <CentralAuthGuard permissions={permissions.billing.features.view}>
+    <CentralAuthGuard permissions={permissions.features.view}>
       <FeaturesProvider>
         <Header fixed>
           <Search className="me-auto" />

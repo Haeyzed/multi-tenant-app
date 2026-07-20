@@ -32,7 +32,7 @@ export function PermissionsStats() {
 
     return (
         <PermissionGate
-            permissions={[permissions.users.permissions.view]}
+            permissions={[permissions.permissions.view]}
             fallback={
                 <div className="flex h-32 w-full flex-col items-center justify-center rounded-xl border border-dashed text-center">
                     <LockIcon className="text-muted-foreground mb-1.5 size-5" />

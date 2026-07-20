@@ -18,7 +18,7 @@ import { ProfileDropdown } from "@/features/central/shell/profile-dropdown"
 
 export default function RolesPage() {
   return (
-    <CentralAuthGuard permissions={permissions.users.roles.view}>
+    <CentralAuthGuard permissions={permissions.roles.view}>
       <RolesProvider>
         <Header fixed>
           <Search className="me-auto" />

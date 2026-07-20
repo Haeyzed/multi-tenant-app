@@ -49,7 +49,7 @@ export function PermissionsBulkActions<TData>({
           <ActionBarSelection>
             {selectedRows.length} selected
           </ActionBarSelection>
-          <PermissionGate permissions={[permissions.users.permissions.delete]}>
+          <PermissionGate permissions={[permissions.permissions.delete]}>
             <ActionBarItem onClick={openBulkDelete}>
               <Trash2 className="size-4" />
               Delete

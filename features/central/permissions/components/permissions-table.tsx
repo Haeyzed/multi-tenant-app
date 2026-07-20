@@ -64,7 +64,7 @@ export function PermissionsTable() {
 
   return (
       <PermissionGate
-          permissions={[permissions.users.permissions.view]}
+          permissions={[permissions.permissions.view]}
           fallback={
             <div className="flex flex-col items-center justify-center rounded-xl border border-dashed p-12 text-center">
               <LockIcon className="text-muted-foreground mb-2 size-8" />

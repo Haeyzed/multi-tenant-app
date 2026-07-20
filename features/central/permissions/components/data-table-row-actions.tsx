@@ -38,7 +38,7 @@ export function DataTableRowActions<TData>({
             />
             <DropdownMenuContent align="end" className="w-48">
                 <PermissionGate
-                    permissions={[permissions.users.permissions.view]}
+                    permissions={[permissions.permissions.view]}
                     fallback={
                         <DropdownMenuItem disabled className="text-muted-foreground opacity-50">
                             <LockIcon className="mr-2 size-4" />
@@ -58,7 +58,7 @@ export function DataTableRowActions<TData>({
                 </PermissionGate>
 
                 <PermissionGate
-                    permissions={[permissions.users.permissions.update]}
+                    permissions={[permissions.permissions.update]}
                     fallback={
                         <DropdownMenuItem disabled className="text-muted-foreground opacity-50">
                             <LockIcon className="mr-2 size-4" />
@@ -80,7 +80,7 @@ export function DataTableRowActions<TData>({
                 <DropdownMenuSeparator />
 
                 <PermissionGate
-                    permissions={[permissions.users.permissions.delete]}
+                    permissions={[permissions.permissions.delete]}
                     fallback={
                         <DropdownMenuItem disabled className="text-muted-foreground opacity-50">
                             <LockIcon className="mr-2 size-4" />

@@ -154,8 +154,8 @@ export function PermissionsFormDialog({
             <PermissionGate
                 permissions={[
                   isUpdate
-                      ? permissions.users.permissions.update
-                      : permissions.users.permissions.create,
+                      ? permissions.permissions.update
+                      : permissions.permissions.create,
                 ]}
                 fallback={
                   <Button disabled variant="outline">

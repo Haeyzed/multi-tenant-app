@@ -15,7 +15,7 @@ export function PermissionsPrimaryButtons() {
     return (
         <div className="flex flex-wrap items-center gap-2">
             <PermissionGate
-                permissions={[permissions.users.permissions.view]}
+                permissions={[permissions.permissions.view]}
                 fallback={
                     <Button disabled variant="outline" className="gap-1 opacity-60">
                         <LockIcon className="size-3.5" />
@@ -30,7 +30,7 @@ export function PermissionsPrimaryButtons() {
             </PermissionGate>
 
             <PermissionGate
-                permissions={[permissions.users.permissions.create]}
+                permissions={[permissions.permissions.create]}
                 fallback={
                     <Button disabled variant="outline" className="gap-1 opacity-60">
                         <LockIcon className="size-3.5" />
