@@ -8,10 +8,11 @@ import { TenantsPrimaryButtons } from "@/features/central/tenants/components/ten
 import { TenantsProvider } from "@/features/central/tenants/components/tenants-provider"
 import { TenantsStats } from "@/features/central/tenants/components/tenants-stats"
 import { TenantsTable } from "@/features/central/tenants/components/tenants-table"
+import {permissions} from "@/features/central/auth/components/permissions";
 
 export default function TenantsPage() {
   return (
-    <CentralAuthGuard permissions="tenants.view">
+    <CentralAuthGuard permissions={permissions.tenants.view}>
       <TenantsProvider>
         <div className="flex flex-1 flex-col gap-4 sm:gap-6">
           <PageHeader

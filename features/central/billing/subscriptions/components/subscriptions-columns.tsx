@@ -2,7 +2,7 @@
 
 import { type ColumnDef } from "@tanstack/react-table"
 import {
-  AlertTriangle,
+  AlertTriangle, CalendarIcon,
   CheckCircle2,
   Clock,
   CreditCard,
@@ -168,6 +168,7 @@ export const columns: ColumnDef<Subscription>[] = [
       ),
   },
   {
+    id: "created_at",
     accessorKey: "created_at",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} label="Created" />
@@ -177,6 +178,12 @@ export const columns: ColumnDef<Subscription>[] = [
         {new Date(row.getValue("created_at")).toLocaleDateString()}
       </span>
     ),
+    meta: {
+      label: "Date Range",
+      variant: "dateRange",
+      icon: CalendarIcon,
+    },
+    enableColumnFilter: true,
   },
   {
     id: "actions",

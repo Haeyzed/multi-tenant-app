@@ -52,6 +52,9 @@ import { handleFormApiError } from "@/lib/form-api-errors"
 import { getTenantBaseDomain } from "@/lib/tenant-domain"
 import { toastApiSuccess } from "@/lib/toast-api"
 import type { Tenant, TenantStatus } from "@/types/central/tenant"
+import {PermissionGate} from "@/features/central/auth/components/permission-gate";
+import {permissions} from "@/features/central/auth/components/permissions";
+import {LockIcon} from "lucide-react";
 
 type TenantsFormDialogProps = {
   open: boolean
@@ -391,12 +394,22 @@ export function TenantsFormDialog({
 
         <ResponsiveDialogFooter>
           <ResponsiveDialogClose
-            render={<Button variant="outline">Cancel</Button>}
+              render={<Button variant="outline">Cancel</Button>}
           />
-          <Button type="submit" form="tenant-form" disabled={isSubmitting}>
-            {isSubmitting ? <Spinner /> : null}
-            {isUpdate ? "Save changes" : "Create tenant"}
-          </Button>
+          <PermissionGate
+              permissions={[isUpdate ? permissions.tenants.update : permissions.tenants.create]}
+              fallback={
+                <Button disabled variant="outline">
+                  <LockIcon className="mr-1.5 size-3.5" />
+                  {isUpdate ? "Save changes (Locked)" : "Create tenant (Locked)"}
+                </Button>
+              }
+          >
+            <Button type="submit" form="tenant-form" disabled={isSubmitting}>
+              {isSubmitting ? <Spinner /> : null}
+              {isUpdate ? "Save changes" : "Create tenant"}
+            </Button>
+          </PermissionGate>
         </ResponsiveDialogFooter>
       </ResponsiveDialogContent>
     </ResponsiveDialog>

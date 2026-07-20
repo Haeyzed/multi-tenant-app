@@ -5,13 +5,14 @@ import { centralApiClient } from "@/lib/api/central-client"
 import { centralRoutes } from "@/features/central/shell/routes"
 import { useRouter } from "next/navigation"
 import { useEffect } from "react"
+import {Permission} from "@/features/central/auth/components/permissions";
 
 export function CentralAuthGuard({
   children,
   permissions,
 }: {
   children: React.ReactNode
-  permissions?: string | string[]
+  permissions?: Permission | Permission[]
 }) {
   const { user, isLoading, hasPermission, isSuperAdmin } = useCentralAuth()
   const router = useRouter()

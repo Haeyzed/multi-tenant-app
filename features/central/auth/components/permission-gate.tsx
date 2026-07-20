@@ -1,20 +1,51 @@
 "use client"
 
+import * as React from "react"
+import { LockIcon } from "lucide-react"
+
+import { Badge } from "@/components/ui/badge"
 import { useCentralAuth } from "@/lib/providers/central-auth-provider"
+import {Permission} from "@/features/central/auth/components/permissions";
+
+type PermissionGateProps = {
+  permissions: Permission | Permission[]
+  children: React.ReactNode
+  /** Optional custom UI to render when access is denied. */
+  fallback?: React.ReactNode
+  /** If true, user must have ALL listed permissions. If false (default), ANY permission grants access. */
+  requireAll?: boolean
+}
+
+/**
+ * A default lightweight fallback badge if you don't pass a custom fallback prop.
+ */
+function DefaultAccessDenied() {
+  return (
+      <div className="flex items-center justify-center p-4">
+        <Badge variant="outline" className="text-muted-foreground flex items-center gap-1.5 py-1">
+          <LockIcon className="size-3.5" />
+          <span>Access Restricted</span>
+        </Badge>
+      </div>
+  )
+}
 
 export function PermissionGate({
-  permissions,
-  children,
-}: {
-  permissions: string | string[]
-  children: React.ReactNode
-}) {
+                                 permissions,
+                                 children,
+                                 fallback = <DefaultAccessDenied />,
+                                 requireAll = false,
+                               }: PermissionGateProps) {
   const { hasPermission, isSuperAdmin } = useCentralAuth()
   const required = Array.isArray(permissions) ? permissions : [permissions]
-  const canAccess = isSuperAdmin || required.every(hasPermission)
+
+  // Uses .some() for OR checks (default), .every() for AND checks
+  const canAccess =
+      isSuperAdmin ||
+      (requireAll ? required.every(hasPermission) : required.some(hasPermission))
 
   if (!canAccess) {
-    return null
+    return <>{fallback}</>
   }
 
   return <>{children}</>

@@ -12,6 +12,7 @@ import {
   ActionBarSelection,
 } from "@/components/ui/action-bar"
 import { PermissionGate } from "@/features/central/auth/components/permission-gate"
+import { permissions } from "@/features/central/auth/components/permissions"
 import { usePermissions } from "@/features/central/permissions/components/permissions-provider"
 import type { PermissionItem } from "@/types/central/rbac"
 
@@ -20,18 +21,18 @@ type PermissionsBulkActionsProps<TData> = {
 }
 
 export function PermissionsBulkActions<TData>({
-  table,
-}: PermissionsBulkActionsProps<TData>) {
+                                                table,
+                                              }: PermissionsBulkActionsProps<TData>) {
   const { setOpen, setBulkSelection } = usePermissions()
   const selectedRows = table.getFilteredSelectedRowModel().rows
 
   const onOpenChange = React.useCallback(
-    (open: boolean) => {
-      if (!open) {
-        table.toggleAllRowsSelected(false)
-      }
-    },
-    [table]
+      (open: boolean) => {
+        if (!open) {
+          table.toggleAllRowsSelected(false)
+        }
+      },
+      [table]
   )
 
   const openBulkDelete = () => {
@@ -43,19 +44,19 @@ export function PermissionsBulkActions<TData>({
   }
 
   return (
-    <ActionBar open={selectedRows.length > 0} onOpenChange={onOpenChange}>
-      <ActionBarGroup>
-        <ActionBarSelection>
-          {selectedRows.length} selected
-        </ActionBarSelection>
-        <PermissionGate permissions="permissions.delete">
-          <ActionBarItem onClick={openBulkDelete}>
-            <Trash2 className="size-4" />
-            Delete
-          </ActionBarItem>
-        </PermissionGate>
-      </ActionBarGroup>
-      <ActionBarClose />
-    </ActionBar>
+      <ActionBar open={selectedRows.length > 0} onOpenChange={onOpenChange}>
+        <ActionBarGroup>
+          <ActionBarSelection>
+            {selectedRows.length} selected
+          </ActionBarSelection>
+          <PermissionGate permissions={[permissions.users.permissions.delete]}>
+            <ActionBarItem onClick={openBulkDelete}>
+              <Trash2 className="size-4" />
+              Delete
+            </ActionBarItem>
+          </PermissionGate>
+        </ActionBarGroup>
+        <ActionBarClose />
+      </ActionBar>
   )
 }

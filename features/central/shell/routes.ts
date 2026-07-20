@@ -38,8 +38,6 @@ export const centralRoutes = {
     success: "/central/billing/success",
     cancel: "/central/billing/cancel",
   },
-  /** @deprecated Prefer centralRoutes.billing.plans */
-  plans: "/central/billing/plans",
 } as const
 
 export function billingCheckoutUrl(subscriptionId: string | number): string {

@@ -42,6 +42,8 @@ export function useGetSubscriptions(params?: {
   plan_id?: number
   gateway?: string
   search?: string
+  start_date?: string
+  end_date?: string
   per_page?: number
   page?: number
 }) {

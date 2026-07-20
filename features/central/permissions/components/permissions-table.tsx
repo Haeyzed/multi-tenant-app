@@ -1,10 +1,13 @@
 "use client"
 
+import { LockIcon } from "lucide-react"
 import { parseAsInteger, parseAsString, useQueryState } from "nuqs"
 
 import { DataTable } from "@/components/data-table/data-table"
 import { DataTableSkeleton } from "@/components/data-table/data-table-skeleton"
 import { DataTableToolbar } from "@/components/data-table/data-table-toolbar"
+import { PermissionGate } from "@/features/central/auth/components/permission-gate"
+import { permissions } from "@/features/central/auth/components/permissions"
 import { PermissionsBulkActions } from "@/features/central/permissions/components/permissions-bulk-actions"
 import { columns } from "@/features/central/permissions/components/permissions-columns"
 import { useGetPaginatedPermissions } from "@/features/central/permissions/hooks/use-permission-query"
@@ -50,23 +53,36 @@ export function PermissionsTable() {
 
   if (isLoading) {
     return (
-      <DataTableSkeleton
-        columnCount={COLUMN_COUNT}
-        rowCount={perPage}
-        filterCount={FILTER_COUNT}
-        cellWidths={["auto", "12rem", "8rem", "6rem", "8rem", "3rem"]}
-      />
+        <DataTableSkeleton
+            columnCount={COLUMN_COUNT}
+            rowCount={perPage}
+            filterCount={FILTER_COUNT}
+            cellWidths={["auto", "12rem", "8rem", "6rem", "8rem", "3rem"]}
+        />
     )
   }
 
   return (
-    <div className="data-table-container space-y-4">
-      <DataTable
-        table={table}
-        actionBar={<PermissionsBulkActions table={table} />}
+      <PermissionGate
+          permissions={[permissions.users.permissions.view]}
+          fallback={
+            <div className="flex flex-col items-center justify-center rounded-xl border border-dashed p-12 text-center">
+              <LockIcon className="text-muted-foreground mb-2 size-8" />
+              <h3 className="font-semibold">Access Restricted</h3>
+              <p className="text-muted-foreground text-sm">
+                You do not have permission to view the permissions catalog table.
+              </p>
+            </div>
+          }
       >
-        <DataTableToolbar table={table} />
-      </DataTable>
-    </div>
+        <div className="data-table-container space-y-4">
+          <DataTable
+              table={table}
+              actionBar={<PermissionsBulkActions table={table} />}
+          >
+            <DataTableToolbar table={table} />
+          </DataTable>
+        </div>
+      </PermissionGate>
   )
 }

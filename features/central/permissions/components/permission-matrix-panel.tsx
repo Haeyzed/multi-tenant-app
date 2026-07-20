@@ -1,27 +1,30 @@
 "use client"
 
 import * as React from "react"
+import { LockIcon } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Spinner } from "@/components/ui/spinner"
-import { useCentralAuth } from "@/lib/providers/central-auth-provider"
+import { PermissionGate } from "@/features/central/auth/components/permission-gate"
+import { permissions } from "@/features/central/auth/components/permissions"
 import {
   useGetPermissionMatrix,
   useSyncRolePermissions,
 } from "@/features/central/roles/hooks/use-role-query"
-import { toastApiError, toastApiSuccess } from "@/lib/toast-api"
 import { useQueryErrorToast } from "@/hooks/use-query-error-toast"
+import { useCentralAuth } from "@/lib/providers/central-auth-provider"
+import { toastApiError, toastApiSuccess } from "@/lib/toast-api"
 import { cn } from "@/lib/utils"
 
 export function PermissionMatrixPanel() {
-  const { hasPermission } = useCentralAuth()
-  const canEdit = hasPermission("roles.assign-permissions")
+  const { hasPermission, isSuperAdmin } = useCentralAuth()
+  const canEdit = isSuperAdmin || hasPermission(permissions.users.roles.assignPermission)
   const { data, isLoading, error } = useGetPermissionMatrix()
   const syncRolePermissions = useSyncRolePermissions()
   const [draftMatrix, setDraftMatrix] = React.useState<Record<string, string[]>>(
-    {}
+      {}
   )
   const [dirtyRoles, setDirtyRoles] = React.useState<Set<number>>(new Set())
   const [isSaving, setIsSaving] = React.useState(false)
@@ -38,10 +41,15 @@ export function PermissionMatrixPanel() {
   const roles = data?.roles ?? []
   const groups = data?.groups ?? []
 
+  // Flatten all available permission names in the system
+  const allPermissionNames = React.useMemo(() => {
+    return groups.flatMap((g) => g.permissions.map((p) => p.name))
+  }, [groups])
+
   const togglePermission = (
-    roleId: number,
-    permissionName: string,
-    checked: boolean
+      roleId: number,
+      permissionName: string,
+      checked: boolean
   ) => {
     if (!canEdit) {
       return
@@ -50,8 +58,48 @@ export function PermissionMatrixPanel() {
     const roleKey = String(roleId)
     const current = draftMatrix[roleKey] ?? []
     const next = checked
-      ? [...current, permissionName]
-      : current.filter((permission) => permission !== permissionName)
+        ? [...current, permissionName]
+        : current.filter((permission) => permission !== permissionName)
+
+    setDraftMatrix((prev) => ({
+      ...prev,
+      [roleKey]: next,
+    }))
+    setDirtyRoles((prev) => new Set(prev).add(roleId))
+  }
+
+  // Toggle ALL permissions globally for a specific role
+  const toggleAllForRole = (roleId: number, checked: boolean) => {
+    if (!canEdit) {
+      return
+    }
+
+    const roleKey = String(roleId)
+    const next = checked ? [...allPermissionNames] : []
+
+    setDraftMatrix((prev) => ({
+      ...prev,
+      [roleKey]: next,
+    }))
+    setDirtyRoles((prev) => new Set(prev).add(roleId))
+  }
+
+  // Toggle ALL permissions within a specific group/category for a role
+  const toggleGroupForRole = (
+      roleId: number,
+      groupPermissions: string[],
+      checked: boolean
+  ) => {
+    if (!canEdit) {
+      return
+    }
+
+    const roleKey = String(roleId)
+    const current = draftMatrix[roleKey] ?? []
+
+    const next = checked
+        ? Array.from(new Set([...current, ...groupPermissions]))
+        : current.filter((p) => !groupPermissions.includes(p))
 
     setDraftMatrix((prev) => ({
       ...prev,
@@ -86,110 +134,191 @@ export function PermissionMatrixPanel() {
 
   if (isLoading) {
     return (
-      <div className="space-y-4">
-        <Skeleton className="h-10 w-40" />
-        <Skeleton className="h-96 rounded-xl" />
-      </div>
+        <div className="space-y-4">
+          <Skeleton className="h-10 w-40" />
+          <Skeleton className="h-96 rounded-xl" />
+        </div>
     )
   }
 
   return (
-    <div className="space-y-4">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="text-muted-foreground text-sm">
-          {canEdit
-            ? "Toggle permissions per role, then save your changes."
-            : "Read-only view of role permissions."}
-        </p>
-        {canEdit ? (
-          <Button
-            onClick={handleSave}
-            disabled={isSaving || dirtyRoles.size === 0}
-          >
-            {isSaving ? <Spinner /> : null}
-            Save changes
-            {dirtyRoles.size > 0 ? ` (${dirtyRoles.size})` : ""}
-          </Button>
-        ) : null}
-      </div>
-
-      <div className="overflow-x-auto rounded-lg border">
-        <table className="min-w-full border-collapse text-sm">
-          <thead className="bg-muted/50">
-            <tr>
-              <th className="sticky left-0 z-20 min-w-56 border-b bg-muted/95 px-4 py-3 text-start font-medium">
-                Permission
-              </th>
-              {roles.map((role) => (
-                <th
-                  key={role.id}
-                  className="sticky top-0 z-10 min-w-36 border-b px-4 py-3 text-center font-medium capitalize"
+      <PermissionGate
+          permissions={[permissions.users.permissions.view]}
+          fallback={
+            <div className="flex flex-col items-center justify-center rounded-xl border border-dashed p-12 text-center">
+              <LockIcon className="text-muted-foreground mb-2 size-8" />
+              <h3 className="font-semibold">Access Restricted</h3>
+              <p className="text-muted-foreground text-sm">
+                You do not have permission to view the role permissions matrix.
+              </p>
+            </div>
+          }
+      >
+        <div className="space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <p className="text-muted-foreground text-sm">
+              {canEdit
+                  ? "Toggle permissions per role, then save your changes."
+                  : "Read-only view of role permissions."}
+            </p>
+            {canEdit ? (
+                <Button
+                    onClick={handleSave}
+                    disabled={isSaving || dirtyRoles.size === 0}
                 >
-                  <div className="space-y-1">
-                    <span>{role.name}</span>
-                    <p className="text-muted-foreground text-xs font-normal">
-                      {role.users_count} users
-                    </p>
-                  </div>
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {groups.map((group) => (
-              <React.Fragment key={group.group}>
-                <tr className="bg-muted/30">
-                  <td
-                    colSpan={roles.length + 1}
-                    className="sticky left-0 border-b px-4 py-2 font-medium capitalize"
-                  >
-                    {group.group}
-                  </td>
-                </tr>
-                {group.permissions.map((permission) => (
-                  <tr key={permission.id} className="border-b last:border-b-0">
-                    <td className="sticky left-0 z-10 border-r bg-background px-4 py-3">
-                      {permission.name}
-                    </td>
-                    {roles.map((role) => {
-                      const roleKey = String(role.id)
-                      const checked = (draftMatrix[roleKey] ?? []).includes(
-                        permission.name
-                      )
-                      const isDirty = dirtyRoles.has(role.id)
+                  {isSaving ? <Spinner /> : null}
+                  Save changes
+                  {dirtyRoles.size > 0 ? ` (${dirtyRoles.size})` : ""}
+                </Button>
+            ) : null}
+          </div>
 
-                      return (
-                        <td
-                          key={`${role.id}-${permission.id}`}
-                          className={cn(
-                            "px-4 py-3 text-center",
-                            isDirty && "bg-primary/5"
-                          )}
-                        >
-                          <div className="flex justify-center">
-                            <Checkbox
-                              checked={checked}
-                              disabled={!canEdit || isSaving}
-                              onCheckedChange={(value) =>
-                                togglePermission(
-                                  role.id,
-                                  permission.name,
-                                  !!value
-                                )
-                              }
-                              aria-label={`${permission.name} for ${role.name}`}
-                            />
+          <div className="overflow-x-auto rounded-lg border">
+            <table className="min-w-full border-collapse text-sm">
+              <thead className="bg-muted/50">
+              <tr>
+                <th className="sticky left-0 z-20 min-w-56 border-b bg-muted/95 px-4 py-3 text-start font-medium">
+                  Permission
+                </th>
+                {roles.map((role) => {
+                  const roleKey = String(role.id)
+                  const rolePermissions = draftMatrix[roleKey] ?? []
+                  const isAllSelected =
+                      allPermissionNames.length > 0 &&
+                      allPermissionNames.every((p) => rolePermissions.includes(p))
+                  const isSomeSelected =
+                      rolePermissions.length > 0 && !isAllSelected
+
+                  return (
+                      <th
+                          key={role.id}
+                          className="sticky top-0 z-10 min-w-36 border-b px-4 py-3 text-center font-medium capitalize"
+                      >
+                        <div className="flex flex-col items-center justify-center gap-2">
+                          <div className="space-y-0.5 text-center">
+                            <span className="block font-semibold">{role.name}</span>
+                            <span className="text-muted-foreground block text-xs font-normal">
+                            {role.users_count} users
+                          </span>
                           </div>
+                          {canEdit && (
+                              <div className="flex items-center gap-1.5 pt-1">
+                                <Checkbox
+                                    checked={isAllSelected || (isSomeSelected ? "indeterminate" : false)}
+                                    disabled={!canEdit || isSaving}
+                                    onCheckedChange={(val) =>
+                                        toggleAllForRole(role.id, !!val)
+                                    }
+                                    aria-label={`Select all permissions for ${role.name}`}
+                                />
+                                <span className="text-muted-foreground text-[11px] font-normal">
+                              Select all
+                            </span>
+                              </div>
+                          )}
+                        </div>
+                      </th>
+                  )
+                })}
+              </tr>
+              </thead>
+              <tbody>
+              {groups.map((group) => {
+                const groupPermissionNames = group.permissions.map((p) => p.name)
+
+                return (
+                    <React.Fragment key={group.group}>
+                      <tr className="bg-muted/30">
+                        <td className="sticky left-0 z-10 border-b bg-muted/30 px-4 py-2 font-medium capitalize">
+                          {group.group}
                         </td>
-                      )
-                    })}
-                  </tr>
-                ))}
-              </React.Fragment>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
+                        {roles.map((role) => {
+                          const roleKey = String(role.id)
+                          const rolePermissions = draftMatrix[roleKey] ?? []
+                          const isGroupAllSelected =
+                              groupPermissionNames.length > 0 &&
+                              groupPermissionNames.every((p) =>
+                                  rolePermissions.includes(p)
+                              )
+                          const isGroupSomeSelected =
+                              groupPermissionNames.some((p) =>
+                                  rolePermissions.includes(p)
+                              ) && !isGroupAllSelected
+
+                          return (
+                              <td
+                                  key={`group-${group.group}-role-${role.id}`}
+                                  className="border-b px-4 py-2 text-center"
+                              >
+                                {canEdit && (
+                                    <div className="flex justify-center">
+                                      <Checkbox
+                                          checked={
+                                              isGroupAllSelected ||
+                                              (isGroupSomeSelected ? "indeterminate" : false)
+                                          }
+                                          disabled={!canEdit || isSaving}
+                                          onCheckedChange={(val) =>
+                                              toggleGroupForRole(
+                                                  role.id,
+                                                  groupPermissionNames,
+                                                  !!val
+                                              )
+                                          }
+                                          aria-label={`Select all ${group.group} permissions for ${role.name}`}
+                                      />
+                                    </div>
+                                )}
+                              </td>
+                          )
+                        })}
+                      </tr>
+                      {group.permissions.map((permission) => (
+                          <tr key={permission.id} className="border-b last:border-b-0">
+                            <td className="sticky left-0 z-10 border-r bg-background px-4 py-3">
+                              {permission.name}
+                            </td>
+                            {roles.map((role) => {
+                              const roleKey = String(role.id)
+                              const checked = (draftMatrix[roleKey] ?? []).includes(
+                                  permission.name
+                              )
+                              const isDirty = dirtyRoles.has(role.id)
+
+                              return (
+                                  <td
+                                      key={`${role.id}-${permission.id}`}
+                                      className={cn(
+                                          "px-4 py-3 text-center",
+                                          isDirty && "bg-primary/5"
+                                      )}
+                                  >
+                                    <div className="flex justify-center">
+                                      <Checkbox
+                                          checked={checked}
+                                          disabled={!canEdit || isSaving}
+                                          onCheckedChange={(value) =>
+                                              togglePermission(
+                                                  role.id,
+                                                  permission.name,
+                                                  !!value
+                                              )
+                                          }
+                                          aria-label={`${permission.name} for ${role.name}`}
+                                      />
+                                    </div>
+                                  </td>
+                              )
+                            })}
+                          </tr>
+                      ))}
+                    </React.Fragment>
+                )
+              })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </PermissionGate>
   )
 }

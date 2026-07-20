@@ -1,3 +1,6 @@
+import * as React from "react"
+import type { Permission } from "@/features/central/auth/components/permissions"
+
 type Team = {
   name: string
   logo: React.ElementType
@@ -8,6 +11,8 @@ type BaseNavItem = {
   title: string
   badge?: string
   icon?: React.ElementType
+  /** Optional array of permission strings required to view this item */
+  permissions?: Permission[]
 }
 
 type NavLink = BaseNavItem & {
@@ -25,6 +30,8 @@ type NavItem = NavCollapsible | NavLink
 type NavGroup = {
   title: string
   items: NavItem[]
+  /** Optional array of permission strings required to view this group */
+  permissions?: string[]
 }
 
 type SidebarData = {

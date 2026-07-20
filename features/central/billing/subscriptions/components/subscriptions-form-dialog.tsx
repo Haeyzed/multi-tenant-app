@@ -45,6 +45,7 @@ import { getTenantOptions } from "@/lib/services/central/tenant-service"
 import { toastApiSuccess } from "@/lib/toast-api"
 import type { Plan, PlanPrice } from "@/types/central/plan"
 import type { CountryOption } from "@/types/central/world"
+import { PermissionGate } from "@/features/central/auth/components/permission-gate"
 
 type SubscriptionsFormDialogProps = {
   open: boolean
@@ -391,14 +392,16 @@ export function SubscriptionsFormDialog({
           <ResponsiveDialogClose
             render={<Button variant="outline">Cancel</Button>}
           />
-          <Button
-            type="submit"
-            form="subscription-form"
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? <Spinner /> : null}
-            Create subscription
-          </Button>
+          <PermissionGate permissions="subscriptions.create">
+            <Button
+                type="submit"
+                form="subscription-form"
+                disabled={isSubmitting}
+            >
+              {isSubmitting ? <Spinner /> : null}
+              Create
+            </Button>
+          </PermissionGate>
         </ResponsiveDialogFooter>
       </ResponsiveDialogContent>
     </ResponsiveDialog>

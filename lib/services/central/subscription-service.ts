@@ -40,11 +40,13 @@ export async function getSubscriptions(params?: {
   plan_id?: number
   gateway?: string
   search?: string
+  start_date?: string
+  end_date?: string
   per_page?: number
   page?: number
 }): Promise<PaginatedSubscriptions> {
   const response = await centralApiClient.get<
-    ApiEnvelope<Subscription[]> & { meta?: PaginatedMeta }
+      ApiEnvelope<Subscription[]> & { meta?: PaginatedMeta }
   >("/subscriptions", params)
 
   return {

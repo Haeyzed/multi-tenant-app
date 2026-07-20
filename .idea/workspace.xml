@@ -6,8 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="b9199642-5776-47cf-a420-93777d317808" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/central/billing/feature-categories/components/feature-categories-table.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/features/central/billing/feature-categories/components/feature-categories-table.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/central/billing/features/components/features-form-dialog.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/features/central/billing/features/components/features-form-dialog.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -87,7 +85,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1784394177622</updated>
-      <workItem from="1784394179224" duration="6990000" />
+      <workItem from="1784394179224" duration="8363000" />
     </task>
     <servers />
   </component>

@@ -31,25 +31,6 @@ export function buildColumns(
       ),
     },
     {
-      id: "state_id",
-      accessorKey: "state_id",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} label="State" />
-      ),
-      cell: ({ row }) => (
-        <span className="text-muted-foreground">
-          {row.original.state?.name ?? row.original.state_id}
-        </span>
-      ),
-      meta: {
-        label: "State",
-        placeholder: "Select state...",
-        variant: "select",
-        options: stateOptions,
-      },
-      enableColumnFilter: showStateFilter,
-    },
-    {
       id: "country_id",
       accessorKey: "country_id",
       header: ({ column }) => (
@@ -66,6 +47,25 @@ export function buildColumns(
         options: countryOptions,
       },
       enableColumnFilter: true,
+    },
+    {
+      id: "state_id",
+      accessorKey: "state_id",
+      header: ({ column }) => (
+          <DataTableColumnHeader column={column} label="State" />
+      ),
+      cell: ({ row }) => (
+          <span className="text-muted-foreground">
+          {row.original.state?.name ?? row.original.state_id}
+        </span>
+      ),
+      meta: {
+        label: "State",
+        placeholder: "Select state...",
+        variant: "select",
+        options: stateOptions,
+      },
+      enableColumnFilter: showStateFilter,
     },
     {
       accessorKey: "state_code",

@@ -12,6 +12,7 @@ import {
   ActionBarSelection,
 } from "@/components/ui/action-bar"
 import { PermissionGate } from "@/features/central/auth/components/permission-gate"
+import { permissions } from "@/features/central/auth/components/permissions"
 import { useTenants } from "@/features/central/tenants/components/tenants-provider"
 import type { Tenant } from "@/types/central/tenant"
 
@@ -20,18 +21,18 @@ type TenantsBulkActionsProps<TData> = {
 }
 
 export function TenantsBulkActions<TData>({
-  table,
-}: TenantsBulkActionsProps<TData>) {
+                                            table,
+                                          }: TenantsBulkActionsProps<TData>) {
   const { setOpen, setBulkSelection } = useTenants()
   const selectedRows = table.getFilteredSelectedRowModel().rows
 
   const onOpenChange = React.useCallback(
-    (open: boolean) => {
-      if (!open) {
-        table.toggleAllRowsSelected(false)
-      }
-    },
-    [table]
+      (open: boolean) => {
+        if (!open) {
+          table.toggleAllRowsSelected(false)
+        }
+      },
+      [table]
   )
 
   const openBulk = (type: "deleteMany" | "suspendMany" | "activateMany") => {
@@ -43,31 +44,31 @@ export function TenantsBulkActions<TData>({
   }
 
   return (
-    <ActionBar open={selectedRows.length > 0} onOpenChange={onOpenChange}>
-      <ActionBarGroup>
-        <ActionBarSelection>
-          {selectedRows.length} selected
-        </ActionBarSelection>
-        <PermissionGate permissions="tenants.activate">
-          <ActionBarItem onClick={() => openBulk("activateMany")}>
-            <PlayCircle className="size-4" />
-            Activate
-          </ActionBarItem>
-        </PermissionGate>
-        <PermissionGate permissions="tenants.suspend">
-          <ActionBarItem onClick={() => openBulk("suspendMany")}>
-            <PauseCircle className="size-4" />
-            Suspend
-          </ActionBarItem>
-        </PermissionGate>
-        <PermissionGate permissions="tenants.delete">
-          <ActionBarItem onClick={() => openBulk("deleteMany")}>
-            <Trash2 className="size-4" />
-            Delete
-          </ActionBarItem>
-        </PermissionGate>
-      </ActionBarGroup>
-      <ActionBarClose />
-    </ActionBar>
+      <ActionBar open={selectedRows.length > 0} onOpenChange={onOpenChange}>
+        <ActionBarGroup>
+          <ActionBarSelection>
+            {selectedRows.length} selected
+          </ActionBarSelection>
+          <PermissionGate permissions={[permissions.tenants.update]}>
+            <ActionBarItem onClick={() => openBulk("activateMany")}>
+              <PlayCircle className="size-4" />
+              Activate
+            </ActionBarItem>
+          </PermissionGate>
+          <PermissionGate permissions={[permissions.tenants.update]}>
+            <ActionBarItem onClick={() => openBulk("suspendMany")}>
+              <PauseCircle className="size-4" />
+              Suspend
+            </ActionBarItem>
+          </PermissionGate>
+          <PermissionGate permissions={[permissions.tenants.delete]}>
+            <ActionBarItem onClick={() => openBulk("deleteMany")}>
+              <Trash2 className="size-4" />
+              Delete
+            </ActionBarItem>
+          </PermissionGate>
+        </ActionBarGroup>
+        <ActionBarClose />
+      </ActionBar>
   )
 }
