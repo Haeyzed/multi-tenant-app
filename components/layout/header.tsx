@@ -15,34 +15,28 @@ export function Header({ className, fixed, children, ...props }: HeaderProps) {
 
   useEffect(() => {
     const onScroll = () => {
+      // Note: If offset stays 0, change `document.documentElement` to your main scrollable container's DOM node
       setOffset(document.body.scrollTop || document.documentElement.scrollTop)
     }
 
-    // Add scroll listener to the body
     document.addEventListener('scroll', onScroll, { passive: true })
-
-    // Clean up the event listener on unmount
     return () => document.removeEventListener('scroll', onScroll)
   }, [])
 
   return (
       <header
           className={cn(
-              'z-50 h-16',
+              'z-50 h-16 transition-all duration-200',
               fixed && 'header-fixed peer/header sticky top-0 w-[inherit]',
-              offset > 10 && fixed ? 'shadow' : 'shadow-none',
+              // Apply background and backdrop-blur directly to the header when scrolled
+              offset > 10 && fixed
+                  ? 'shadow-sm bg-background/80 backdrop-blur-md border-b'
+                  : 'shadow-none bg-transparent',
               className
           )}
           {...props}
       >
-        <div
-            className={cn(
-                'relative flex h-full items-center gap-3 p-4 sm:gap-4',
-                offset > 10 &&
-                fixed &&
-                'after:absolute after:inset-0 after:-z-10 after:bg-background/20 after:backdrop-blur-lg'
-            )}
-        >
+        <div className="relative flex h-full items-center gap-3 p-4 sm:gap-4">
           <SidebarTrigger variant='outline' className='max-md:scale-125' />
           <Separator orientation='vertical' className='h-6' />
           {children}
