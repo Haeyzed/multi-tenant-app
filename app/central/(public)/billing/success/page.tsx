@@ -1,38 +1,36 @@
-import { Suspense } from "react"
+import {Suspense} from "react"
 
 
+import {Spinner} from "@/components/ui/spinner"
 
-import { Spinner } from "@/components/ui/spinner"
-
-import { BillingSuccessClient } from "@/features/central/billing/checkout/components/billing-success-client"
-
+import {BillingSuccessClient} from "@/features/central/billing/checkout/components/billing-success-client"
 
 
 export default function BillingSuccessPage() {
 
-  return (
+    return (
 
-    <Suspense
+        <Suspense
 
-      fallback={
+            fallback={
 
-        <div className="flex flex-col items-center gap-3 text-center">
+                <div className="flex flex-col items-center gap-3 text-center">
 
-          <Spinner className="size-6" />
+                    <Spinner className="size-6"/>
 
-          <p className="text-muted-foreground text-sm">Loading…</p>
+                    <p className="text-muted-foreground text-sm">Loading…</p>
 
-        </div>
+                </div>
 
-      }
+            }
 
-    >
+        >
 
-      <BillingSuccessClient />
+            <BillingSuccessClient/>
 
-    </Suspense>
+        </Suspense>
 
-  )
+    )
 
 }
 

@@ -1,8 +1,8 @@
-import { z } from "zod"
+import {z} from "zod"
 
 export const refundPaymentSchema = z.object({
-  amount: z.coerce.number().positive().optional(),
-  reason: z.string().optional(),
+    amount: z.coerce.number().positive().optional(),
+    reason: z.string().optional(),
 })
 
 export type RefundPaymentFormValues = z.infer<typeof refundPaymentSchema>

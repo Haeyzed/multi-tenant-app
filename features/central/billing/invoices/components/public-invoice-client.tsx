@@ -2,9 +2,9 @@
 
 import * as React from "react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
+import {useRouter} from "next/navigation"
 
-import { Button, buttonVariants } from "@/components/ui/button"
+import {Button, buttonVariants} from "@/components/ui/button"
 import {
     Combobox,
     ComboboxContent,
@@ -13,17 +13,17 @@ import {
     ComboboxItem,
     ComboboxList,
 } from "@/components/ui/combobox"
-import { Field, FieldContent, FieldLabel } from "@/components/ui/field"
-import { Spinner } from "@/components/ui/spinner"
-import { InvoiceDocument } from "@/features/central/billing/invoices/components/invoice-document"
-import { centralRoutes } from "@/features/central/shell/routes"
+import {Field, FieldContent, FieldLabel} from "@/components/ui/field"
+import {Spinner} from "@/components/ui/spinner"
+import {InvoiceDocument} from "@/features/central/billing/invoices/components/invoice-document"
+import {centralRoutes} from "@/features/central/shell/routes"
 import {
     getPublicInvoice,
     payPublicInvoice,
     type PublicInvoiceGatewayOption,
 } from "@/lib/services/central/public-billing-service"
-import { cn } from "@/lib/utils"
-import type { Invoice } from "@/types/central/invoice"
+import {cn} from "@/lib/utils"
+import type {Invoice} from "@/types/central/invoice"
 
 type PublicInvoiceClientProps = {
     invoiceId: number
@@ -51,7 +51,7 @@ export function PublicInvoiceClient({
                                         signature,
                                     }: PublicInvoiceClientProps) {
     const router = useRouter()
-    const [state, setState] = React.useState<PageState>({ status: "loading" })
+    const [state, setState] = React.useState<PageState>({status: "loading"})
     const [gateway, setGateway] = React.useState<string>("")
     const loaded = React.useRef(false)
 
@@ -69,7 +69,7 @@ export function PublicInvoiceClient({
             return
         }
 
-        getPublicInvoice(invoiceId, { expires, signature })
+        getPublicInvoice(invoiceId, {expires, signature})
             .then((result) => {
                 const recommended =
                     result.gateways.find((option) => option.recommended)?.value ??
@@ -88,7 +88,7 @@ export function PublicInvoiceClient({
                     error instanceof Error
                         ? error.message
                         : "Unable to load this invoice. The link may have expired."
-                setState({ status: "error", message })
+                setState({status: "error", message})
             })
     }, [expires, invoiceId, signature])
 
@@ -97,9 +97,9 @@ export function PublicInvoiceClient({
             return
         }
 
-        setState({ status: "paying" })
+        setState({status: "paying"})
 
-        payPublicInvoice(invoiceId, gateway, { expires, signature })
+        payPublicInvoice(invoiceId, gateway, {expires, signature})
             .then((result) => {
                 if (result.completed) {
                     router.replace(
@@ -109,7 +109,7 @@ export function PublicInvoiceClient({
                 }
 
                 if (result.checkout_url) {
-                    setState({ status: "redirecting" })
+                    setState({status: "redirecting"})
                     window.location.assign(result.checkout_url)
                     return
                 }
@@ -124,7 +124,7 @@ export function PublicInvoiceClient({
                     error instanceof Error
                         ? error.message
                         : "Unable to start payment. The link may have expired."
-                setState({ status: "error", message })
+                setState({status: "error", message})
             })
     }
 
@@ -135,7 +135,7 @@ export function PublicInvoiceClient({
                 <p className="text-muted-foreground text-sm">{state.message}</p>
                 <Link
                     href={centralRoutes.login}
-                    className={cn(buttonVariants({ variant: "default" }))}
+                    className={cn(buttonVariants({variant: "default"}))}
                 >
                     Go to login
                 </Link>
@@ -150,7 +150,7 @@ export function PublicInvoiceClient({
     ) {
         return (
             <div className="flex flex-col items-center gap-3 text-center">
-                <Spinner className="size-6" />
+                <Spinner className="size-6"/>
                 <h1 className="text-xl font-semibold">
                     {state.status === "redirecting"
                         ? "Redirecting to payment…"
@@ -173,7 +173,7 @@ export function PublicInvoiceClient({
 
     return (
         <div className="flex w-full flex-col gap-6">
-            <InvoiceDocument invoice={state.invoice} />
+            <InvoiceDocument invoice={state.invoice}/>
 
             {state.canPay ? (
                 <div className="bg-card flex flex-col gap-4 rounded-lg border p-4 shadow-sm">
@@ -195,7 +195,7 @@ export function PublicInvoiceClient({
                                     setGateway(item?.value ?? "")
                                 }
                             >
-                                <ComboboxInput placeholder="Select a provider..." />
+                                <ComboboxInput placeholder="Select a provider..."/>
                                 <ComboboxContent>
                                     <ComboboxEmpty>No providers available.</ComboboxEmpty>
                                     <ComboboxList>

@@ -1,8 +1,8 @@
 "use client"
 
-import { RecentActivities } from "@/features/central/dashboard/components/recent-activities"
-import { useDashboardActivities } from "@/features/central/dashboard/hooks/use-dashboard-query"
-import { useQueryErrorToast } from "@/hooks/use-query-error-toast"
+import {RecentActivities} from "@/features/central/dashboard/components/recent-activities"
+import {useDashboardActivities} from "@/features/central/dashboard/hooks/use-dashboard-query"
+import {useQueryErrorToast} from "@/hooks/use-query-error-toast"
 
 export function DashboardActivitiesTab() {
     // Increase the limit since it has a whole page now, instead of just 12

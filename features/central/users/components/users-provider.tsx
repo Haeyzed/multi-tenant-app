@@ -1,9 +1,9 @@
 "use client"
 
-import React, { useState } from "react"
+import React, {useState} from "react"
 
 import useDialogState from "@/hooks/use-dialog-state"
-import type { CentralUser } from "@/types/central/user"
+import type {CentralUser} from "@/types/central/user"
 
 export type UsersDialogType =
     | "create"
@@ -36,7 +36,7 @@ type UsersContextType = {
 
 const UsersContext = React.createContext<UsersContextType | null>(null)
 
-export function UsersProvider({ children }: { children: React.ReactNode }) {
+export function UsersProvider({children}: { children: React.ReactNode }) {
     const [open, setOpen] = useDialogState<UsersDialogType>(null)
     const [currentRow, setCurrentRow] = useState<CentralUser | null>(null)
     const [bulkSelection, setBulkSelection] = useState<BulkSelection | null>(null)

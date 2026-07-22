@@ -1,46 +1,43 @@
-import { CheckoutClient } from "@/features/central/billing/checkout/components/checkout-client"
-
+import {CheckoutClient} from "@/features/central/billing/checkout/components/checkout-client"
 
 
 type CheckoutPageProps = {
 
-  params: Promise<{ subscriptionId: string }>
+    params: Promise<{ subscriptionId: string }>
 
-  searchParams: Promise<{ expires?: string; signature?: string }>
+    searchParams: Promise<{ expires?: string; signature?: string }>
 
 }
 
 
-
 export default async function PublicCheckoutPage({
 
-  params,
+                                                     params,
 
-  searchParams,
+                                                     searchParams,
 
-}: CheckoutPageProps) {
+                                                 }: CheckoutPageProps) {
 
-  const { subscriptionId } = await params
+    const {subscriptionId} = await params
 
-  const query = await searchParams
+    const query = await searchParams
 
-  const id = Number(subscriptionId)
+    const id = Number(subscriptionId)
 
 
+    return (
 
-  return (
+        <CheckoutClient
 
-    <CheckoutClient
+            subscriptionId={Number.isFinite(id) ? id : 0}
 
-      subscriptionId={Number.isFinite(id) ? id : 0}
+            expires={query.expires ?? null}
 
-      expires={query.expires ?? null}
+            signature={query.signature ?? null}
 
-      signature={query.signature ?? null}
+        />
 
-    />
-
-  )
+    )
 
 }
 

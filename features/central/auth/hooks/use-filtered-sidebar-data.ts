@@ -1,16 +1,11 @@
 "use client"
 
-import { useMemo } from "react"
-import { useCentralAuth } from "@/lib/providers/central-auth-provider"
-import type {
-    SidebarData,
-    NavItem,
-    NavCollapsible,
-    NavLink,
-} from "@/components/layout/types"
+import {useMemo} from "react"
+import {useCentralAuth} from "@/lib/providers/central-auth-provider"
+import type {NavCollapsible, NavItem, NavLink, SidebarData,} from "@/components/layout/types"
 
 export function useFilteredSidebarData(data: SidebarData): SidebarData {
-    const { hasPermission, isSuperAdmin } = useCentralAuth()
+    const {hasPermission, isSuperAdmin} = useCentralAuth()
 
     return useMemo(() => {
         // Super-admins bypass all filters and see the entire sidebar

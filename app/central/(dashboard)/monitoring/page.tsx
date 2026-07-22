@@ -1,52 +1,52 @@
 "use client"
 
-import { PageHeader } from "@/components/layout/page-header"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { CentralAuthGuard } from "@/features/central/auth/components/auth-guard"
-import { FailedJobsDialogs } from "@/features/central/monitoring/components/failed-jobs-dialogs"
-import { FailedJobsTable } from "@/features/central/monitoring/components/failed-jobs-table"
-import { MonitoringHealthPanels } from "@/features/central/monitoring/components/monitoring-health-panels"
-import { MonitoringPrimaryButtons } from "@/features/central/monitoring/components/monitoring-primary-buttons"
-import { MonitoringProvider } from "@/features/central/monitoring/components/monitoring-provider"
-import { MonitoringStats } from "@/features/central/monitoring/components/monitoring-stats"
-import { permissions } from "@/features/central/auth/components/permissions"
-import { Header } from "@/components/layout/header"
-import { ThemeSwitch } from "@/components/theme-switch"
-import { ConfigDrawer } from "@/components/config-drawer"
-import { Main } from "@/components/layout/main"
-import { Search } from "@/components/search"
-import { ProfileDropdown } from "@/features/central/shell/profile-dropdown"
+import {PageHeader} from "@/components/layout/page-header"
+import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card"
+import {CentralAuthGuard} from "@/features/central/auth/components/auth-guard"
+import {FailedJobsDialogs} from "@/features/central/monitoring/components/failed-jobs-dialogs"
+import {FailedJobsTable} from "@/features/central/monitoring/components/failed-jobs-table"
+import {MonitoringHealthPanels} from "@/features/central/monitoring/components/monitoring-health-panels"
+import {MonitoringPrimaryButtons} from "@/features/central/monitoring/components/monitoring-primary-buttons"
+import {MonitoringProvider} from "@/features/central/monitoring/components/monitoring-provider"
+import {MonitoringStats} from "@/features/central/monitoring/components/monitoring-stats"
+import {permissions} from "@/features/central/auth/components/permissions"
+import {Header} from "@/components/layout/header"
+import {ThemeSwitch} from "@/components/theme-switch"
+import {ConfigDrawer} from "@/components/config-drawer"
+import {Main} from "@/components/layout/main"
+import {Search} from "@/components/search"
+import {ProfileDropdown} from "@/features/central/shell/profile-dropdown"
 
 export default function MonitoringPage() {
-  return (
-    <CentralAuthGuard permissions={permissions.monitoring.view}>
-      <MonitoringProvider>
-        <Header fixed>
-          <Search className="me-auto" />
-          <ThemeSwitch />
-          <ConfigDrawer />
-          <ProfileDropdown />
-        </Header>
-        <Main className="flex flex-1 flex-col gap-4 sm:gap-6">
-          <PageHeader
-            title="Monitoring"
-            description="Monitor platform health, queues, infrastructure checks, and failed jobs."
-          >
-            <MonitoringPrimaryButtons />
-          </PageHeader>
-          <MonitoringStats />
-          <MonitoringHealthPanels />
-          <Card>
-            <CardHeader>
-              <CardTitle>Failed jobs</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <FailedJobsTable />
-            </CardContent>
-          </Card>
-          <FailedJobsDialogs />
-        </Main>
-      </MonitoringProvider>
-    </CentralAuthGuard>
-  )
+    return (
+        <CentralAuthGuard permissions={permissions.monitoring.view}>
+            <MonitoringProvider>
+                <Header fixed>
+                    <Search className="me-auto"/>
+                    <ThemeSwitch/>
+                    <ConfigDrawer/>
+                    <ProfileDropdown/>
+                </Header>
+                <Main className="flex flex-1 flex-col gap-4 sm:gap-6">
+                    <PageHeader
+                        title="Monitoring"
+                        description="Monitor platform health, queues, infrastructure checks, and failed jobs."
+                    >
+                        <MonitoringPrimaryButtons/>
+                    </PageHeader>
+                    <MonitoringStats/>
+                    <MonitoringHealthPanels/>
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Failed jobs</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <FailedJobsTable/>
+                        </CardContent>
+                    </Card>
+                    <FailedJobsDialogs/>
+                </Main>
+            </MonitoringProvider>
+        </CentralAuthGuard>
+    )
 }

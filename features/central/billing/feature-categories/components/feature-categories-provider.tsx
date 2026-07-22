@@ -1,47 +1,47 @@
 "use client"
 
-import React, { useState } from "react"
+import React, {useState} from "react"
 
 import useDialogState from "@/hooks/use-dialog-state"
-import type { FeatureCategory } from "@/types/central/feature-category"
+import type {FeatureCategory} from "@/types/central/feature-category"
 
 export type FeatureCategoriesDialogType = "create" | "update" | "view" | "delete"
 
 type FeatureCategoriesContextType = {
-  open: FeatureCategoriesDialogType | null
-  setOpen: (str: FeatureCategoriesDialogType | null) => void
-  currentRow: FeatureCategory | null
-  setCurrentRow: React.Dispatch<React.SetStateAction<FeatureCategory | null>>
+    open: FeatureCategoriesDialogType | null
+    setOpen: (str: FeatureCategoriesDialogType | null) => void
+    currentRow: FeatureCategory | null
+    setCurrentRow: React.Dispatch<React.SetStateAction<FeatureCategory | null>>
 }
 
 const FeatureCategoriesContext =
-  React.createContext<FeatureCategoriesContextType | null>(null)
+    React.createContext<FeatureCategoriesContextType | null>(null)
 
 export function FeatureCategoriesProvider({
-  children,
-}: {
-  children: React.ReactNode
+                                              children,
+                                          }: {
+    children: React.ReactNode
 }) {
-  const [open, setOpen] = useDialogState<FeatureCategoriesDialogType>(null)
-  const [currentRow, setCurrentRow] = useState<FeatureCategory | null>(null)
+    const [open, setOpen] = useDialogState<FeatureCategoriesDialogType>(null)
+    const [currentRow, setCurrentRow] = useState<FeatureCategory | null>(null)
 
-  return (
-    <FeatureCategoriesContext.Provider
-      value={{ open, setOpen, currentRow, setCurrentRow }}
-    >
-      {children}
-    </FeatureCategoriesContext.Provider>
-  )
+    return (
+        <FeatureCategoriesContext.Provider
+            value={{open, setOpen, currentRow, setCurrentRow}}
+        >
+            {children}
+        </FeatureCategoriesContext.Provider>
+    )
 }
 
 export function useFeatureCategories() {
-  const context = React.useContext(FeatureCategoriesContext)
+    const context = React.useContext(FeatureCategoriesContext)
 
-  if (!context) {
-    throw new Error(
-      "useFeatureCategories has to be used within <FeatureCategoriesProvider>"
-    )
-  }
+    if (!context) {
+        throw new Error(
+            "useFeatureCategories has to be used within <FeatureCategoriesProvider>"
+        )
+    }
 
-  return context
+    return context
 }

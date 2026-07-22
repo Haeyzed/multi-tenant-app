@@ -1,216 +1,202 @@
 "use client"
 
 
-
 import * as React from "react"
 
 import Link from "next/link"
 
-import { useRouter } from "next/navigation"
+import {useRouter} from "next/navigation"
 
 
+import {buttonVariants} from "@/components/ui/button"
 
-import { buttonVariants } from "@/components/ui/button"
+import {Spinner} from "@/components/ui/spinner"
 
-import { Spinner } from "@/components/ui/spinner"
+import {centralRoutes} from "@/features/central/shell/routes"
 
-import { centralRoutes } from "@/features/central/shell/routes"
+import {startPublicCheckout} from "@/lib/services/central/public-billing-service"
 
-import { startPublicCheckout } from "@/lib/services/central/public-billing-service"
-
-import { cn } from "@/lib/utils"
-
+import {cn} from "@/lib/utils"
 
 
 type CheckoutClientProps = {
 
-  subscriptionId: number
+    subscriptionId: number
 
-  expires: string | null
+    expires: string | null
 
-  signature: string | null
+    signature: string | null
 
 }
 
 
-
 type CheckoutState =
 
-  | { status: "loading" }
+    | { status: "loading" }
 
-  | { status: "redirecting" }
+    | { status: "redirecting" }
 
-  | { status: "completed"; paymentId: number }
+    | { status: "completed"; paymentId: number }
 
-  | { status: "error"; message: string }
-
+    | { status: "error"; message: string }
 
 
 export function CheckoutClient({
 
-  subscriptionId,
+                                   subscriptionId,
 
-  expires,
+                                   expires,
 
-  signature,
+                                   signature,
 
-}: CheckoutClientProps) {
+                               }: CheckoutClientProps) {
 
-  const router = useRouter()
+    const router = useRouter()
 
-  const [state, setState] = React.useState<CheckoutState>({ status: "loading" })
+    const [state, setState] = React.useState<CheckoutState>({status: "loading"})
 
-  const started = React.useRef(false)
-
-
-
-  React.useEffect(() => {
-
-    if (started.current) {
-
-      return
-
-    }
-
-    started.current = true
+    const started = React.useRef(false)
 
 
+    React.useEffect(() => {
 
-    if (!expires || !signature) {
+        if (started.current) {
 
-      setState({
+            return
 
-        status: "error",
+        }
 
-        message: "This checkout link is missing a valid signature.",
-
-      })
-
-      return
-
-    }
+        started.current = true
 
 
+        if (!expires || !signature) {
 
-    startPublicCheckout(subscriptionId, { expires, signature })
+            setState({
 
-      .then((result) => {
+                status: "error",
 
-        if (result.completed) {
+                message: "This checkout link is missing a valid signature.",
 
-          setState({ status: "completed", paymentId: result.payment_id })
+            })
 
-          router.replace(
-
-            `${centralRoutes.billing.success}?payment=${result.payment_id}`
-
-          )
-
-          return
+            return
 
         }
 
 
+        startPublicCheckout(subscriptionId, {expires, signature})
 
-        if (result.checkout_url) {
+            .then((result) => {
 
-          setState({ status: "redirecting" })
+                if (result.completed) {
 
-          window.location.assign(result.checkout_url)
+                    setState({status: "completed", paymentId: result.payment_id})
 
-          return
+                    router.replace(
+                        `${centralRoutes.billing.success}?payment=${result.payment_id}`
+                    )
 
-        }
+                    return
 
-
-
-        setState({
-
-          status: "error",
-
-          message: "The payment gateway did not return a checkout URL.",
-
-        })
-
-      })
-
-      .catch((error: unknown) => {
-
-        const message =
-
-          error instanceof Error
-
-            ? error.message
-
-            : "Unable to start checkout. The link may have expired."
-
-        setState({ status: "error", message })
-
-      })
-
-  }, [expires, router, signature, subscriptionId])
+                }
 
 
+                if (result.checkout_url) {
 
-  if (state.status === "error") {
+                    setState({status: "redirecting"})
+
+                    window.location.assign(result.checkout_url)
+
+                    return
+
+                }
+
+
+                setState({
+
+                    status: "error",
+
+                    message: "The payment gateway did not return a checkout URL.",
+
+                })
+
+            })
+
+            .catch((error: unknown) => {
+
+                const message =
+
+                    error instanceof Error
+
+                        ? error.message
+
+                        : "Unable to start checkout. The link may have expired."
+
+                setState({status: "error", message})
+
+            })
+
+    }, [expires, router, signature, subscriptionId])
+
+
+    if (state.status === "error") {
+
+        return (
+
+            <div className="space-y-4 text-center">
+
+                <h1 className="text-xl font-semibold">Checkout unavailable</h1>
+
+                <p className="text-muted-foreground text-sm">{state.message}</p>
+
+                <Link
+
+                    href={centralRoutes.login}
+
+                    className={cn(buttonVariants({variant: "default"}))}
+
+                >
+
+                    Go to login
+
+                </Link>
+
+            </div>
+
+        )
+
+    }
+
 
     return (
 
-      <div className="space-y-4 text-center">
+        <div className="flex flex-col items-center gap-3 text-center">
 
-        <h1 className="text-xl font-semibold">Checkout unavailable</h1>
+            <Spinner className="size-6"/>
 
-        <p className="text-muted-foreground text-sm">{state.message}</p>
+            <h1 className="text-xl font-semibold">
 
-        <Link
+                {state.status === "completed"
 
-          href={centralRoutes.login}
+                    ? "Payment completed"
 
-          className={cn(buttonVariants({ variant: "default" }))}
+                    : state.status === "redirecting"
 
-        >
+                        ? "Redirecting to payment…"
 
-          Go to login
+                        : "Preparing checkout…"}
 
-        </Link>
+            </h1>
 
-      </div>
+            <p className="text-muted-foreground text-sm">
+
+                Please wait while we connect you to the payment provider.
+
+            </p>
+
+        </div>
 
     )
-
-  }
-
-
-
-  return (
-
-    <div className="flex flex-col items-center gap-3 text-center">
-
-      <Spinner className="size-6" />
-
-      <h1 className="text-xl font-semibold">
-
-        {state.status === "completed"
-
-          ? "Payment completed"
-
-          : state.status === "redirecting"
-
-            ? "Redirecting to payment…"
-
-            : "Preparing checkout…"}
-
-      </h1>
-
-      <p className="text-muted-foreground text-sm">
-
-        Please wait while we connect you to the payment provider.
-
-      </p>
-
-    </div>
-
-  )
 
 }
 

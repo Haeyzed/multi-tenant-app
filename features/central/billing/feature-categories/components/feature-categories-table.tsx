@@ -9,18 +9,18 @@ import {
     useReactTable,
 } from "@tanstack/react-table"
 
-import { DataTable } from "@/components/data-table/data-table"
-import { DataTableSkeleton } from "@/components/data-table/data-table-skeleton"
-import { DataTableToolbar } from "@/components/data-table/data-table-toolbar"
-import { columns } from "@/features/central/billing/feature-categories/components/feature-categories-columns"
-import { useGetFeatureCategories } from "@/features/central/billing/feature-categories/hooks/use-feature-category-query"
-import { useQueryErrorToast } from "@/hooks/use-query-error-toast"
+import {DataTable} from "@/components/data-table/data-table"
+import {DataTableSkeleton} from "@/components/data-table/data-table-skeleton"
+import {DataTableToolbar} from "@/components/data-table/data-table-toolbar"
+import {columns} from "@/features/central/billing/feature-categories/components/feature-categories-columns"
+import {useGetFeatureCategories} from "@/features/central/billing/feature-categories/hooks/use-feature-category-query"
+import {useQueryErrorToast} from "@/hooks/use-query-error-toast"
 
 const COLUMN_COUNT = 6
 const FILTER_COUNT = 1
 
 export function FeatureCategoriesTable() {
-    const { data, isLoading, error } = useGetFeatureCategories()
+    const {data, isLoading, error} = useGetFeatureCategories()
 
     useQueryErrorToast(error ?? null, "Failed to load feature categories.")
 
@@ -31,8 +31,8 @@ export function FeatureCategoriesTable() {
         columns,
         getRowId: (row) => String(row.id),
         initialState: {
-            sorting: [{ id: "sort_order", desc: false }],
-            pagination: { pageIndex: 0, pageSize: 15 },
+            sorting: [{id: "sort_order", desc: false}],
+            pagination: {pageIndex: 0, pageSize: 15},
         },
         getCoreRowModel: getCoreRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
@@ -54,7 +54,7 @@ export function FeatureCategoriesTable() {
     return (
         <div className="data-table-container space-y-4">
             <DataTable table={table}>
-                <DataTableToolbar table={table} />
+                <DataTableToolbar table={table}/>
             </DataTable>
         </div>
     )

@@ -1,438 +1,429 @@
 "use client"
 
-import { zodResolver } from "@hookform/resolvers/zod"
+import {zodResolver} from "@hookform/resolvers/zod"
 import * as React from "react"
-import { useForm } from "react-hook-form"
+import {useForm} from "react-hook-form"
 
-import { Button } from "@/components/ui/button"
+import {Button} from "@/components/ui/button"
 import {
-  Combobox,
-  ComboboxContent,
-  ComboboxEmpty,
-  ComboboxInput,
-  ComboboxItem,
-  ComboboxList,
+    Combobox,
+    ComboboxContent,
+    ComboboxEmpty,
+    ComboboxInput,
+    ComboboxItem,
+    ComboboxList,
 } from "@/components/ui/combobox"
+import {Field, FieldContent, FieldError, FieldGroup, FieldLabel,} from "@/components/ui/field"
+import {Input} from "@/components/ui/input"
 import {
-  Field,
-  FieldContent,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
-import {
-  ResponsiveDialog,
-  ResponsiveDialogClose,
-  ResponsiveDialogContent,
-  ResponsiveDialogDescription,
-  ResponsiveDialogFooter,
-  ResponsiveDialogHeader,
-  ResponsiveDialogTitle,
+    ResponsiveDialog,
+    ResponsiveDialogClose,
+    ResponsiveDialogContent,
+    ResponsiveDialogDescription,
+    ResponsiveDialogFooter,
+    ResponsiveDialogHeader,
+    ResponsiveDialogTitle,
 } from "@/components/ui/responsive-dialog"
-import { Spinner } from "@/components/ui/spinner"
-import { useCurrenciesContext } from "@/features/central/world/currencies/components/currencies-provider"
+import {Spinner} from "@/components/ui/spinner"
+import {useCurrenciesContext} from "@/features/central/world/currencies/components/currencies-provider"
 import {
-  useCountrySelectOptions,
-  useCreateCurrency,
-  useDeleteCurrency,
-  useUpdateCurrency,
+    useCountrySelectOptions,
+    useCreateCurrency,
+    useDeleteCurrency,
+    useUpdateCurrency,
 } from "@/features/central/world/hooks/use-world-query"
-import {
-  type CurrencyFormValues,
-  currencySchema,
-} from "@/features/central/world/schemas"
-import { handleFormApiError } from "@/lib/form-api-errors"
-import { toastApiError, toastApiSuccess } from "@/lib/toast-api"
-import type { CountryOption, Currency } from "@/types/central/world"
+import {type CurrencyFormValues, currencySchema,} from "@/features/central/world/schemas"
+import {handleFormApiError} from "@/lib/form-api-errors"
+import {toastApiError, toastApiSuccess} from "@/lib/toast-api"
+import type {CountryOption, Currency} from "@/types/central/world"
 
 const emptyValues: CurrencyFormValues = {
-  country_id: "",
-  name: "",
-  code: "",
-  symbol: "",
-  symbol_native: "",
-  precision: "",
+    country_id: "",
+    name: "",
+    code: "",
+    symbol: "",
+    symbol_native: "",
+    precision: "",
 }
 
 type CurrencyFormDialogProps = {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  currentRow?: Currency
+    open: boolean
+    onOpenChange: (open: boolean) => void
+    currentRow?: Currency
 }
 
 function CurrencyFormDialog({
-  open,
-  onOpenChange,
-  currentRow,
-}: CurrencyFormDialogProps) {
-  const isUpdate = !!currentRow
-  const createCurrency = useCreateCurrency()
-  const updateCurrency = useUpdateCurrency()
-  const isSubmitting = createCurrency.isPending || updateCurrency.isPending
-  const { data: countryOptions = [] } = useCountrySelectOptions()
+                                open,
+                                onOpenChange,
+                                currentRow,
+                            }: CurrencyFormDialogProps) {
+    const isUpdate = !!currentRow
+    const createCurrency = useCreateCurrency()
+    const updateCurrency = useUpdateCurrency()
+    const isSubmitting = createCurrency.isPending || updateCurrency.isPending
+    const {data: countryOptions = []} = useCountrySelectOptions()
 
-  const form = useForm<CurrencyFormValues>({
-    resolver: zodResolver(currencySchema),
-    defaultValues: emptyValues,
-  })
+    const form = useForm<CurrencyFormValues>({
+        resolver: zodResolver(currencySchema),
+        defaultValues: emptyValues,
+    })
 
-  React.useEffect(() => {
-    if (!open) {
-      return
+    React.useEffect(() => {
+        if (!open) {
+            return
+        }
+
+        if (currentRow) {
+            form.reset({
+                country_id: currentRow.country_id ? String(currentRow.country_id) : "",
+                name: currentRow.name,
+                code: currentRow.code,
+                symbol: currentRow.symbol || "",
+                symbol_native: currentRow.symbol_native || "",
+                precision:
+                    currentRow.precision !== null && currentRow.precision !== undefined
+                        ? String(currentRow.precision)
+                        : "",
+            })
+        } else {
+            form.reset(emptyValues)
+        }
+    }, [open, currentRow, form])
+
+    const countryIdValue = form.watch("country_id")
+    const selectedCountry =
+        countryOptions.find((option) => option.value === countryIdValue) ?? null
+
+    const onSubmit = (data: CurrencyFormValues) => {
+        const handlers = {
+            onSuccess: (result: { message?: string }) => {
+                toastApiSuccess(
+                    result.message,
+                    isUpdate
+                        ? "Currency updated successfully"
+                        : "Currency created successfully"
+                )
+                onOpenChange(false)
+            },
+            onError: (error: unknown) => {
+                handleFormApiError(
+                    error,
+                    form.setError,
+                    isUpdate ? "Failed to update currency" : "Failed to create currency"
+                )
+            },
+        }
+
+        if (isUpdate && currentRow) {
+            updateCurrency.mutate({id: currentRow.id, values: data}, handlers)
+            return
+        }
+
+        createCurrency.mutate(data, handlers)
     }
 
-    if (currentRow) {
-      form.reset({
-        country_id: currentRow.country_id ? String(currentRow.country_id) : "",
-        name: currentRow.name,
-        code: currentRow.code,
-        symbol: currentRow.symbol || "",
-        symbol_native: currentRow.symbol_native || "",
-        precision:
-          currentRow.precision !== null && currentRow.precision !== undefined
-            ? String(currentRow.precision)
-            : "",
-      })
-    } else {
-      form.reset(emptyValues)
-    }
-  }, [open, currentRow, form])
+    return (
+        <ResponsiveDialog open={open} onOpenChange={onOpenChange}>
+            <ResponsiveDialogContent className="sm:max-w-lg">
+                <ResponsiveDialogHeader>
+                    <ResponsiveDialogTitle>
+                        {isUpdate ? "Edit currency" : "Create currency"}
+                    </ResponsiveDialogTitle>
+                    <ResponsiveDialogDescription>
+                        {isUpdate
+                            ? "Update reference data for this currency."
+                            : "Add a new currency to a country."}
+                    </ResponsiveDialogDescription>
+                </ResponsiveDialogHeader>
 
-  const countryIdValue = form.watch("country_id")
-  const selectedCountry =
-    countryOptions.find((option) => option.value === countryIdValue) ?? null
-
-  const onSubmit = (data: CurrencyFormValues) => {
-    const handlers = {
-      onSuccess: (result: { message?: string }) => {
-        toastApiSuccess(
-          result.message,
-          isUpdate
-            ? "Currency updated successfully"
-            : "Currency created successfully"
-        )
-        onOpenChange(false)
-      },
-      onError: (error: unknown) => {
-        handleFormApiError(
-          error,
-          form.setError,
-          isUpdate ? "Failed to update currency" : "Failed to create currency"
-        )
-      },
-    }
-
-    if (isUpdate && currentRow) {
-      updateCurrency.mutate({ id: currentRow.id, values: data }, handlers)
-      return
-    }
-
-    createCurrency.mutate(data, handlers)
-  }
-
-  return (
-    <ResponsiveDialog open={open} onOpenChange={onOpenChange}>
-      <ResponsiveDialogContent className="sm:max-w-lg">
-        <ResponsiveDialogHeader>
-          <ResponsiveDialogTitle>
-            {isUpdate ? "Edit currency" : "Create currency"}
-          </ResponsiveDialogTitle>
-          <ResponsiveDialogDescription>
-            {isUpdate
-              ? "Update reference data for this currency."
-              : "Add a new currency to a country."}
-          </ResponsiveDialogDescription>
-        </ResponsiveDialogHeader>
-
-        <form
-          id="currency-form"
-          className="flex flex-col gap-4"
-          onSubmit={form.handleSubmit(onSubmit)}
-        >
-          <FieldGroup>
-            <Field>
-              <FieldLabel>Country</FieldLabel>
-              <FieldContent>
-                <Combobox
-                  items={countryOptions}
-                  itemToStringValue={(item: CountryOption) => item.label}
-                  value={selectedCountry}
-                  onValueChange={(item: CountryOption | null) => {
-                    form.setValue("country_id", item?.value ?? "", {
-                      shouldDirty: true,
-                      shouldValidate: true,
-                    })
-                  }}
+                <form
+                    id="currency-form"
+                    className="flex flex-col gap-4"
+                    onSubmit={form.handleSubmit(onSubmit)}
                 >
-                  <ComboboxInput placeholder="Select country..." />
-                  <ComboboxContent>
-                    <ComboboxEmpty>No countries found.</ComboboxEmpty>
-                    <ComboboxList>
-                      {(item: CountryOption) => (
-                        <ComboboxItem key={item.value} value={item}>
-                          {item.label}
-                        </ComboboxItem>
-                      )}
-                    </ComboboxList>
-                  </ComboboxContent>
-                </Combobox>
-                <FieldError
-                  errors={
-                    form.formState.errors.country_id
-                      ? [form.formState.errors.country_id]
-                      : []
-                  }
-                />
-              </FieldContent>
-            </Field>
+                    <FieldGroup>
+                        <Field>
+                            <FieldLabel>Country</FieldLabel>
+                            <FieldContent>
+                                <Combobox
+                                    items={countryOptions}
+                                    itemToStringValue={(item: CountryOption) => item.label}
+                                    value={selectedCountry}
+                                    onValueChange={(item: CountryOption | null) => {
+                                        form.setValue("country_id", item?.value ?? "", {
+                                            shouldDirty: true,
+                                            shouldValidate: true,
+                                        })
+                                    }}
+                                >
+                                    <ComboboxInput placeholder="Select country..."/>
+                                    <ComboboxContent>
+                                        <ComboboxEmpty>No countries found.</ComboboxEmpty>
+                                        <ComboboxList>
+                                            {(item: CountryOption) => (
+                                                <ComboboxItem key={item.value} value={item}>
+                                                    {item.label}
+                                                </ComboboxItem>
+                                            )}
+                                        </ComboboxList>
+                                    </ComboboxContent>
+                                </Combobox>
+                                <FieldError
+                                    errors={
+                                        form.formState.errors.country_id
+                                            ? [form.formState.errors.country_id]
+                                            : []
+                                    }
+                                />
+                            </FieldContent>
+                        </Field>
 
-            <Field>
-              <FieldLabel>Name</FieldLabel>
-              <FieldContent>
-                <Input
-                  {...form.register("name")}
-                  placeholder="Nigerian naira"
-                />
-                <FieldError
-                  errors={
-                    form.formState.errors.name
-                      ? [form.formState.errors.name]
-                      : []
-                  }
-                />
-              </FieldContent>
-            </Field>
+                        <Field>
+                            <FieldLabel>Name</FieldLabel>
+                            <FieldContent>
+                                <Input
+                                    {...form.register("name")}
+                                    placeholder="Nigerian naira"
+                                />
+                                <FieldError
+                                    errors={
+                                        form.formState.errors.name
+                                            ? [form.formState.errors.name]
+                                            : []
+                                    }
+                                />
+                            </FieldContent>
+                        </Field>
 
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              <Field>
-                <FieldLabel>Code</FieldLabel>
-                <FieldContent>
-                  <Input {...form.register("code")} placeholder="NGN" />
-                  <FieldError
-                    errors={
-                      form.formState.errors.code
-                        ? [form.formState.errors.code]
-                        : []
-                    }
-                  />
-                </FieldContent>
-              </Field>
+                        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                            <Field>
+                                <FieldLabel>Code</FieldLabel>
+                                <FieldContent>
+                                    <Input {...form.register("code")} placeholder="NGN"/>
+                                    <FieldError
+                                        errors={
+                                            form.formState.errors.code
+                                                ? [form.formState.errors.code]
+                                                : []
+                                        }
+                                    />
+                                </FieldContent>
+                            </Field>
 
-              <Field>
-                <FieldLabel>Precision</FieldLabel>
-                <FieldContent>
-                  <Input
-                    type="number"
-                    min={0}
-                    max={8}
-                    {...form.register("precision")}
-                    placeholder="2"
-                  />
-                  <FieldError
-                    errors={
-                      form.formState.errors.precision
-                        ? [form.formState.errors.precision]
-                        : []
-                    }
-                  />
-                </FieldContent>
-              </Field>
-            </div>
+                            <Field>
+                                <FieldLabel>Precision</FieldLabel>
+                                <FieldContent>
+                                    <Input
+                                        type="number"
+                                        min={0}
+                                        max={8}
+                                        {...form.register("precision")}
+                                        placeholder="2"
+                                    />
+                                    <FieldError
+                                        errors={
+                                            form.formState.errors.precision
+                                                ? [form.formState.errors.precision]
+                                                : []
+                                        }
+                                    />
+                                </FieldContent>
+                            </Field>
+                        </div>
 
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              <Field>
-                <FieldLabel>Symbol</FieldLabel>
-                <FieldContent>
-                  <Input {...form.register("symbol")} placeholder="₦" />
-                  <FieldError
-                    errors={
-                      form.formState.errors.symbol
-                        ? [form.formState.errors.symbol]
-                        : []
-                    }
-                  />
-                </FieldContent>
-              </Field>
+                        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                            <Field>
+                                <FieldLabel>Symbol</FieldLabel>
+                                <FieldContent>
+                                    <Input {...form.register("symbol")} placeholder="₦"/>
+                                    <FieldError
+                                        errors={
+                                            form.formState.errors.symbol
+                                                ? [form.formState.errors.symbol]
+                                                : []
+                                        }
+                                    />
+                                </FieldContent>
+                            </Field>
 
-              <Field>
-                <FieldLabel>Native symbol</FieldLabel>
-                <FieldContent>
-                  <Input {...form.register("symbol_native")} placeholder="₦" />
-                </FieldContent>
-              </Field>
-            </div>
-          </FieldGroup>
-        </form>
+                            <Field>
+                                <FieldLabel>Native symbol</FieldLabel>
+                                <FieldContent>
+                                    <Input {...form.register("symbol_native")} placeholder="₦"/>
+                                </FieldContent>
+                            </Field>
+                        </div>
+                    </FieldGroup>
+                </form>
 
-        <ResponsiveDialogFooter>
-          <ResponsiveDialogClose
-            render={<Button variant="outline">Cancel</Button>}
-          />
-          <Button type="submit" form="currency-form" disabled={isSubmitting}>
-            {isSubmitting ? <Spinner /> : null}
-            {isUpdate ? "Save changes" : "Create currency"}
-          </Button>
-        </ResponsiveDialogFooter>
-      </ResponsiveDialogContent>
-    </ResponsiveDialog>
-  )
+                <ResponsiveDialogFooter>
+                    <ResponsiveDialogClose
+                        render={<Button variant="outline">Cancel</Button>}
+                    />
+                    <Button type="submit" form="currency-form" disabled={isSubmitting}>
+                        {isSubmitting ? <Spinner/> : null}
+                        {isUpdate ? "Save changes" : "Create currency"}
+                    </Button>
+                </ResponsiveDialogFooter>
+            </ResponsiveDialogContent>
+        </ResponsiveDialog>
+    )
 }
 
 type CurrencyViewDialogProps = {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  currency: Currency
+    open: boolean
+    onOpenChange: (open: boolean) => void
+    currency: Currency
 }
 
 function CurrencyViewDialog({
-  open,
-  onOpenChange,
-  currency,
-}: CurrencyViewDialogProps) {
-  const rows = [
-    ["Name", currency.name],
-    ["Code", currency.code],
-    ["Symbol", currency.symbol || "—"],
-    ["Native symbol", currency.symbol_native || "—"],
-    ["Precision", currency.precision !== null ? String(currency.precision) : "—"],
-    [
-      "Country",
-      currency.country?.name ??
-        (currency.country_id ? String(currency.country_id) : "—"),
-    ],
-  ] as const
+                                open,
+                                onOpenChange,
+                                currency,
+                            }: CurrencyViewDialogProps) {
+    const rows = [
+        ["Name", currency.name],
+        ["Code", currency.code],
+        ["Symbol", currency.symbol || "—"],
+        ["Native symbol", currency.symbol_native || "—"],
+        ["Precision", currency.precision !== null ? String(currency.precision) : "—"],
+        [
+            "Country",
+            currency.country?.name ??
+            (currency.country_id ? String(currency.country_id) : "—"),
+        ],
+    ] as const
 
-  return (
-    <ResponsiveDialog open={open} onOpenChange={onOpenChange}>
-      <ResponsiveDialogContent className="sm:max-w-lg">
-        <ResponsiveDialogHeader>
-          <ResponsiveDialogTitle>Currency details</ResponsiveDialogTitle>
-          <ResponsiveDialogDescription>
-            Read-only overview for {currency.name}.
-          </ResponsiveDialogDescription>
-        </ResponsiveDialogHeader>
+    return (
+        <ResponsiveDialog open={open} onOpenChange={onOpenChange}>
+            <ResponsiveDialogContent className="sm:max-w-lg">
+                <ResponsiveDialogHeader>
+                    <ResponsiveDialogTitle>Currency details</ResponsiveDialogTitle>
+                    <ResponsiveDialogDescription>
+                        Read-only overview for {currency.name}.
+                    </ResponsiveDialogDescription>
+                </ResponsiveDialogHeader>
 
-        <div className="flex flex-col gap-3 text-sm">
-          {rows.map(([label, value]) => (
-            <div
-              key={label}
-              className="flex items-start justify-between gap-4 border-b pb-2 last:border-b-0"
-            >
-              <span className="text-muted-foreground">{label}</span>
-              <span className="text-end font-medium">{value}</span>
-            </div>
-          ))}
-        </div>
+                <div className="flex flex-col gap-3 text-sm">
+                    {rows.map(([label, value]) => (
+                        <div
+                            key={label}
+                            className="flex items-start justify-between gap-4 border-b pb-2 last:border-b-0"
+                        >
+                            <span className="text-muted-foreground">{label}</span>
+                            <span className="text-end font-medium">{value}</span>
+                        </div>
+                    ))}
+                </div>
 
-        <ResponsiveDialogFooter>
-          <ResponsiveDialogClose
-            render={<Button variant="outline">Close</Button>}
-          />
-        </ResponsiveDialogFooter>
-      </ResponsiveDialogContent>
-    </ResponsiveDialog>
-  )
+                <ResponsiveDialogFooter>
+                    <ResponsiveDialogClose
+                        render={<Button variant="outline">Close</Button>}
+                    />
+                </ResponsiveDialogFooter>
+            </ResponsiveDialogContent>
+        </ResponsiveDialog>
+    )
 }
 
 export function CurrenciesDialogs() {
-  const { open, setOpen, currentRow, setCurrentRow } = useCurrenciesContext()
-  const deleteCurrency = useDeleteCurrency()
+    const {open, setOpen, currentRow, setCurrentRow} = useCurrenciesContext()
+    const deleteCurrency = useDeleteCurrency()
 
-  const handleClose = React.useCallback(() => {
-    setOpen(null)
-    setTimeout(() => {
-      setCurrentRow(null)
-    }, 300)
-  }, [setOpen, setCurrentRow])
+    const handleClose = React.useCallback(() => {
+        setOpen(null)
+        setTimeout(() => {
+            setCurrentRow(null)
+        }, 300)
+    }, [setOpen, setCurrentRow])
 
-  const runDelete = () => {
-    if (!currentRow) {
-      return
+    const runDelete = () => {
+        if (!currentRow) {
+            return
+        }
+
+        deleteCurrency.mutate(currentRow.id, {
+            onSuccess: (result) => {
+                toastApiSuccess(
+                    result.message,
+                    `Currency "${currentRow.code}" deleted successfully`
+                )
+                handleClose()
+            },
+            onError: (error) => {
+                toastApiError(error, "Failed to delete currency")
+            },
+        })
     }
 
-    deleteCurrency.mutate(currentRow.id, {
-      onSuccess: (result) => {
-        toastApiSuccess(
-          result.message,
-          `Currency "${currentRow.code}" deleted successfully`
-        )
-        handleClose()
-      },
-      onError: (error) => {
-        toastApiError(error, "Failed to delete currency")
-      },
-    })
-  }
-
-  return (
-    <>
-      <CurrencyFormDialog
-        open={open === "create"}
-        onOpenChange={(val) => {
-          if (!val) {
-            setOpen(null)
-          }
-        }}
-      />
-
-      {currentRow ? (
+    return (
         <>
-          <CurrencyFormDialog
-            key={`currency-update-${currentRow.id}`}
-            open={open === "update"}
-            onOpenChange={(val) => {
-              if (!val) {
-                handleClose()
-              }
-            }}
-            currentRow={currentRow}
-          />
+            <CurrencyFormDialog
+                open={open === "create"}
+                onOpenChange={(val) => {
+                    if (!val) {
+                        setOpen(null)
+                    }
+                }}
+            />
 
-          <CurrencyViewDialog
-            key={`currency-view-${currentRow.id}`}
-            open={open === "view"}
-            onOpenChange={(val) => {
-              if (!val) {
-                handleClose()
-              }
-            }}
-            currency={currentRow}
-          />
+            {currentRow ? (
+                <>
+                    <CurrencyFormDialog
+                        key={`currency-update-${currentRow.id}`}
+                        open={open === "update"}
+                        onOpenChange={(val) => {
+                            if (!val) {
+                                handleClose()
+                            }
+                        }}
+                        currentRow={currentRow}
+                    />
 
-          <ResponsiveDialog
-            open={open === "delete"}
-            onOpenChange={(val) => {
-              if (!val) {
-                handleClose()
-              }
-            }}
-          >
-            <ResponsiveDialogContent className="sm:max-w-md">
-              <ResponsiveDialogHeader>
-                <ResponsiveDialogTitle>Delete currency</ResponsiveDialogTitle>
-                <ResponsiveDialogDescription>
-                  Delete <strong>{currentRow.name}</strong> (
-                  {currentRow.code})? Countries referencing it may be affected.
-                </ResponsiveDialogDescription>
-              </ResponsiveDialogHeader>
-              <ResponsiveDialogFooter>
-                <ResponsiveDialogClose
-                  render={<Button variant="outline">Cancel</Button>}
-                />
-                <Button
-                  variant="destructive"
-                  disabled={deleteCurrency.isPending}
-                  onClick={runDelete}
-                >
-                  {deleteCurrency.isPending ? <Spinner /> : null}
-                  Delete
-                </Button>
-              </ResponsiveDialogFooter>
-            </ResponsiveDialogContent>
-          </ResponsiveDialog>
+                    <CurrencyViewDialog
+                        key={`currency-view-${currentRow.id}`}
+                        open={open === "view"}
+                        onOpenChange={(val) => {
+                            if (!val) {
+                                handleClose()
+                            }
+                        }}
+                        currency={currentRow}
+                    />
+
+                    <ResponsiveDialog
+                        open={open === "delete"}
+                        onOpenChange={(val) => {
+                            if (!val) {
+                                handleClose()
+                            }
+                        }}
+                    >
+                        <ResponsiveDialogContent className="sm:max-w-md">
+                            <ResponsiveDialogHeader>
+                                <ResponsiveDialogTitle>Delete currency</ResponsiveDialogTitle>
+                                <ResponsiveDialogDescription>
+                                    Delete <strong>{currentRow.name}</strong> (
+                                    {currentRow.code})? Countries referencing it may be affected.
+                                </ResponsiveDialogDescription>
+                            </ResponsiveDialogHeader>
+                            <ResponsiveDialogFooter>
+                                <ResponsiveDialogClose
+                                    render={<Button variant="outline">Cancel</Button>}
+                                />
+                                <Button
+                                    variant="destructive"
+                                    disabled={deleteCurrency.isPending}
+                                    onClick={runDelete}
+                                >
+                                    {deleteCurrency.isPending ? <Spinner/> : null}
+                                    Delete
+                                </Button>
+                            </ResponsiveDialogFooter>
+                        </ResponsiveDialogContent>
+                    </ResponsiveDialog>
+                </>
+            ) : null}
         </>
-      ) : null}
-    </>
-  )
+    )
 }

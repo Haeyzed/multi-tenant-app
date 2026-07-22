@@ -3,8 +3,8 @@
 import * as React from "react"
 import Link from "next/link"
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
+import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar"
+import {Button} from "@/components/ui/button"
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -15,11 +15,11 @@ import {
     DropdownMenuShortcut,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { SignOutDialog } from "@/features/central/shell/sign-out-dialog"
-import { useCentralAuth } from "@/lib/providers/central-auth-provider"
+import {SignOutDialog} from "@/features/central/shell/sign-out-dialog"
+import {useCentralAuth} from "@/lib/providers/central-auth-provider"
 
 export function ProfileDropdown() {
-    const { user } = useCentralAuth()
+    const {user} = useCentralAuth()
     const [signOutOpen, setSignOutOpen] = React.useState(false)
 
     if (!user) {
@@ -33,7 +33,7 @@ export function ProfileDropdown() {
                     render={
                         <Button variant="ghost" className="relative size-8 rounded-full">
                             <Avatar className="size-8">
-                                <AvatarImage src={user.avatar_url ?? undefined} alt={user.name} />
+                                <AvatarImage src={user.avatar_url ?? undefined} alt={user.name}/>
                                 <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
                             </Avatar>
                         </Button>
@@ -48,7 +48,7 @@ export function ProfileDropdown() {
                             </p>
                         </div>
                     </DropdownMenuLabel>
-                    <DropdownMenuSeparator />
+                    <DropdownMenuSeparator/>
                     <DropdownMenuGroup>
                         <DropdownMenuItem
                             render={
@@ -76,7 +76,7 @@ export function ProfileDropdown() {
                         />
                         <DropdownMenuItem>New Team</DropdownMenuItem>
                     </DropdownMenuGroup>
-                    <DropdownMenuSeparator />
+                    <DropdownMenuSeparator/>
                     <DropdownMenuItem
                         variant="destructive"
                         onClick={() => setSignOutOpen(true)}
@@ -89,7 +89,7 @@ export function ProfileDropdown() {
                 </DropdownMenuContent>
             </DropdownMenu>
 
-            <SignOutDialog open={signOutOpen} onOpenChange={setSignOutOpen} />
+            <SignOutDialog open={signOutOpen} onOpenChange={setSignOutOpen}/>
         </>
     )
 }

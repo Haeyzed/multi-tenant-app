@@ -1,9 +1,9 @@
 "use client"
 
-import { type Row } from "@tanstack/react-table"
-import { Edit, Eye, LockIcon, MoreHorizontal, Trash2 } from "lucide-react"
+import {type Row} from "@tanstack/react-table"
+import {Edit, Eye, LockIcon, MoreHorizontal, Trash2} from "lucide-react"
 
-import { Button } from "@/components/ui/button"
+import {Button} from "@/components/ui/button"
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -11,10 +11,10 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { PermissionGate } from "@/features/central/auth/components/permission-gate"
-import { permissions } from "@/features/central/auth/components/permissions"
-import { usePermissions } from "@/features/central/permissions/components/permissions-provider"
-import type { PermissionItem } from "@/types/central/rbac"
+import {PermissionGate} from "@/features/central/auth/components/permission-gate"
+import {permissions} from "@/features/central/auth/components/permissions"
+import {usePermissions} from "@/features/central/permissions/components/permissions-provider"
+import type {PermissionItem} from "@/types/central/rbac"
 
 type DataTableRowActionsProps<TData> = {
     row: Row<TData>
@@ -24,14 +24,14 @@ export function DataTableRowActions<TData>({
                                                row,
                                            }: DataTableRowActionsProps<TData>) {
     const permission = row.original as PermissionItem
-    const { setOpen, setCurrentRow } = usePermissions()
+    const {setOpen, setCurrentRow} = usePermissions()
 
     return (
         <DropdownMenu>
             <DropdownMenuTrigger
                 render={
                     <Button variant="ghost" className="flex size-8 p-0">
-                        <MoreHorizontal className="size-4" />
+                        <MoreHorizontal className="size-4"/>
                         <span className="sr-only">Open menu</span>
                     </Button>
                 }
@@ -41,7 +41,7 @@ export function DataTableRowActions<TData>({
                     permissions={[permissions.permissions.view]}
                     fallback={
                         <DropdownMenuItem disabled className="text-muted-foreground opacity-50">
-                            <LockIcon className="mr-2 size-4" />
+                            <LockIcon className="mr-2 size-4"/>
                             View
                         </DropdownMenuItem>
                     }
@@ -52,7 +52,7 @@ export function DataTableRowActions<TData>({
                             setOpen("view")
                         }}
                     >
-                        <Eye className="mr-2 size-4" />
+                        <Eye className="mr-2 size-4"/>
                         View
                     </DropdownMenuItem>
                 </PermissionGate>
@@ -61,7 +61,7 @@ export function DataTableRowActions<TData>({
                     permissions={[permissions.permissions.update]}
                     fallback={
                         <DropdownMenuItem disabled className="text-muted-foreground opacity-50">
-                            <LockIcon className="mr-2 size-4" />
+                            <LockIcon className="mr-2 size-4"/>
                             Edit
                         </DropdownMenuItem>
                     }
@@ -72,18 +72,18 @@ export function DataTableRowActions<TData>({
                             setOpen("update")
                         }}
                     >
-                        <Edit className="mr-2 size-4" />
+                        <Edit className="mr-2 size-4"/>
                         Edit
                     </DropdownMenuItem>
                 </PermissionGate>
 
-                <DropdownMenuSeparator />
+                <DropdownMenuSeparator/>
 
                 <PermissionGate
                     permissions={[permissions.permissions.delete]}
                     fallback={
                         <DropdownMenuItem disabled className="text-muted-foreground opacity-50">
-                            <LockIcon className="mr-2 size-4" />
+                            <LockIcon className="mr-2 size-4"/>
                             Delete
                         </DropdownMenuItem>
                     }
@@ -95,7 +95,7 @@ export function DataTableRowActions<TData>({
                             setOpen("delete")
                         }}
                     >
-                        <Trash2 className="mr-2 size-4" />
+                        <Trash2 className="mr-2 size-4"/>
                         Delete
                     </DropdownMenuItem>
                 </PermissionGate>

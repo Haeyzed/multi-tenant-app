@@ -1,28 +1,28 @@
 "use client"
 
-import { LockIcon, Plus } from "lucide-react"
+import {LockIcon, Plus} from "lucide-react"
 
-import { Button } from "@/components/ui/button"
-import { PermissionGate } from "@/features/central/auth/components/permission-gate"
-import { permissions } from "@/features/central/auth/components/permissions"
-import { useInvoices } from "@/features/central/billing/invoices/components/invoices-provider"
+import {Button} from "@/components/ui/button"
+import {PermissionGate} from "@/features/central/auth/components/permission-gate"
+import {permissions} from "@/features/central/auth/components/permissions"
+import {useInvoices} from "@/features/central/billing/invoices/components/invoices-provider"
 
 export function InvoicesPrimaryButtons() {
-    const { setOpen } = useInvoices()
+    const {setOpen} = useInvoices()
 
     return (
         <PermissionGate
             permissions={[permissions.billing.invoices.manage]}
             fallback={
                 <Button disabled variant="outline" className="gap-1 opacity-60">
-                    <LockIcon className="size-3.5" />
+                    <LockIcon className="size-3.5"/>
                     <span>Create</span>
                 </Button>
             }
         >
             <Button className="gap-1" onClick={() => setOpen("create")}>
                 <span>Create</span>
-                <Plus className="size-4" />
+                <Plus className="size-4"/>
             </Button>
         </PermissionGate>
     )

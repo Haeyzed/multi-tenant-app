@@ -1,10 +1,10 @@
 "use client"
 
-import { zodResolver } from "@hookform/resolvers/zod"
+import {zodResolver} from "@hookform/resolvers/zod"
 import * as React from "react"
-import { Controller, useForm } from "react-hook-form"
+import {Controller, useForm} from "react-hook-form"
 
-import { Button } from "@/components/ui/button"
+import {Button} from "@/components/ui/button"
 import {
     Combobox,
     ComboboxContent,
@@ -13,14 +13,8 @@ import {
     ComboboxItem,
     ComboboxList,
 } from "@/components/ui/combobox"
-import {
-    Field,
-    FieldContent,
-    FieldError,
-    FieldGroup,
-    FieldLabel,
-} from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
+import {Field, FieldContent, FieldError, FieldGroup, FieldLabel,} from "@/components/ui/field"
+import {Input} from "@/components/ui/input"
 import {
     ResponsiveDialog,
     ResponsiveDialogClose,
@@ -30,26 +24,21 @@ import {
     ResponsiveDialogHeader,
     ResponsiveDialogTitle,
 } from "@/components/ui/responsive-dialog"
-import { Spinner } from "@/components/ui/spinner"
-import { Switch } from "@/components/ui/switch"
-import { Textarea } from "@/components/ui/textarea"
-import { useGetFeatureCategoryOptions } from "@/features/central/billing/feature-categories/hooks/use-feature-category-query"
+import {Spinner} from "@/components/ui/spinner"
+import {Switch} from "@/components/ui/switch"
+import {Textarea} from "@/components/ui/textarea"
 import {
-    useCreateFeature,
-    useUpdateFeature,
-} from "@/features/central/billing/features/hooks/use-feature-query"
+    useGetFeatureCategoryOptions
+} from "@/features/central/billing/feature-categories/hooks/use-feature-category-query"
+import {useCreateFeature, useUpdateFeature,} from "@/features/central/billing/features/hooks/use-feature-query"
 import {
     type StoreFeatureFormValues,
     storeFeatureSchema,
     type UpdateFeatureFormValues,
 } from "@/features/central/billing/features/schemas"
-import { handleFormApiError } from "@/lib/form-api-errors"
-import { toastApiSuccess } from "@/lib/toast-api"
-import type {
-    Feature,
-    FeatureLimitType,
-    FeatureStatus,
-} from "@/types/central/feature"
+import {handleFormApiError} from "@/lib/form-api-errors"
+import {toastApiSuccess} from "@/lib/toast-api"
+import type {Feature, FeatureLimitType, FeatureStatus,} from "@/types/central/feature"
 
 type FeaturesFormDialogProps = {
     open: boolean
@@ -60,18 +49,18 @@ type FeaturesFormDialogProps = {
 type Option<T extends string | number> = { label: string; value: T }
 
 const statusOptions: Option<FeatureStatus>[] = [
-    { label: "Active", value: "active" },
-    { label: "Inactive", value: "inactive" },
-    { label: "Deprecated", value: "deprecated" },
+    {label: "Active", value: "active"},
+    {label: "Inactive", value: "inactive"},
+    {label: "Deprecated", value: "deprecated"},
 ]
 
 const limitTypeOptions: Option<FeatureLimitType>[] = [
-    { label: "Unlimited", value: "unlimited" },
-    { label: "Count Limit", value: "count" },
-    { label: "Storage Limit", value: "storage" },
-    { label: "Bandwidth Limit", value: "bandwidth" },
-    { label: "Periodic Limit", value: "periodic" },
-    { label: "Enabled/Disabled", value: "boolean" },
+    {label: "Unlimited", value: "unlimited"},
+    {label: "Count Limit", value: "count"},
+    {label: "Storage Limit", value: "storage"},
+    {label: "Bandwidth Limit", value: "bandwidth"},
+    {label: "Periodic Limit", value: "periodic"},
+    {label: "Enabled/Disabled", value: "boolean"},
 ]
 
 const defaults: StoreFeatureFormValues = {
@@ -97,7 +86,7 @@ export function FeaturesFormDialog({
     const isUpdate = !!currentRow
     const createFeature = useCreateFeature()
     const updateFeature = useUpdateFeature()
-    const { data: categoryOptions = [] } = useGetFeatureCategoryOptions(open)
+    const {data: categoryOptions = []} = useGetFeatureCategoryOptions(open)
     const isSubmitting = createFeature.isPending || updateFeature.isPending
 
     const form = useForm<StoreFeatureFormValues>({
@@ -152,7 +141,7 @@ export function FeaturesFormDialog({
         if (isUpdate && currentRow) {
             const values: UpdateFeatureFormValues = data
             updateFeature.mutate(
-                { id: currentRow.id, values },
+                {id: currentRow.id, values},
                 {
                     onSuccess: (result) => {
                         toastApiSuccess(result.message, "Feature updated successfully")
@@ -270,7 +259,7 @@ export function FeaturesFormDialog({
                                 <Controller
                                     control={form.control}
                                     name="feature_category_id"
-                                    render={({ field }) => {
+                                    render={({field}) => {
                                         const selected =
                                             categoryOptions.find(
                                                 (option) => option.value === field.value
@@ -314,7 +303,7 @@ export function FeaturesFormDialog({
                                     <Controller
                                         control={form.control}
                                         name="status"
-                                        render={({ field }) => {
+                                        render={({field}) => {
                                             const selected =
                                                 statusOptions.find(
                                                     (option) => option.value === field.value
@@ -330,7 +319,7 @@ export function FeaturesFormDialog({
                                                         item: Option<FeatureStatus> | null
                                                     ) => field.onChange(item?.value ?? "active")}
                                                 >
-                                                    <ComboboxInput placeholder="Select status..." />
+                                                    <ComboboxInput placeholder="Select status..."/>
                                                     <ComboboxContent>
                                                         <ComboboxEmpty>No statuses found.</ComboboxEmpty>
                                                         <ComboboxList>
@@ -353,7 +342,7 @@ export function FeaturesFormDialog({
                                     <Controller
                                         control={form.control}
                                         name="default_limit_type"
-                                        render={({ field }) => {
+                                        render={({field}) => {
                                             const selected =
                                                 limitTypeOptions.find(
                                                     (option) => option.value === field.value
@@ -369,7 +358,7 @@ export function FeaturesFormDialog({
                                                         item: Option<FeatureLimitType> | null
                                                     ) => field.onChange(item?.value ?? "boolean")}
                                                 >
-                                                    <ComboboxInput placeholder="Select limit type..." />
+                                                    <ComboboxInput placeholder="Select limit type..."/>
                                                     <ComboboxContent>
                                                         <ComboboxEmpty>No limit types found.</ComboboxEmpty>
                                                         <ComboboxList>
@@ -402,7 +391,7 @@ export function FeaturesFormDialog({
                             <Field>
                                 <FieldLabel>Unit</FieldLabel>
                                 <FieldContent>
-                                    <Input {...form.register("unit")} placeholder="reports" />
+                                    <Input {...form.register("unit")} placeholder="reports"/>
                                 </FieldContent>
                             </Field>
                         </div>
@@ -424,7 +413,7 @@ export function FeaturesFormDialog({
                                     <Controller
                                         control={form.control}
                                         name="is_available"
-                                        render={({ field }) => (
+                                        render={({field}) => (
                                             <div className="flex h-8 items-center gap-2">
                                                 <Switch
                                                     checked={field.value}
@@ -446,7 +435,7 @@ export function FeaturesFormDialog({
                                 <Controller
                                     control={form.control}
                                     name="tracks_usage"
-                                    render={({ field }) => (
+                                    render={({field}) => (
                                         <div className="flex h-8 items-center gap-2">
                                             <Switch
                                                 checked={field.value}
@@ -468,7 +457,7 @@ export function FeaturesFormDialog({
                         render={<Button variant="outline">Cancel</Button>}
                     />
                     <Button type="submit" form="feature-form" disabled={isSubmitting}>
-                        {isSubmitting ? <Spinner /> : null}
+                        {isSubmitting ? <Spinner/> : null}
                         {isUpdate ? "Save changes" : "Create feature"}
                     </Button>
                 </ResponsiveDialogFooter>

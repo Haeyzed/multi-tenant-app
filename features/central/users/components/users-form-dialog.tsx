@@ -1,13 +1,13 @@
 "use client"
 
-import { zodResolver } from "@hookform/resolvers/zod"
+import {zodResolver} from "@hookform/resolvers/zod"
 import * as React from "react"
-import { Controller, useForm } from "react-hook-form"
+import {Controller, useForm} from "react-hook-form"
 
-import { AvatarUpload } from "@/components/reui/avatar-upload"
-import { PhoneInput } from "@/components/reui/phone-input"
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
+import {AvatarUpload} from "@/components/reui/avatar-upload"
+import {PhoneInput} from "@/components/reui/phone-input"
+import {Button} from "@/components/ui/button"
+import {Checkbox} from "@/components/ui/checkbox"
 import {
     Combobox,
     ComboboxContent,
@@ -16,14 +16,8 @@ import {
     ComboboxItem,
     ComboboxList,
 } from "@/components/ui/combobox"
-import {
-    Field,
-    FieldContent,
-    FieldError,
-    FieldGroup,
-    FieldLabel,
-} from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
+import {Field, FieldContent, FieldError, FieldGroup, FieldLabel,} from "@/components/ui/field"
+import {Input} from "@/components/ui/input"
 import {
     ResponsiveDialog,
     ResponsiveDialogClose,
@@ -33,24 +27,16 @@ import {
     ResponsiveDialogHeader,
     ResponsiveDialogTitle,
 } from "@/components/ui/responsive-dialog"
-import { Spinner } from "@/components/ui/spinner"
-import { PermissionGate } from "@/features/central/auth/components/permission-gate"
-import { permissions } from "@/features/central/auth/components/permissions"
-import { useGetRoles } from "@/features/central/roles/hooks/use-role-query"
-import {
-    useCreateUser,
-    useUpdateUser,
-    useUploadUserAvatar,
-} from "@/features/central/users/hooks/use-user-query"
-import {
-    type StoreUserFormValues,
-    storeUserSchema,
-    type UpdateUserFormValues,
-} from "@/features/central/users/schemas"
-import { handleFormApiError } from "@/lib/form-api-errors"
-import { toastApiError, toastApiSuccess } from "@/lib/toast-api"
-import type { CentralUser, UserStatus } from "@/types/central/user"
-import { LockIcon } from "lucide-react"
+import {Spinner} from "@/components/ui/spinner"
+import {PermissionGate} from "@/features/central/auth/components/permission-gate"
+import {permissions} from "@/features/central/auth/components/permissions"
+import {useGetRoles} from "@/features/central/roles/hooks/use-role-query"
+import {useCreateUser, useUpdateUser, useUploadUserAvatar,} from "@/features/central/users/hooks/use-user-query"
+import {type StoreUserFormValues, storeUserSchema, type UpdateUserFormValues,} from "@/features/central/users/schemas"
+import {handleFormApiError} from "@/lib/form-api-errors"
+import {toastApiError, toastApiSuccess} from "@/lib/toast-api"
+import type {CentralUser, UserStatus} from "@/types/central/user"
+import {LockIcon} from "lucide-react"
 
 type UsersFormDialogProps = {
     open: boolean
@@ -61,9 +47,9 @@ type UsersFormDialogProps = {
 type StatusOption = { label: string; value: UserStatus }
 
 const statusOptions: StatusOption[] = [
-    { label: "Active", value: "active" },
-    { label: "Inactive", value: "inactive" },
-    { label: "Suspended", value: "suspended" },
+    {label: "Active", value: "active"},
+    {label: "Inactive", value: "inactive"},
+    {label: "Suspended", value: "suspended"},
 ]
 
 export function UsersFormDialog({
@@ -77,7 +63,7 @@ export function UsersFormDialog({
     const uploadAvatar = useUploadUserAvatar()
     const isSubmitting =
         createUser.isPending || updateUser.isPending || uploadAvatar.isPending
-    const { data: rolesData } = useGetRoles(open)
+    const {data: rolesData} = useGetRoles(open)
     const roleOptions = rolesData?.data ?? []
 
     const form = useForm<StoreUserFormValues>({
@@ -135,7 +121,7 @@ export function UsersFormDialog({
         }
 
         uploadAvatar.mutate(
-            { id: currentRow.id, file },
+            {id: currentRow.id, file},
             {
                 onSuccess: (result) => {
                     toastApiSuccess(result.message, "Avatar uploaded successfully")
@@ -158,7 +144,7 @@ export function UsersFormDialog({
             }
 
             updateUser.mutate(
-                { id: currentRow.id, values: updateValues },
+                {id: currentRow.id, values: updateValues},
                 {
                     onSuccess: (result) => {
                         toastApiSuccess(result.message, "User updated successfully")
@@ -189,7 +175,7 @@ export function UsersFormDialog({
         const next = checked
             ? [...selectedRoles, roleName]
             : selectedRoles.filter((role) => role !== roleName)
-        form.setValue("roles", next, { shouldDirty: true, shouldValidate: true })
+        form.setValue("roles", next, {shouldDirty: true, shouldValidate: true})
     }
 
     return (
@@ -232,7 +218,7 @@ export function UsersFormDialog({
                         <Field>
                             <FieldLabel>Name</FieldLabel>
                             <FieldContent>
-                                <Input {...form.register("name")} placeholder="Jane Admin" />
+                                <Input {...form.register("name")} placeholder="Jane Admin"/>
                                 <FieldError
                                     errors={
                                         form.formState.errors.name
@@ -268,7 +254,7 @@ export function UsersFormDialog({
                                     <Controller
                                         control={form.control}
                                         name="phone"
-                                        render={({ field }) => (
+                                        render={({field}) => (
                                             <PhoneInput
                                                 placeholder="Enter phone number"
                                                 defaultCountry="NG"
@@ -321,7 +307,7 @@ export function UsersFormDialog({
                                                 })
                                             }}
                                         >
-                                            <ComboboxInput placeholder="Select status..." />
+                                            <ComboboxInput placeholder="Select status..."/>
                                             <ComboboxContent>
                                                 <ComboboxEmpty>No statuses found.</ComboboxEmpty>
                                                 <ComboboxList>
@@ -429,13 +415,13 @@ export function UsersFormDialog({
                         permissions={[isUpdate ? permissions.users.update : permissions.users.create]}
                         fallback={
                             <Button disabled variant="outline">
-                                <LockIcon className="mr-1.5 size-3.5" />
+                                <LockIcon className="mr-1.5 size-3.5"/>
                                 {isUpdate ? "Save changes (Locked)" : "Create user (Locked)"}
                             </Button>
                         }
                     >
                         <Button type="submit" form="user-form" disabled={isSubmitting}>
-                            {isSubmitting ? <Spinner /> : null}
+                            {isSubmitting ? <Spinner/> : null}
                             {isUpdate ? "Save changes" : "Create user"}
                         </Button>
                     </PermissionGate>

@@ -1,30 +1,25 @@
 "use client"
 
-import {
-    LayersIcon,
-    ListIcon,
-    LockIcon,
-    ShieldIcon,
-} from "lucide-react"
+import {LayersIcon, ListIcon, LockIcon, ShieldIcon,} from "lucide-react"
 
-import { Skeleton } from "@/components/ui/skeleton"
-import { PermissionGate } from "@/features/central/auth/components/permission-gate"
-import { permissions } from "@/features/central/auth/components/permissions"
-import { MetricCard } from "@/features/central/dashboard/components/metric-card"
-import { formatCompactNumber } from "@/features/central/dashboard/lib/format"
-import { useGetPermissionStatistics } from "@/features/central/permissions/hooks/use-permission-query"
-import { useQueryErrorToast } from "@/hooks/use-query-error-toast"
+import {Skeleton} from "@/components/ui/skeleton"
+import {PermissionGate} from "@/features/central/auth/components/permission-gate"
+import {permissions} from "@/features/central/auth/components/permissions"
+import {MetricCard} from "@/features/central/dashboard/components/metric-card"
+import {formatCompactNumber} from "@/features/central/dashboard/lib/format"
+import {useGetPermissionStatistics} from "@/features/central/permissions/hooks/use-permission-query"
+import {useQueryErrorToast} from "@/hooks/use-query-error-toast"
 
 export function PermissionsStats() {
-    const { data, isLoading, error } = useGetPermissionStatistics()
+    const {data, isLoading, error} = useGetPermissionStatistics()
 
     useQueryErrorToast(error ?? null, "Failed to load permission statistics.")
 
     if (isLoading) {
         return (
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                {Array.from({ length: 3 }).map((_, index) => (
-                    <Skeleton key={index} className="h-32 rounded-xl" />
+                {Array.from({length: 3}).map((_, index) => (
+                    <Skeleton key={index} className="h-32 rounded-xl"/>
                 ))}
             </div>
         )
@@ -34,10 +29,12 @@ export function PermissionsStats() {
         <PermissionGate
             permissions={[permissions.permissions.view]}
             fallback={
-                <div className="flex h-32 w-full flex-col items-center justify-center rounded-xl border border-dashed text-center">
-                    <LockIcon className="text-muted-foreground mb-1.5 size-5" />
+                <div
+                    className="flex h-32 w-full flex-col items-center justify-center rounded-xl border border-dashed text-center">
+                    <LockIcon className="text-muted-foreground mb-1.5 size-5"/>
                     <span className="text-sm font-medium">Statistics Locked</span>
-                    <span className="text-muted-foreground text-xs">You lack permission to view permission metrics.</span>
+                    <span
+                        className="text-muted-foreground text-xs">You lack permission to view permission metrics.</span>
                 </div>
             }
         >
