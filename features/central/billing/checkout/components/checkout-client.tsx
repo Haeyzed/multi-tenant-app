@@ -37,22 +37,22 @@ export function CheckoutClient({
                                    signature,
                                }: CheckoutClientProps) {
     const router = useRouter()
-    const [state, setState] = React.useState<CheckoutState>({status: "loading"})
+    const invalidLink = !expires || !signature
+    const [state, setState] = React.useState<CheckoutState>(() =>
+        invalidLink
+            ? {
+                  status: "error",
+                  message: "This checkout link is missing a valid signature.",
+              }
+            : {status: "loading"}
+    )
     const started = React.useRef(false)
 
     React.useEffect(() => {
-        if (started.current) {
+        if (invalidLink || started.current) {
             return
         }
         started.current = true
-        if (!expires || !signature) {
-            setState({
-                status: "error",
-                message: "This checkout link is missing a valid signature.",
-            })
-
-            return
-        }
         startPublicCheckout(subscriptionId, {expires, signature})
             .then((result) => {
                 if (result.completed) {
@@ -81,7 +81,7 @@ export function CheckoutClient({
                         : "Unable to start checkout. The link may have expired."
                 setState({status: "error", message})
             })
-    }, [expires, router, signature, subscriptionId])
+    }, [expires, invalidLink, router, signature, subscriptionId])
 
     if (state.status === "error") {
         return (

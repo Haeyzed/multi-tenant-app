@@ -51,23 +51,23 @@ export function PublicInvoiceClient({
                                         signature,
                                     }: PublicInvoiceClientProps) {
     const router = useRouter()
-    const [state, setState] = React.useState<PageState>({status: "loading"})
+    const invalidLink = !expires || !signature
+    const [state, setState] = React.useState<PageState>(() =>
+        invalidLink
+            ? {
+                  status: "error",
+                  message: "This invoice link is missing a valid signature.",
+              }
+            : {status: "loading"}
+    )
     const [gateway, setGateway] = React.useState<string>("")
     const loaded = React.useRef(false)
 
     React.useEffect(() => {
-        if (loaded.current) {
+        if (invalidLink || loaded.current) {
             return
         }
         loaded.current = true
-
-        if (!expires || !signature) {
-            setState({
-                status: "error",
-                message: "This invoice link is missing a valid signature.",
-            })
-            return
-        }
 
         getPublicInvoice(invoiceId, {expires, signature})
             .then((result) => {
@@ -90,7 +90,7 @@ export function PublicInvoiceClient({
                         : "Unable to load this invoice. The link may have expired."
                 setState({status: "error", message})
             })
-    }, [expires, invoiceId, signature])
+    }, [expires, invalidLink, invoiceId, signature])
 
     const onPay = () => {
         if (!expires || !signature || !gateway || state.status !== "ready") {

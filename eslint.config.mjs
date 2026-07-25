@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Third-party ReUI registry components (not maintained in-app)
+    "components/reui/**",
   ]),
 ]);
 

@@ -3,6 +3,7 @@
 import {useMemo} from "react"
 import {useCentralAuth} from "@/lib/providers/central-auth-provider"
 import type {NavCollapsible, NavItem, NavLink, SidebarData,} from "@/components/layout/types"
+import type {Permission} from "@/features/central/auth/components/permissions";
 
 export function useFilteredSidebarData(data: SidebarData): SidebarData {
     const {hasPermission, isSuperAdmin} = useCentralAuth()
@@ -16,9 +17,11 @@ export function useFilteredSidebarData(data: SidebarData): SidebarData {
         /**
          * Returns true if no permissions are set, or if the user has ANY of the required permissions (OR logic).
          */
-        const checkAccess = (permissions?: string[]) => {
-            if (!permissions || permissions.length === 0) return true
-            return permissions.some(hasPermission)
+        const checkAccess = (itemPermissions?: string[]) => {
+            if (!itemPermissions || itemPermissions.length === 0) return true
+            return itemPermissions.some((permission) =>
+                hasPermission(permission as Permission)
+            )
         }
 
         const filterItems = (items: NavItem[]): NavItem[] => {

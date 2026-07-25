@@ -67,6 +67,21 @@ export function useInvoiceSettings() {
     return {...query, settings}
 }
 
+export function usePlatformSettings() {
+    const query = usePublicSettings("platform")
+    const raw = query.data ?? {}
+    const pick = (key: string): string | null => {
+        const value = raw[`platform.${key}`]
+        return typeof value === "string" && value.length > 0 ? value : null
+    }
+
+    return {
+        ...query,
+        name: pick("name") ?? "Central",
+        supportEmail: pick("support_email"),
+    }
+}
+
 export function useSettingGroups() {
     return useQuery({
         queryKey: ["central", "settings", "groups"],

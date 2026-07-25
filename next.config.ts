@@ -37,6 +37,11 @@ const nextConfig: NextConfig = {
         permanent: false,
       },
       { source: "/users", destination: "/central/users", permanent: false },
+      {
+        source: "/tenant",
+        destination: "/tenant/dashboard",
+        permanent: false,
+      },
     ]
   },
 }

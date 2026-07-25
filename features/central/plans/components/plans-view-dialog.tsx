@@ -11,6 +11,8 @@ import {
     ResponsiveDialogHeader,
     ResponsiveDialogTitle,
 } from "@/components/ui/responsive-dialog"
+import {Spinner} from "@/components/ui/spinner"
+import {useGetPlan} from "@/features/central/plans/hooks/use-plan-query"
 import type {Plan} from "@/types/central/plan"
 
 function formatPrice(price: {
@@ -35,26 +37,36 @@ export function PlansViewDialog({
                                     onOpenChange,
                                     plan,
                                 }: PlansViewDialogProps) {
+    const {data: details, isLoading} = useGetPlan(plan.id, open)
+    const view = details ?? plan
+    const primaryPrice = view.resolved_price ?? view.prices?.[0]
     const rows = [
-        ["Slug", plan.slug],
-        ["Price", `${plan.currency} ${Number(plan.price).toFixed(2)}`],
+        ["Slug", view.slug],
+        [
+            "Primary price",
+            primaryPrice
+                ? formatPrice(primaryPrice)
+                : view.currency && view.price != null
+                    ? `${view.currency} ${Number(view.price).toFixed(2)}`
+                    : "—",
+        ],
         [
             "Interval",
-            plan.billing_interval_label ?? plan.billing_interval ?? "—",
+            view.billing_interval_label ?? view.billing_interval ?? "—",
         ],
-        ["Trial days", String(plan.trial_days ?? 0)],
-        ["Visibility", plan.visibility_label ?? plan.visibility],
-        ["Featured", plan.is_featured ? "Yes" : "No"],
-        ["Sort order", String(plan.sort_order ?? 0)],
+        ["Trial days", String(view.trial_days ?? 0)],
+        ["Visibility", view.visibility_label ?? view.visibility],
+        ["Featured", view.is_featured ? "Yes" : "No"],
+        ["Sort order", String(view.sort_order ?? 0)],
         [
             "Created",
-            plan.created_at_human ?? new Date(plan.created_at).toLocaleString(),
+            view.created_at_human ?? new Date(view.created_at).toLocaleString(),
         ],
         [
             "Updated",
-            plan.updated_at_human ??
-            (plan.updated_at
-                ? new Date(plan.updated_at).toLocaleString()
+            view.updated_at_human ??
+            (view.updated_at
+                ? new Date(view.updated_at).toLocaleString()
                 : "—"),
         ],
     ] as const
@@ -65,29 +77,51 @@ export function PlansViewDialog({
                 <ResponsiveDialogHeader>
                     <ResponsiveDialogTitle>Plan details</ResponsiveDialogTitle>
                     <ResponsiveDialogDescription>
-                        Read-only overview for {plan.name}.
+                        Read-only overview for {view.name}.
                     </ResponsiveDialogDescription>
                 </ResponsiveDialogHeader>
 
-                <div className="space-y-3 text-sm">
+                <div className="max-h-[65vh] space-y-3 overflow-y-auto pe-1 text-sm">
+                    {isLoading ? (
+                        <div className="flex items-center gap-2 text-muted-foreground">
+                            <Spinner/> Loading plan details...
+                        </div>
+                    ) : null}
                     <div className="flex items-center gap-2">
                         <span className="text-muted-foreground">Status</span>
                         <Badge className="capitalize">
-                            {plan.status_label ?? plan.status}
+                            {view.status_label ?? view.status}
                         </Badge>
                     </div>
-                    {plan.description ? (
-                        <p className="text-muted-foreground">{plan.description}</p>
+                    {view.description ? (
+                        <p className="text-muted-foreground">{view.description}</p>
                     ) : null}
-                    {plan.prices && plan.prices.length > 0 ? (
-                        <div className="space-y-1.5 rounded-lg border p-3">
+                    {view.prices && view.prices.length > 0 ? (
+                        <div className="flex flex-col gap-1.5 rounded-lg border p-3">
               <span className="text-muted-foreground">
                 Prices by currency
               </span>
                             <div className="flex flex-wrap gap-2">
-                                {plan.prices.map((price) => (
+                                {view.prices.map((price) => (
                                     <Badge key={price.id} variant="outline">
                                         {formatPrice(price)}
+                                    </Badge>
+                                ))}
+                            </div>
+                        </div>
+                    ) : null}
+                    {view.features && view.features.length > 0 ? (
+                        <div className="flex flex-col gap-1.5 rounded-lg border p-3">
+                            <span className="text-muted-foreground">Features</span>
+                            <div className="flex flex-wrap gap-2">
+                                {view.features.map((feature) => (
+                                    <Badge key={feature.id} variant="secondary">
+                                        {feature.name}
+                                        {feature.pivot?.is_unlimited
+                                            ? " · unlimited"
+                                            : feature.pivot?.limit_value != null
+                                                ? ` · ${feature.pivot.limit_value}`
+                                                : ""}
                                     </Badge>
                                 ))}
                             </div>

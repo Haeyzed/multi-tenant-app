@@ -35,6 +35,9 @@ type PriceDraft = {
     billing_interval: PlanPriceInterval
     trial_days: string
     status: PlanStatus
+    stripe_id: string
+    paystack_id: string
+    flutterwave_id: string
 }
 
 function emptyDraft(defaultInterval: PlanPriceInterval): PriceDraft {
@@ -44,6 +47,9 @@ function emptyDraft(defaultInterval: PlanPriceInterval): PriceDraft {
         billing_interval: defaultInterval,
         trial_days: "",
         status: "active",
+        stripe_id: "",
+        paystack_id: "",
+        flutterwave_id: "",
     }
 }
 
@@ -87,6 +93,9 @@ export function PlansPricesManager({planId}: { planId: number }) {
             billing_interval: price.billing_interval ?? defaultBillingInterval,
             trial_days: price.trial_days != null ? String(price.trial_days) : "",
             status: price.status ?? "active",
+            stripe_id: price.gateway_identifiers?.stripe ?? "",
+            paystack_id: price.gateway_identifiers?.paystack ?? "",
+            flutterwave_id: price.gateway_identifiers?.flutterwave ?? "",
         })
         setEditingId(price.id)
     }
@@ -109,6 +118,11 @@ export function PlansPricesManager({planId}: { planId: number }) {
             billing_interval: draft.billing_interval,
             trial_days: draft.trial_days === "" ? null : Number(draft.trial_days),
             status: draft.status,
+            gateway_identifiers: {
+                stripe: draft.stripe_id.trim() || null,
+                paystack: draft.paystack_id.trim() || null,
+                flutterwave: draft.flutterwave_id.trim() || null,
+            },
         }
 
         if (editingId === "new") {
@@ -196,6 +210,12 @@ export function PlansPricesManager({planId}: { planId: number }) {
                                             <span className="text-muted-foreground">
                       · {price.trial_days}d trial
                     </span>
+                                        ) : null}
+                                        {price.gateway_identifiers &&
+                                        Object.values(price.gateway_identifiers).some(Boolean) ? (
+                                            <span className="text-muted-foreground">
+                                                · gateway IDs set
+                                            </span>
                                         ) : null}
                                         <Badge variant={price.status === "active" ? "secondary" : "outline"}>
                                             {price.status_label ?? price.status}
@@ -360,6 +380,44 @@ function PriceForm({
                             </NativeSelectOption>
                         ))}
                     </NativeSelect>
+                </FieldContent>
+            </Field>
+            <Field>
+                <FieldLabel className="text-xs">Stripe price ID</FieldLabel>
+                <FieldContent>
+                    <Input
+                        value={draft.stripe_id}
+                        placeholder="price_..."
+                        onChange={(event) =>
+                            setDraft((d) => ({...d, stripe_id: event.target.value}))
+                        }
+                    />
+                </FieldContent>
+            </Field>
+            <Field>
+                <FieldLabel className="text-xs">Paystack plan code</FieldLabel>
+                <FieldContent>
+                    <Input
+                        value={draft.paystack_id}
+                        placeholder="PLN_..."
+                        onChange={(event) =>
+                            setDraft((d) => ({...d, paystack_id: event.target.value}))
+                        }
+                    />
+                </FieldContent>
+            </Field>
+            <Field>
+                <FieldLabel className="text-xs">Flutterwave plan ID</FieldLabel>
+                <FieldContent>
+                    <Input
+                        value={draft.flutterwave_id}
+                        onChange={(event) =>
+                            setDraft((d) => ({
+                                ...d,
+                                flutterwave_id: event.target.value,
+                            }))
+                        }
+                    />
                 </FieldContent>
             </Field>
             <div className="col-span-full flex justify-end gap-2">

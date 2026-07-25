@@ -65,15 +65,28 @@ export const columns: ColumnDef<Plan>[] = [
         ),
     },
     {
-        accessorKey: "price",
+        id: "price",
         header: ({column}) => (
             <DataTableColumnHeader column={column} label="Price"/>
         ),
-        cell: ({row}) => (
-            <span className="text-muted-foreground">
-        {row.original.currency} {Number(row.original.price).toFixed(2)}
-      </span>
-        ),
+        cell: ({row}) => {
+            const resolved = row.original.resolved_price ?? row.original.prices?.[0]
+            if (resolved) {
+                return (
+                    <span className="text-muted-foreground">
+                        {resolved.currency} {Number(resolved.amount).toFixed(2)}
+                    </span>
+                )
+            }
+            if (row.original.currency && row.original.price != null) {
+                return (
+                    <span className="text-muted-foreground">
+                        {row.original.currency} {Number(row.original.price).toFixed(2)}
+                    </span>
+                )
+            }
+            return <span className="text-muted-foreground">—</span>
+        },
     },
     {
         accessorKey: "billing_interval",

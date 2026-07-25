@@ -339,7 +339,7 @@ function CountryViewDialog({
                     </ResponsiveDialogDescription>
                 </ResponsiveDialogHeader>
 
-                <div className="flex flex-col gap-3 text-sm">
+                <div className="max-h-[65vh] flex flex-col gap-3 overflow-y-auto pe-1 text-sm">
                     <div className="flex items-center gap-2">
                         <span className="text-muted-foreground">Status</span>
                         <Badge>

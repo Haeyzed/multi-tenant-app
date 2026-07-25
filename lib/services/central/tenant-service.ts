@@ -140,3 +140,35 @@ export async function getTenantStatistics(): Promise<TenantStatistics> {
   )
   return response.data
 }
+
+export type TenantBillingProfile = {
+  id: number
+  tenant_id: string
+  country_iso2: string | null
+  currency: string | null
+  preferred_gateway: string | null
+  metadata?: Record<string, unknown> | null
+}
+
+export async function getTenantBillingProfile(
+  tenantId: string
+): Promise<TenantBillingProfile> {
+  const response = await centralApiClient.get<
+    ApiEnvelope<TenantBillingProfile>
+  >(`/tenants/${tenantId}/billing-profile`)
+  return response.data
+}
+
+export async function updateTenantBillingProfile(
+  tenantId: string,
+  values: {
+    country_iso2?: string | null
+    currency?: string | null
+    preferred_gateway?: string | null
+  }
+) {
+  const response = await centralApiClient.put<
+    ApiEnvelope<TenantBillingProfile>
+  >(`/tenants/${tenantId}/billing-profile`, values)
+  return { data: response.data, message: response.message }
+}

@@ -67,7 +67,7 @@ export function UsersViewDialog({
                     </ResponsiveDialogDescription>
                 </ResponsiveDialogHeader>
 
-                <div className="space-y-4 text-sm">
+                <div className="max-h-[65vh] space-y-4 overflow-y-auto pe-1 text-sm">
                     <div className="flex flex-col items-center gap-3 py-2">
                         <Avatar className="size-20">
                             {user.avatar_url ? (

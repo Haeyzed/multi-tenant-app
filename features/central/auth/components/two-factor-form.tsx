@@ -26,7 +26,7 @@ export function TwoFactorForm({
     const router = useRouter()
     const confirmMutation = useConfirmTwoFactor()
     const [useRecovery, setUseRecovery] = useState(false)
-    const [tokenReady, setTokenReady] = useState(false)
+    const twoFactorToken = getTwoFactorToken()
 
     const form = useForm<z.infer<typeof twoFactorSchema>>({
         resolver: zodResolver(twoFactorSchema),
@@ -34,16 +34,12 @@ export function TwoFactorForm({
     })
 
     useEffect(() => {
-        const token = getTwoFactorToken()
-        if (!token) {
+        if (!twoFactorToken) {
             router.replace(centralRoutes.login)
-            return
         }
-        setTokenReady(true)
-    }, [router])
+    }, [router, twoFactorToken])
 
     const onSubmit = (values: z.infer<typeof twoFactorSchema>) => {
-        const twoFactorToken = getTwoFactorToken()
         if (!twoFactorToken) {
             router.replace(centralRoutes.login)
             return
@@ -66,7 +62,7 @@ export function TwoFactorForm({
         )
     }
 
-    if (!tokenReady) {
+    if (!twoFactorToken) {
         return null
     }
 

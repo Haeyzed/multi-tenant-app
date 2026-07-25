@@ -62,7 +62,7 @@ export function UsersSecurityDialog({
                     </ResponsiveDialogDescription>
                 </ResponsiveDialogHeader>
 
-                <div className="space-y-3 text-sm">
+                <div className="max-h-[65vh] space-y-3 overflow-y-auto pe-1 text-sm">
                     {isLoading ? (
                         <div className="space-y-3">
                             {Array.from({length: 5}).map((_, index) => (

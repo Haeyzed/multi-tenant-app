@@ -25,22 +25,19 @@ type UsersAssignRolesDialogProps = {
     user: CentralUser
 }
 
-export function UsersAssignRolesDialog({
-                                           open,
-                                           onOpenChange,
-                                           user,
-                                       }: UsersAssignRolesDialogProps) {
-    const {data: rolesData, isLoading} = useGetRoles(open)
+function UserRolesEditor({
+    user,
+    roleOptions,
+    isLoading,
+    onOpenChange,
+}: {
+    user: CentralUser
+    roleOptions: NonNullable<ReturnType<typeof useGetRoles>["data"]>["data"]
+    isLoading: boolean
+    onOpenChange: (open: boolean) => void
+}) {
     const syncRoles = useSyncUserRoles()
-    const [selectedRoles, setSelectedRoles] = React.useState<string[]>([])
-
-    React.useEffect(() => {
-        if (open) {
-            setSelectedRoles(user.roles ?? [])
-        }
-    }, [open, user.roles])
-
-    const roleOptions = rolesData?.data ?? []
+    const [selectedRoles, setSelectedRoles] = React.useState(user.roles ?? [])
 
     const toggleRole = (roleName: string, checked: boolean) => {
         setSelectedRoles((current) =>
@@ -66,6 +63,54 @@ export function UsersAssignRolesDialog({
     }
 
     return (
+        <>
+            <div className="max-h-64 space-y-2 overflow-y-auto rounded-md border p-3">
+                {isLoading ? (
+                    <div className="flex justify-center py-6">
+                        <Spinner/>
+                    </div>
+                ) : roleOptions.length === 0 ? (
+                    <p className="text-muted-foreground text-sm">No roles available.</p>
+                ) : (
+                    roleOptions.map((role) => (
+                        <label
+                            key={role.id}
+                            className="flex items-center gap-2 text-sm capitalize"
+                        >
+                            <Checkbox
+                                checked={selectedRoles.includes(role.name)}
+                                onCheckedChange={(checked) =>
+                                    toggleRole(role.name, !!checked)
+                                }
+                            />
+                            {role.name}
+                        </label>
+                    ))
+                )}
+            </div>
+
+            <ResponsiveDialogFooter>
+                <ResponsiveDialogClose
+                    render={<Button variant="outline">Cancel</Button>}
+                />
+                <Button onClick={handleSave} disabled={syncRoles.isPending}>
+                    {syncRoles.isPending ? <Spinner/> : null}
+                    Save roles
+                </Button>
+            </ResponsiveDialogFooter>
+        </>
+    )
+}
+
+export function UsersAssignRolesDialog({
+                                           open,
+                                           onOpenChange,
+                                           user,
+                                       }: UsersAssignRolesDialogProps) {
+    const {data: rolesData, isLoading} = useGetRoles(open)
+    const roleOptions = rolesData?.data ?? []
+
+    return (
         <ResponsiveDialog open={open} onOpenChange={onOpenChange}>
             <ResponsiveDialogContent className="sm:max-w-md">
                 <ResponsiveDialogHeader>
@@ -75,40 +120,15 @@ export function UsersAssignRolesDialog({
                     </ResponsiveDialogDescription>
                 </ResponsiveDialogHeader>
 
-                <div className="max-h-64 space-y-2 overflow-y-auto rounded-md border p-3">
-                    {isLoading ? (
-                        <div className="flex justify-center py-6">
-                            <Spinner/>
-                        </div>
-                    ) : roleOptions.length === 0 ? (
-                        <p className="text-muted-foreground text-sm">No roles available.</p>
-                    ) : (
-                        roleOptions.map((role) => (
-                            <label
-                                key={role.id}
-                                className="flex items-center gap-2 text-sm capitalize"
-                            >
-                                <Checkbox
-                                    checked={selectedRoles.includes(role.name)}
-                                    onCheckedChange={(checked) =>
-                                        toggleRole(role.name, !!checked)
-                                    }
-                                />
-                                {role.name}
-                            </label>
-                        ))
-                    )}
-                </div>
-
-                <ResponsiveDialogFooter>
-                    <ResponsiveDialogClose
-                        render={<Button variant="outline">Cancel</Button>}
+                {open ? (
+                    <UserRolesEditor
+                        key={user.id}
+                        user={user}
+                        roleOptions={roleOptions}
+                        isLoading={isLoading}
+                        onOpenChange={onOpenChange}
                     />
-                    <Button onClick={handleSave} disabled={syncRoles.isPending}>
-                        {syncRoles.isPending ? <Spinner/> : null}
-                        Save roles
-                    </Button>
-                </ResponsiveDialogFooter>
+                ) : null}
             </ResponsiveDialogContent>
         </ResponsiveDialog>
     )

@@ -1,5 +1,4 @@
 import * as React from "react"
-import type { Permission } from "@/features/central/auth/components/permissions"
 
 type Team = {
   name: string
@@ -11,8 +10,8 @@ type BaseNavItem = {
   title: string
   badge?: string
   icon?: React.ElementType
-  /** Optional array of permission strings required to view this item */
-  permissions?: Permission[]
+  /** Optional permission strings required to view this item (central or tenant) */
+  permissions?: string[]
 }
 
 type NavLink = BaseNavItem & {
@@ -30,7 +29,7 @@ type NavItem = NavCollapsible | NavLink
 type NavGroup = {
   title: string
   items: NavItem[]
-  /** Optional array of permission strings required to view this group */
+  /** Optional permission strings required to view this group (central or tenant) */
   permissions?: string[]
 }
 

@@ -120,9 +120,12 @@ function ResponsiveDialog({
     }
   }, [listenersRef, stateRef, onOpenChangeRef])
 
-  if (stateRef.current.isMobile !== isMobile) {
-    stateRef.current.isMobile = isMobile
-  }
+  useIsomorphicLayoutEffect(() => {
+    if (stateRef.current.isMobile !== isMobile) {
+      stateRef.current.isMobile = isMobile
+      store.notify()
+    }
+  }, [isMobile, store, stateRef])
 
   const open = useStore((state) => state.open, store)
 

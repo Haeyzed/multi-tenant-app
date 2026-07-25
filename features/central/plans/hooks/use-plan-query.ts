@@ -11,6 +11,7 @@ import {
     deleteManyPlans,
     deletePlan,
     deletePlanPrice,
+    getPlan,
     getPlanPrices,
     getPlans,
     getPlanStatistics,
@@ -24,6 +25,17 @@ export const plansQueryKey = (params?: Record<string, unknown>) =>
 
 export const planStatisticsQueryKey = () =>
     ["central", "plans", "statistics"] as const
+
+export const planQueryKey = (id: number) =>
+    ["central", "plans", id] as const
+
+export function useGetPlan(id: number | undefined, enabled = true) {
+    return useQuery({
+        queryKey: planQueryKey(id ?? 0),
+        queryFn: () => getPlan(id as number),
+        enabled: !!id && enabled,
+    })
+}
 
 export function useGetPlans(params?: {
     search?: string
@@ -65,8 +77,9 @@ export function useUpdatePlan() {
             id: number
             values: UpdatePlanFormValues
         }) => updatePlan(id, values),
-        onSuccess: () => {
+        onSuccess: (_result, variables) => {
             queryClient.invalidateQueries({queryKey: ["central", "plans"]})
+            queryClient.invalidateQueries({queryKey: planQueryKey(variables.id)})
         },
     })
 }

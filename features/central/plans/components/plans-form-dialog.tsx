@@ -27,15 +27,14 @@ import {
 import {Spinner} from "@/components/ui/spinner"
 import {Switch} from "@/components/ui/switch"
 import {Textarea} from "@/components/ui/textarea"
-import {useCreatePlan, useUpdatePlan,} from "@/features/central/plans/hooks/use-plan-query"
+import {PlansFeaturesFields} from "@/features/central/plans/components/plans-features-fields"
 import {PlansPricesManager} from "@/features/central/plans/components/plans-prices-manager"
-import {useBillingDefaultInterval} from "@/features/central/settings/hooks/use-setting-query"
+import {useCreatePlan, useGetPlan, useUpdatePlan,} from "@/features/central/plans/hooks/use-plan-query"
 import {type StorePlanFormValues, storePlanSchema, type UpdatePlanFormValues,} from "@/features/central/plans/schemas"
-import {useCurrencyOptions} from "@/features/central/world/hooks/use-world-query"
+import {useBillingDefaultInterval} from "@/features/central/settings/hooks/use-setting-query"
 import {handleFormApiError} from "@/lib/form-api-errors"
 import {toastApiSuccess} from "@/lib/toast-api"
-import type {BillingInterval, Plan, PlanStatus, PlanVisibility,} from "@/types/central/plan"
-import type {CurrencyOption} from "@/types/central/world"
+import type {BillingInterval, FeatureLimitType, Plan, PlanStatus, PlanVisibility,} from "@/types/central/plan"
 
 type PlansFormDialogProps = {
     open: boolean
@@ -72,14 +71,40 @@ const defaults: StorePlanFormValues = {
     name: "",
     slug: "",
     description: "",
-    price: 0,
-    currency: "NGN",
     billing_interval: "monthly",
     trial_days: 14,
     status: "active",
     visibility: "public",
     is_featured: false,
     sort_order: 0,
+    features: [],
+}
+
+function mapPlanFeatures(plan: Plan): StorePlanFormValues["features"] {
+    return (plan.features ?? []).map((feature) => {
+        const limitType =
+            (feature.pivot?.limit_type as FeatureLimitType | null | undefined) ??
+            (feature.default_limit_type as FeatureLimitType | null | undefined) ??
+            "boolean"
+
+        return {
+            feature_id: feature.id,
+            limit_type: limitType,
+            limit_value: feature.pivot?.limit_value ?? feature.default_limit_value ?? null,
+            is_unlimited:
+                feature.pivot?.is_unlimited ?? limitType === "unlimited",
+            is_enabled: feature.pivot?.is_enabled ?? true,
+            tracks_usage:
+                feature.pivot?.tracks_usage ?? feature.tracks_usage ?? false,
+            reset_period:
+                (feature.pivot?.reset_period as
+                    | "monthly"
+                    | "quarterly"
+                    | "yearly"
+                    | null
+                    | undefined) ?? null,
+        }
+    })
 }
 
 export function PlansFormDialog({
@@ -90,8 +115,8 @@ export function PlansFormDialog({
     const isUpdate = !!currentRow
     const createPlan = useCreatePlan()
     const updatePlan = useUpdatePlan()
+    const {data: planDetails} = useGetPlan(currentRow?.id, open && isUpdate)
     const isSubmitting = createPlan.isPending || updatePlan.isPending
-    const {data: currencyOptions = []} = useCurrencyOptions()
     const defaultBillingInterval = useBillingDefaultInterval()
     const initializedDialogRef = React.useRef<string | null>(null)
 
@@ -106,26 +131,33 @@ export function PlansFormDialog({
             return
         }
 
-        const dialogIdentity = currentRow ? `edit:${currentRow.id}` : "new"
+        const source = planDetails ?? currentRow
+        const dialogIdentity = currentRow
+            ? `edit:${currentRow.id}:${planDetails ? "loaded" : "pending"}`
+            : "new"
+
+        if (currentRow && !planDetails) {
+            return
+        }
+
         if (initializedDialogRef.current === dialogIdentity) {
             return
         }
         initializedDialogRef.current = dialogIdentity
 
-        if (currentRow) {
+        if (source) {
             form.reset({
-                name: currentRow.name,
-                slug: currentRow.slug,
-                description: currentRow.description || "",
-                price: Number(currentRow.price),
-                currency: currentRow.currency || "NGN",
+                name: source.name,
+                slug: source.slug,
+                description: source.description || "",
                 billing_interval:
-                    currentRow.billing_interval || defaultBillingInterval,
-                trial_days: currentRow.trial_days ?? 0,
-                status: currentRow.status,
-                visibility: currentRow.visibility,
-                is_featured: currentRow.is_featured,
-                sort_order: currentRow.sort_order ?? 0,
+                    source.billing_interval || defaultBillingInterval,
+                trial_days: source.trial_days ?? 0,
+                status: source.status,
+                visibility: source.visibility,
+                is_featured: source.is_featured,
+                sort_order: source.sort_order ?? 0,
+                features: mapPlanFeatures(source),
             })
         } else {
             form.reset({
@@ -133,7 +165,7 @@ export function PlansFormDialog({
                 billing_interval: defaultBillingInterval,
             })
         }
-    }, [open, currentRow, defaultBillingInterval, form])
+    }, [open, currentRow, planDetails, defaultBillingInterval, form])
 
     React.useEffect(() => {
         if (open && !currentRow && !form.formState.isDirty) {
@@ -203,8 +235,8 @@ export function PlansFormDialog({
                     </ResponsiveDialogTitle>
                     <ResponsiveDialogDescription>
                         {isUpdate
-                            ? "Update pricing and visibility for this plan."
-                            : "Define a billing plan tenants can subscribe to."}
+                            ? "Update plan details, features, and currency prices below."
+                            : "Define a billing plan and attach features. Add currency prices after saving."}
                     </ResponsiveDialogDescription>
                 </ResponsiveDialogHeader>
 
@@ -253,76 +285,6 @@ export function PlansFormDialog({
                                     />
                                 </FieldContent>
                             </Field>
-
-                            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                                <Field>
-                                    <FieldLabel>Price</FieldLabel>
-                                    <FieldContent>
-                                        <Input
-                                            type="number"
-                                            step="0.01"
-                                            min="0"
-                                            {...form.register("price")}
-                                        />
-                                        <FieldError
-                                            errors={
-                                                form.formState.errors.price
-                                                    ? [form.formState.errors.price]
-                                                    : []
-                                            }
-                                        />
-                                    </FieldContent>
-                                </Field>
-                                <Field>
-                                    <FieldLabel>Currency</FieldLabel>
-                                    <FieldContent>
-                                        <Controller
-                                            control={form.control}
-                                            name="currency"
-                                            render={({field}) => {
-                                                const selected =
-                                                    currencyOptions.find(
-                                                        (option) => option.value === field.value
-                                                    ) ??
-                                                    (field.value
-                                                        ? {value: field.value, label: field.value}
-                                                        : null)
-                                                return (
-                                                    <Combobox
-                                                        items={currencyOptions}
-                                                        itemToStringValue={(item: CurrencyOption) =>
-                                                            item.label
-                                                        }
-                                                        value={selected}
-                                                        onValueChange={(item: CurrencyOption | null) =>
-                                                            field.onChange(item?.value ?? "")
-                                                        }
-                                                    >
-                                                        <ComboboxInput placeholder="Select currency..."/>
-                                                        <ComboboxContent>
-                                                            <ComboboxEmpty>No currencies found.</ComboboxEmpty>
-                                                            <ComboboxList>
-                                                                {(item: CurrencyOption) => (
-                                                                    <ComboboxItem key={item.value} value={item}>
-                                                                        {item.label}
-                                                                    </ComboboxItem>
-                                                                )}
-                                                            </ComboboxList>
-                                                        </ComboboxContent>
-                                                    </Combobox>
-                                                )
-                                            }}
-                                        />
-                                        <FieldError
-                                            errors={
-                                                form.formState.errors.currency
-                                                    ? [form.formState.errors.currency]
-                                                    : []
-                                            }
-                                        />
-                                    </FieldContent>
-                                </Field>
-                            </div>
 
                             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                                 <Field>
@@ -494,14 +456,16 @@ export function PlansFormDialog({
                                 </Field>
                             </div>
                         </FieldGroup>
+
+                        <PlansFeaturesFields control={form.control} disabled={isSubmitting}/>
                     </form>
 
                     {isUpdate && currentRow ? (
                         <PlansPricesManager planId={currentRow.id}/>
                     ) : (
                         <p className="text-sm text-muted-foreground">
-                            Save the plan first, then manage additional currency prices from
-                            the edit dialog.
+                            Save the plan first, then manage currency prices from the edit
+                            dialog.
                         </p>
                     )}
                 </div>

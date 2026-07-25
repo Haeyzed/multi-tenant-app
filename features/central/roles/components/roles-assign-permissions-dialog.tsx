@@ -24,22 +24,23 @@ type RolesAssignPermissionsDialogProps = {
     role: CentralRole
 }
 
-export function RolesAssignPermissionsDialog({
-                                                 open,
-                                                 onOpenChange,
-                                                 role,
-                                             }: RolesAssignPermissionsDialogProps) {
-    const {data: permissionGroups, isLoading} = useGetPermissions(open)
+function RolePermissionsEditor({
+    role,
+    permissionGroups,
+    isLoading,
+    onOpenChange,
+}: {
+    role: CentralRole
+    permissionGroups: NonNullable<
+        ReturnType<typeof useGetPermissions>["data"]
+    >
+    isLoading: boolean
+    onOpenChange: (open: boolean) => void
+}) {
     const syncPermissions = useSyncRolePermissions()
-    const [selectedPermissions, setSelectedPermissions] = React.useState<
-        string[]
-    >([])
-
-    React.useEffect(() => {
-        if (open) {
-            setSelectedPermissions(role.permissions ?? [])
-        }
-    }, [open, role.permissions])
+    const [selectedPermissions, setSelectedPermissions] = React.useState(
+        role.permissions ?? []
+    )
 
     const togglePermission = (permissionName: string, checked: boolean) => {
         setSelectedPermissions((current) =>
@@ -65,6 +66,62 @@ export function RolesAssignPermissionsDialog({
     }
 
     return (
+        <>
+            <div className="max-h-80 space-y-4 overflow-y-auto pr-1">
+                {isLoading ? (
+                    <div className="flex justify-center py-6">
+                        <Spinner/>
+                    </div>
+                ) : (permissionGroups ?? []).length === 0 ? (
+                    <p className="text-muted-foreground text-sm">
+                        No permissions available.
+                    </p>
+                ) : (
+                    (permissionGroups ?? []).map((group) => (
+                        <div key={group.group} className="space-y-2">
+                            <p className="text-sm font-medium capitalize">{group.group}</p>
+                            <div className="space-y-2 rounded-md border p-3">
+                                {group.permissions.map((permission) => (
+                                    <label
+                                        key={permission.id}
+                                        className="flex items-center gap-2 text-sm"
+                                    >
+                                        <Checkbox
+                                            checked={selectedPermissions.includes(permission.name)}
+                                            onCheckedChange={(checked) =>
+                                                togglePermission(permission.name, !!checked)
+                                            }
+                                        />
+                                        {permission.name}
+                                    </label>
+                                ))}
+                            </div>
+                        </div>
+                    ))
+                )}
+            </div>
+
+            <ResponsiveDialogFooter>
+                <ResponsiveDialogClose
+                    render={<Button variant="outline">Cancel</Button>}
+                />
+                <Button onClick={handleSave} disabled={syncPermissions.isPending}>
+                    {syncPermissions.isPending ? <Spinner/> : null}
+                    Save permissions
+                </Button>
+            </ResponsiveDialogFooter>
+        </>
+    )
+}
+
+export function RolesAssignPermissionsDialog({
+                                                 open,
+                                                 onOpenChange,
+                                                 role,
+                                             }: RolesAssignPermissionsDialogProps) {
+    const {data: permissionGroups, isLoading} = useGetPermissions(open)
+
+    return (
         <ResponsiveDialog open={open} onOpenChange={onOpenChange}>
             <ResponsiveDialogContent className="sm:max-w-lg">
                 <ResponsiveDialogHeader>
@@ -74,49 +131,15 @@ export function RolesAssignPermissionsDialog({
                     </ResponsiveDialogDescription>
                 </ResponsiveDialogHeader>
 
-                <div className="max-h-80 space-y-4 overflow-y-auto pr-1">
-                    {isLoading ? (
-                        <div className="flex justify-center py-6">
-                            <Spinner/>
-                        </div>
-                    ) : (permissionGroups ?? []).length === 0 ? (
-                        <p className="text-muted-foreground text-sm">
-                            No permissions available.
-                        </p>
-                    ) : (
-                        (permissionGroups ?? []).map((group) => (
-                            <div key={group.group} className="space-y-2">
-                                <p className="text-sm font-medium capitalize">{group.group}</p>
-                                <div className="space-y-2 rounded-md border p-3">
-                                    {group.permissions.map((permission) => (
-                                        <label
-                                            key={permission.id}
-                                            className="flex items-center gap-2 text-sm"
-                                        >
-                                            <Checkbox
-                                                checked={selectedPermissions.includes(permission.name)}
-                                                onCheckedChange={(checked) =>
-                                                    togglePermission(permission.name, !!checked)
-                                                }
-                                            />
-                                            {permission.name}
-                                        </label>
-                                    ))}
-                                </div>
-                            </div>
-                        ))
-                    )}
-                </div>
-
-                <ResponsiveDialogFooter>
-                    <ResponsiveDialogClose
-                        render={<Button variant="outline">Cancel</Button>}
+                {open ? (
+                    <RolePermissionsEditor
+                        key={role.id}
+                        role={role}
+                        permissionGroups={permissionGroups}
+                        isLoading={isLoading}
+                        onOpenChange={onOpenChange}
                     />
-                    <Button onClick={handleSave} disabled={syncPermissions.isPending}>
-                        {syncPermissions.isPending ? <Spinner/> : null}
-                        Save permissions
-                    </Button>
-                </ResponsiveDialogFooter>
+                ) : null}
             </ResponsiveDialogContent>
         </ResponsiveDialog>
     )

@@ -5,7 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b9199642-5776-47cf-a420-93777d317808" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/features/central/billing/checkout/components/checkout-client.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/features/central/billing/checkout/components/checkout-client.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/layout/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/components/layout/types.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/central/auth/hooks/use-filtered-sidebar-data.ts" beforeDir="false" afterPath="$PROJECT_DIR$/features/central/shell/hooks/use-filtered-sidebar-data.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/central/shell/app-sidebar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/features/central/shell/app-sidebar.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,6 +74,7 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\devs\multi-tenant-app\features\central\shell\hooks" />
       <recent name="C:\devs\multi-tenant-app\components\layout" />
     </key>
   </component>
@@ -105,7 +109,7 @@
       <updated>1784394177622</updated>
       <workItem from="1784394179224" duration="8363000" />
       <workItem from="1784503937131" duration="17516000" />
-      <workItem from="1784677617073" duration="2832000" />
+      <workItem from="1784677617073" duration="6389000" />
     </task>
     <servers />
   </component>

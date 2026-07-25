@@ -54,7 +54,7 @@ export function PermissionsViewDialog({
                     </ResponsiveDialogDescription>
                 </ResponsiveDialogHeader>
 
-                <div className="space-y-3 text-sm">
+                <div className="max-h-[65vh] space-y-3 overflow-y-auto pe-1 text-sm">
                     <div className="flex items-center gap-2">
                         <span className="text-muted-foreground">Group</span>
                         <Badge variant="outline" className="capitalize">

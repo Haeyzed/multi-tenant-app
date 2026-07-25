@@ -48,7 +48,7 @@ export function RolesViewDialog({
                     </ResponsiveDialogDescription>
                 </ResponsiveDialogHeader>
 
-                <div className="space-y-3 text-sm">
+                <div className="max-h-[65vh] space-y-3 overflow-y-auto pe-1 text-sm">
                     {rows.map(([label, value]) => (
                         <div
                             key={label}

@@ -10,6 +10,7 @@ import {Spinner} from "@/components/ui/spinner"
 import {Switch} from "@/components/ui/switch"
 import {Textarea} from "@/components/ui/textarea"
 import {BillingPaymentPolicyEditor} from "@/features/central/settings/components/billing-payment-policy-editor"
+import {PaymentGatewaysCatalogCard} from "@/features/central/settings/components/payment-gateways-catalog-card"
 import {useBulkUpdateSettings, useSendTestMail,} from "@/features/central/settings/hooks/use-setting-query"
 import {toastApiError, toastApiSuccess} from "@/lib/toast-api"
 import type {Setting} from "@/types/central/setting"
@@ -63,6 +64,25 @@ const BILLING_POLICY_KEYS = new Set([
     "billing.card_verification_currency",
 ])
 
+/** Hidden from the generic settings form (catalog + verification editor replace these). */
+const BILLING_HIDDEN_KEYS = new Set([
+    "billing.provider_currencies",
+    "billing.gateway_by_currency",
+    "billing.credentials_provider",
+])
+
+function isBillingHiddenKey(key: string): boolean {
+    if (BILLING_HIDDEN_KEYS.has(key)) {
+        return true
+    }
+
+    return (
+        key.startsWith("billing.paystack_") ||
+        key.startsWith("billing.flutterwave_") ||
+        key.startsWith("billing.stripe_")
+    )
+}
+
 function optionLabel(option: string): string {
     return OPTION_LABELS[option] ?? (option === "" ? "Default" : option)
 }
@@ -102,7 +122,6 @@ function isSettingVisible(
 ): boolean {
     const mailer = String(values["mail.mailer"] ?? "")
     const disk = String(values["storage.default_disk"] ?? "")
-    const provider = String(values["billing.credentials_provider"] ?? "")
 
     if (
         key === "mail.host" ||
@@ -126,43 +145,17 @@ function isSettingVisible(
         return disk === "s3"
     }
 
-    if (
-        key === "billing.paystack_public" ||
-        key === "billing.paystack_secret" ||
-        key === "billing.paystack_webhook_secret"
-    ) {
-        return provider === "paystack"
-    }
-
-    if (
-        key === "billing.flutterwave_public" ||
-        key === "billing.flutterwave_secret" ||
-        key === "billing.flutterwave_webhook_secret"
-    ) {
-        return provider === "flutterwave"
-    }
-
-    if (
-        key === "billing.stripe_publishable" ||
-        key === "billing.stripe_secret" ||
-        key === "billing.stripe_webhook_secret"
-    ) {
-        return provider === "stripe"
-    }
-
     return true
 }
 
 export function SettingsGroupForm({
                                       group,
                                       title,
-                                      description,
                                       settings,
                                       isLoading,
                                   }: {
     group?: string
     title: string
-    description?: string
     settings: Setting[]
     isLoading?: boolean
 }) {
@@ -299,21 +292,23 @@ export function SettingsGroupForm({
     const visibleSettings = settings.filter(
         (setting) =>
             isSettingVisible(setting.key, values) &&
-            !(group === "billing" && BILLING_POLICY_KEYS.has(setting.key))
+            !(
+                group === "billing" &&
+                (BILLING_POLICY_KEYS.has(setting.key) || isBillingHiddenKey(setting.key))
+            )
     )
 
     return (
         <div className="flex flex-col gap-4">
-            {description ? (
-                <p className="text-sm text-muted-foreground">{description}</p>
-            ) : null}
-
             {group === "billing" ? (
-                <BillingPaymentPolicyEditor
-                    settings={settings}
-                    values={values}
-                    onChange={(key, value) => setValue(key, value)}
-                />
+                <>
+                    <PaymentGatewaysCatalogCard/>
+                    <BillingPaymentPolicyEditor
+                        settings={settings}
+                        values={values}
+                        onChange={(key, value) => setValue(key, value)}
+                    />
+                </>
             ) : null}
 
             {visibleSettings.length > 0 ? (

@@ -22,6 +22,11 @@ export type PlanPricePayload = {
   trial_days?: number | null
   status?: "draft" | "active" | "inactive" | "archived"
   metadata?: Record<string, unknown> | null
+  gateway_identifiers?: {
+    stripe?: string | null
+    paystack?: string | null
+    flutterwave?: string | null
+  } | null
 }
 
 function toPayload(values: StorePlanFormValues | UpdatePlanFormValues) {
@@ -29,15 +34,27 @@ function toPayload(values: StorePlanFormValues | UpdatePlanFormValues) {
     name: values.name,
     slug: values.slug || undefined,
     description: values.description || null,
-    price: values.price,
-    currency: values.currency.toUpperCase(),
     billing_interval: values.billing_interval,
     trial_days: values.trial_days,
     status: values.status,
     visibility: values.visibility,
     is_featured: values.is_featured,
     sort_order: values.sort_order,
+    features: values.features?.map((feature) => ({
+      feature_id: feature.feature_id,
+      limit_type: feature.limit_type,
+      limit_value: feature.is_unlimited ? null : (feature.limit_value ?? null),
+      is_unlimited: feature.is_unlimited ?? feature.limit_type === "unlimited",
+      is_enabled: feature.is_enabled ?? true,
+      tracks_usage: feature.tracks_usage ?? false,
+      reset_period: feature.reset_period ?? null,
+    })),
   }
+}
+
+export async function getPlan(id: number): Promise<Plan> {
+  const response = await centralApiClient.get<ApiEnvelope<Plan>>(`/plans/${id}`)
+  return response.data
 }
 
 export async function getPlans(params?: {

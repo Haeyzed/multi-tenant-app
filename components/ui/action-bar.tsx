@@ -141,8 +141,6 @@ function ActionBar(props: ActionBarProps) {
     ...rootProps
   } = props;
 
-  const [mounted, setMounted] = React.useState(false);
-
   const rootRef = React.useRef<RootElement>(null);
   const composedRef = useComposedRefs(ref, rootRef);
 
@@ -154,9 +152,11 @@ function ActionBar(props: ActionBarProps) {
   const contextDir = useDirection();
   const dir = dirProp ?? contextDir;
 
-  React.useLayoutEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = React.useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
 
   React.useEffect(() => {
     if (!open) return;
@@ -398,6 +398,7 @@ function ActionBarGroup(props: DivProps) {
     ],
   );
 
+  /* eslint-disable react-hooks/refs -- Radix-style composed ref passed to useRender */
   const element = useRender({
     defaultTagName: "div",
     props: mergeProps<"div">(
@@ -425,6 +426,7 @@ function ActionBarGroup(props: DivProps) {
       orientation,
     },
   });
+  /* eslint-enable react-hooks/refs */
 
   return (
     <FocusContext.Provider value={focusContextValue}>

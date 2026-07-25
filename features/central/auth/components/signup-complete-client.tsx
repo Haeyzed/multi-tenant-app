@@ -28,18 +28,13 @@ export function SignupCompleteClient() {
     const [result, setResult] = React.useState<PublicSignupResult | null>(null)
     const [error, setError] = React.useState<string | null>(null)
     const started = React.useRef(false)
+    const intentId = params.intent
 
     React.useEffect(() => {
-        if (started.current) {
+        if (!intentId || started.current) {
             return
         }
         started.current = true
-
-        const intentId = params.intent
-        if (!intentId) {
-            setError("Missing signup session.")
-            return
-        }
 
         completeMutation.mutate(
             {
@@ -62,7 +57,22 @@ export function SignupCompleteClient() {
             }
         )
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [params.intent])
+    }, [intentId])
+
+    if (!intentId) {
+        return (
+            <div className="flex flex-col items-center gap-4 text-center">
+                <h1 className="text-2xl font-bold">Signup incomplete</h1>
+                <p className="text-muted-foreground text-sm">Missing signup session.</p>
+                <Link
+                    href={centralRoutes.signup}
+                    className={cn(buttonVariants({variant: "default"}))}
+                >
+                    Try again
+                </Link>
+            </div>
+        )
+    }
 
     if (error) {
         return (

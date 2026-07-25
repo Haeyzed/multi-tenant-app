@@ -1,32 +1,26 @@
 "use client"
 
-import {PageHeader} from "@/components/layout/page-header"
-import {CentralAuthGuard} from "@/features/central/auth/components/auth-guard"
-import {SettingsTabs} from "@/features/central/settings/components/settings-tabs"
-import {permissions} from "@/features/central/auth/components/permissions"
-import {Header} from "@/components/layout/header"
-import {ThemeSwitch} from "@/components/theme-switch"
-import {ConfigDrawer} from "@/components/config-drawer"
-import {Main} from "@/components/layout/main"
-import {Search} from "@/components/search"
-import {ProfileDropdown} from "@/features/central/shell/profile-dropdown"
+import {useRouter} from "next/navigation"
+import * as React from "react"
 
-export default function SettingsPage() {
+import {Spinner} from "@/components/ui/spinner"
+import {settingsGroupHref} from "@/features/central/settings/components/settings-sidebar-nav"
+import {useSettingGroups} from "@/features/central/settings/hooks/use-setting-query"
+
+export default function SettingsIndexPage() {
+    const router = useRouter()
+    const {data: groups = [], isLoading} = useSettingGroups()
+
+    React.useEffect(() => {
+        const first = groups[0]?.value
+        if (first) {
+            router.replace(settingsGroupHref(first))
+        }
+    }, [groups, router])
+
     return (
-        <CentralAuthGuard permissions={permissions.settings.view}>
-            <Header fixed>
-                <Search className="me-auto"/>
-                <ThemeSwitch/>
-                <ConfigDrawer/>
-                <ProfileDropdown/>
-            </Header>
-            <Main className="flex flex-1 flex-col gap-4 sm:gap-6">
-                <PageHeader
-                    title="Settings"
-                    description="Configure platform-wide settings, including billing gateways and currencies."
-                />
-                <SettingsTabs/>
-            </Main>
-        </CentralAuthGuard>
+        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <Spinner/> {isLoading ? "Loading settings..." : "Opening settings..."}
+        </div>
     )
 }

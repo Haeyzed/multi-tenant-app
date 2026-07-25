@@ -2,15 +2,26 @@
 
 import {GalleryVerticalEndIcon} from "lucide-react"
 import Link from "next/link"
+import * as React from "react"
 
 import {CentralGuestGuard} from "@/features/central/auth/components/guest-guard"
+import {usePlatformSettings} from "@/features/central/settings/hooks/use-setting-query"
 import {centralRoutes} from "@/features/central/shell/routes"
+import {Skeleton} from "@/components/ui/skeleton"
 
 export default function AuthLayout({
                                        children,
                                    }: {
     children: React.ReactNode
 }) {
+    const {name, isLoading} = usePlatformSettings()
+
+    React.useEffect(() => {
+        if (!isLoading && name) {
+            document.title = name
+        }
+    }, [isLoading, name])
+
     return (
         <CentralGuestGuard>
             <div className="grid min-h-svh lg:grid-cols-2">
@@ -24,7 +35,7 @@ export default function AuthLayout({
                                 className="flex size-6 items-center justify-center rounded-md bg-primary text-primary-foreground">
                                 <GalleryVerticalEndIcon className="size-4"/>
                             </div>
-                            Acme Inc.
+                            {isLoading ? <Skeleton className="h-5 w-28"/> : name}
                         </Link>
                     </div>
                     <div className="flex flex-1 items-center justify-center">

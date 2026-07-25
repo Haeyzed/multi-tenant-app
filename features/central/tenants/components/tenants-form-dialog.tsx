@@ -208,7 +208,7 @@ export function TenantsFormDialog({
 
                 <form
                     id="tenant-form"
-                    className="space-y-4"
+                    className="max-h-[65vh] space-y-4 overflow-y-auto pe-1"
                     onSubmit={form.handleSubmit(onSubmit)}
                 >
                     <FieldGroup>
