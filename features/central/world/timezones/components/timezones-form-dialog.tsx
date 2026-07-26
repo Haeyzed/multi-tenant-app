@@ -42,7 +42,7 @@ import {
 } from "@/features/central/world/schemas"
 import { handleFormApiError } from "@/lib/form-api-errors"
 import { toastApiSuccess } from "@/lib/toast-api"
-import type { CountryOption, Timezone } from "@/types/central/world"
+import type { CountryOption, Timezone } from "@/features/central/world/types"
 
 const emptyValues: TimezoneFormValues = {
   country_id: "",

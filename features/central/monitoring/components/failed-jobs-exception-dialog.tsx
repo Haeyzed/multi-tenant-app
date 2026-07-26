@@ -12,7 +12,7 @@ import {
   ResponsiveDialogTitle,
 } from "@/components/ui/responsive-dialog"
 import { Textarea } from "@/components/ui/textarea"
-import type { FailedJob } from "@/types/central/monitoring"
+import type { FailedJob } from "@/features/central/monitoring/types"
 
 type FailedJobsExceptionDialogProps = {
   open: boolean

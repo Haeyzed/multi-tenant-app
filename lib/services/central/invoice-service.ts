@@ -6,9 +6,9 @@ import type {
   Invoice,
   InvoiceStatistics,
   PaginatedInvoices,
-  PaginatedMeta,
-} from "@/types/central/invoice"
-import type { Payment } from "@/types/central/payment"
+} from "@/features/central/billing/invoices/types"
+import type { Payment } from "@/features/central/billing/payments/types"
+import type { PaginatedMeta } from "@/features/central/shared/types"
 
 export async function getInvoices(
   params?: {

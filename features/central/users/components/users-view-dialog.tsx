@@ -12,7 +12,7 @@ import {
     ResponsiveDialogHeader,
     ResponsiveDialogTitle,
 } from "@/components/ui/responsive-dialog"
-import type {CentralUser} from "@/types/central/user"
+import type {CentralUser} from "@/features/central/users/types"
 
 type UsersViewDialogProps = {
     open: boolean

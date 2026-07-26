@@ -23,7 +23,7 @@ import type {
   WorldPaginated,
   WorldPaginatedMeta,
   WorldStatistics,
-} from "@/types/central/world"
+} from "@/features/central/world/types"
 
 export async function getCountries(params?: {
   search?: string

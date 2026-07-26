@@ -172,7 +172,8 @@ function PermissionMatrixEditor({
                                         <PermissionGate permissions={[permissions.roles.assignPermissions]}>
                                             <div className="flex items-center gap-1.5 pt-1">
                                                 <Checkbox
-                                                    checked={isAllSelected || (isSomeSelected ? "indeterminate" : false)}
+                                                    checked={isAllSelected}
+                                                    indeterminate={isSomeSelected && !isAllSelected}
                                                     disabled={isSaving}
                                                     onCheckedChange={(val) =>
                                                         toggleAllForRole(role.id, !!val)
@@ -221,9 +222,10 @@ function PermissionMatrixEditor({
                                                 <PermissionGate permissions={[permissions.roles.assignPermissions]}>
                                                     <div className="flex justify-center">
                                                         <Checkbox
-                                                            checked={
-                                                                isGroupAllSelected ||
-                                                                (isGroupSomeSelected ? "indeterminate" : false)
+                                                            checked={isGroupAllSelected}
+                                                            indeterminate={
+                                                                isGroupSomeSelected &&
+                                                                !isGroupAllSelected
                                                             }
                                                             disabled={isSaving}
                                                             onCheckedChange={(val) =>

@@ -6,7 +6,7 @@ import {
     publicSignupComplete,
     publicSignupSetup,
 } from "@/lib/services/central/signup-service"
-import type {PublicSignupPayload} from "@/types/central/signup"
+import type {PublicSignupPayload} from "@/features/central/auth/types"
 
 export function usePublicPlanOptions(params?: { country?: string }) {
     return useQuery({

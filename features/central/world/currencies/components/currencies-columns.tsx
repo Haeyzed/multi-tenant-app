@@ -5,7 +5,7 @@ import {Search} from "lucide-react"
 
 import {DataTableColumnHeader} from "@/components/data-table/data-table-column-header"
 import {DataTableRowActions} from "@/features/central/world/currencies/components/currencies-row-actions"
-import type {CountryOption, Currency} from "@/types/central/world"
+import type {CountryOption, Currency} from "@/features/central/world/types"
 
 export function buildColumns(
     countryOptions: CountryOption[]

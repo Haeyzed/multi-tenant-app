@@ -10,7 +10,7 @@ import {
   ResponsiveDialogHeader,
   ResponsiveDialogTitle,
 } from "@/components/ui/responsive-dialog"
-import type { Currency } from "@/types/central/world"
+import type { Currency } from "@/features/central/world/types"
 
 type CurrenciesViewDialogProps = {
   open: boolean

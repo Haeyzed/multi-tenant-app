@@ -15,7 +15,7 @@ import {Skeleton} from "@/components/ui/skeleton"
 import {formatRelativeTime} from "@/features/central/shared/lib/format"
 import {useGetUserActivities} from "@/features/central/users/hooks/use-user-query"
 import {useQueryErrorToast} from "@/hooks/use-query-error-toast"
-import type {CentralUser} from "@/types/central/user"
+import type {CentralUser} from "@/features/central/users/types"
 
 type UsersActivitiesDialogProps = {
     open: boolean

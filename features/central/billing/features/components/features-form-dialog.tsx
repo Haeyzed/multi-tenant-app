@@ -57,7 +57,7 @@ import type {
   Feature,
   FeatureLimitType,
   FeatureStatus,
-} from "@/types/central/feature"
+} from "@/features/central/billing/features/types"
 
 type FeaturesFormDialogProps = {
   open: boolean

@@ -11,7 +11,7 @@ import {
     ResponsiveDialogHeader,
     ResponsiveDialogTitle,
 } from "@/components/ui/responsive-dialog"
-import type {CentralRole} from "@/types/central/rbac"
+import type {CentralRole} from "@/features/central/roles/types"
 
 type RolesViewDialogProps = {
     open: boolean

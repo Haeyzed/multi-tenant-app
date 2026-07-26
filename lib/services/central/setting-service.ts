@@ -7,7 +7,7 @@ import type {
   PublicSettings,
   Setting,
   SettingGroupOption,
-} from "@/types/central/setting"
+} from "@/features/central/settings/types"
 
 export async function getSettings(
   params?: {

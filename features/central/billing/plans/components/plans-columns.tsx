@@ -7,7 +7,7 @@ import {DataTableColumnHeader} from "@/components/data-table/data-table-column-h
 import {Badge} from "@/components/ui/badge"
 import {Checkbox} from "@/components/ui/checkbox"
 import {DataTableRowActions} from "@/features/central/billing/plans/components/plans-row-actions"
-import type {Plan, PlanStatus} from "@/types/central/plan"
+import type {Plan, PlanStatus} from "@/features/central/billing/plans/types"
 
 const statusVariantMap: Record<
     PlanStatus,

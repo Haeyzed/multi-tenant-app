@@ -54,7 +54,7 @@ import {
 } from "@/features/central/shared/select-option"
 import { handleFormApiError } from "@/lib/form-api-errors"
 import { toastApiError, toastApiSuccess } from "@/lib/toast-api"
-import type { CentralUser, UserStatus } from "@/types/central/user"
+import type { CentralUser, UserStatus } from "@/features/central/users/types"
 import { LockIcon } from "lucide-react"
 
 type UsersFormDialogProps = {

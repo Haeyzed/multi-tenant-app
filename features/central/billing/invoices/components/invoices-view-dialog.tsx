@@ -13,7 +13,7 @@ import {
     ResponsiveDialogTitle,
 } from "@/components/ui/responsive-dialog"
 import {InvoiceDocument} from "@/features/central/billing/invoices/components/invoice-document"
-import type {Invoice} from "@/types/central/invoice"
+import type {Invoice} from "@/features/central/billing/invoices/types"
 
 type InvoicesViewDialogProps = {
     open: boolean

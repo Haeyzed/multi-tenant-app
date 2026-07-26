@@ -30,7 +30,7 @@ import {
 } from "@/features/central/billing/feature-categories/schemas"
 import {handleFormApiError} from "@/lib/form-api-errors"
 import {toastApiSuccess} from "@/lib/toast-api"
-import type {FeatureCategory} from "@/types/central/feature-category"
+import type {FeatureCategory} from "@/features/central/billing/feature-categories/types"
 
 type FeatureCategoriesFormDialogProps = {
     open: boolean

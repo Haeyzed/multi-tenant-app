@@ -3,7 +3,7 @@
 import React, {useState} from "react"
 
 import useDialogState from "@/hooks/use-dialog-state"
-import type {Payment} from "@/types/central/payment"
+import type {Payment} from "@/features/central/billing/payments/types"
 
 export type PaymentsDialogType = "view" | "refund"
 

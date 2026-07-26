@@ -12,7 +12,7 @@ import {
     ResponsiveDialogTitle,
 } from "@/components/ui/responsive-dialog"
 import {formatMoney} from "@/features/central/shared/lib/format"
-import type {Subscription} from "@/types/central/subscription"
+import type {Subscription} from "@/features/central/billing/subscriptions/types"
 
 type SubscriptionsViewDialogProps = {
     open: boolean

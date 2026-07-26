@@ -7,7 +7,7 @@ import type {
   MonitoringServer,
   MonitoringStorage,
   PaginatedFailedJobs,
-} from "@/types/central/monitoring"
+} from "@/features/central/monitoring/types"
 
 export async function getMonitoringOverview(): Promise<MonitoringOverview> {
   const response =

@@ -10,7 +10,7 @@ import {
   ResponsiveDialogHeader,
   ResponsiveDialogTitle,
 } from "@/components/ui/responsive-dialog"
-import type { State } from "@/types/central/world"
+import type { State } from "@/features/central/world/types"
 
 type StatesViewDialogProps = {
   open: boolean

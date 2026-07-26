@@ -14,7 +14,7 @@ import {
 import {PermissionGate} from "@/features/central/auth/components/permission-gate"
 import {permissions} from "@/features/central/auth/permissions"
 import {useTenants} from "@/features/central/tenants/components/tenants-provider"
-import type {Tenant} from "@/types/central/tenant"
+import type {Tenant} from "@/features/central/tenants/types"
 
 type DataTableRowActionsProps<TData> = {
     row: Row<TData>

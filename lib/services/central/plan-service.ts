@@ -7,13 +7,13 @@ import type {
   UpdatePlanFormValues,
 } from "@/features/central/billing/plans/schemas"
 import type {
-  PaginatedMeta,
   PaginatedPlans,
   Plan,
   PlanPrice,
   PlanPriceInterval,
   PlanStatistics,
-} from "@/types/central/plan"
+} from "@/features/central/billing/plans/types"
+import type { PaginatedMeta } from "@/features/central/shared/types"
 
 export type PlanPricePayload = {
   amount: number

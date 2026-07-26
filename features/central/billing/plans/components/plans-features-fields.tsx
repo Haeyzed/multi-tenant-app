@@ -13,7 +13,7 @@ import type {
   StorePlanFormValues,
 } from "@/features/central/billing/plans/schemas"
 import { planFeatureLimitTypeOptions } from "@/features/central/billing/features/options"
-import type { FeatureLimitType } from "@/types/central/plan"
+import type { FeatureLimitType } from "@/features/central/billing/plans/types"
 
 type PlansFeaturesFieldsProps = {
   control: Control<StorePlanFormValues>

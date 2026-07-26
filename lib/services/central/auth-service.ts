@@ -7,8 +7,8 @@ import type {
   LoginResult,
   LoginSuccessData,
   ResetPasswordPayload,
-} from "@/types/central/auth"
-import type { CentralUser } from "@/types/central/user"
+} from "@/features/central/auth/types"
+import type { CentralUser } from "@/features/central/users/types"
 
 const TWO_FACTOR_TOKEN_KEY = "central_two_factor_token"
 

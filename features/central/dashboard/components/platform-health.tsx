@@ -3,7 +3,7 @@
 import {Badge} from "@/components/ui/badge"
 import {Card, CardContent, CardDescription, CardHeader, CardTitle,} from "@/components/ui/card"
 import {Skeleton} from "@/components/ui/skeleton"
-import type {PlatformHealth} from "@/types/central/dashboard"
+import type {PlatformHealth} from "@/features/central/dashboard/types"
 
 type PlatformHealthCardProps = {
     health?: PlatformHealth

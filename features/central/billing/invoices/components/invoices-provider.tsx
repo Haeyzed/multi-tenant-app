@@ -3,7 +3,7 @@
 import React, {useState} from "react"
 
 import useDialogState from "@/hooks/use-dialog-state"
-import type {Invoice} from "@/types/central/invoice"
+import type {Invoice} from "@/features/central/billing/invoices/types"
 
 export type InvoicesDialogType =
     | "create"

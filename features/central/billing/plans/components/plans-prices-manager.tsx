@@ -35,8 +35,8 @@ import type {
   PlanPrice,
   PlanPriceInterval,
   PlanStatus,
-} from "@/types/central/plan"
-import type { CurrencyOption } from "@/types/central/world"
+} from "@/features/central/billing/plans/types"
+import type { CurrencyOption } from "@/features/central/world/types"
 
 type PriceDraft = {
   amount: string

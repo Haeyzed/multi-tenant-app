@@ -14,7 +14,7 @@ import {
 import {PermissionGate} from "@/features/central/auth/components/permission-gate"
 import {permissions} from "@/features/central/auth/permissions"
 import {useMonitoring} from "@/features/central/monitoring/components/monitoring-provider"
-import type {FailedJob} from "@/types/central/monitoring"
+import type {FailedJob} from "@/features/central/monitoring/types"
 
 type DataTableRowActionsProps<TData> = {
     row: Row<TData>

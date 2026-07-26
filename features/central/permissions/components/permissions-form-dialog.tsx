@@ -28,7 +28,7 @@ import {
 } from "@/features/central/permissions/schemas"
 import {handleFormApiError} from "@/lib/form-api-errors"
 import {toastApiSuccess} from "@/lib/toast-api"
-import type {PermissionItem} from "@/types/central/rbac"
+import type {PermissionItem} from "@/features/central/permissions/types"
 
 type PermissionsFormDialogProps = {
     open: boolean

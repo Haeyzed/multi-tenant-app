@@ -3,7 +3,7 @@
 import React, {useState} from "react"
 
 import useDialogState from "@/hooks/use-dialog-state"
-import type {Timezone} from "@/types/central/world"
+import type {Timezone} from "@/features/central/world/types"
 
 export type TimezonesDialogType = "create" | "update" | "view" | "delete"
 

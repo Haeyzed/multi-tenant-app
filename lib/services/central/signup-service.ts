@@ -8,7 +8,7 @@ import type {
   PublicSignupResult,
   SignupPaymentOptions,
   SignupSetupResult,
-} from "@/types/central/signup"
+} from "@/features/central/auth/types"
 
 export async function getPublicPlanOptions(params?: {
   country?: string

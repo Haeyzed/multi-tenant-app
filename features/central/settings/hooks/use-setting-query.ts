@@ -10,7 +10,7 @@ import {
     updateSetting,
 } from "@/lib/services/central/setting-service"
 import {catalogQueryOptions} from "@/lib/query/query-options"
-import type {InvoiceSettings} from "@/types/central/setting"
+import type {InvoiceSettings} from "@/features/central/settings/types"
 
 export type RecurringBillingInterval = "monthly" | "quarterly" | "yearly"
 

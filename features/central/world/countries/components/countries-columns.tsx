@@ -6,7 +6,7 @@ import {CheckCircle2, Search, XCircle} from "lucide-react"
 import {DataTableColumnHeader} from "@/components/data-table/data-table-column-header"
 import {Badge} from "@/components/ui/badge"
 import {DataTableRowActions} from "@/features/central/world/countries/components/countries-row-actions"
-import type {Country} from "@/types/central/world"
+import type {Country} from "@/features/central/world/types"
 
 export const columns: ColumnDef<Country>[] = [
     {

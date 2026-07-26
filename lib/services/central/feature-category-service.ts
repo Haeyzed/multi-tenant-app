@@ -6,7 +6,7 @@ import type {
   StoreFeatureCategoryFormValues,
   UpdateFeatureCategoryFormValues,
 } from "@/features/central/billing/feature-categories/schemas"
-import type { FeatureCategory } from "@/types/central/feature-category"
+import type { FeatureCategory } from "@/features/central/billing/feature-categories/types"
 
 function toPayload(
   values: StoreFeatureCategoryFormValues | UpdateFeatureCategoryFormValues

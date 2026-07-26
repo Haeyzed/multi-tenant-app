@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/responsive-dialog"
 import {Spinner} from "@/components/ui/spinner"
 import {useGetPlan} from "@/features/central/billing/plans/hooks/use-plan-query"
-import type {Plan} from "@/types/central/plan"
+import type {Plan} from "@/features/central/billing/plans/types"
 
 function formatPrice(price: {
     currency: string

@@ -2,12 +2,13 @@ import {
   type ApiEnvelope,
   centralApiClient,
 } from "@/lib/api/central-client"
+import type { PaginatedMeta } from "@/features/central/shared/types"
 import type {
-  PaginatedMeta,
   PaginatedTenants,
   Tenant,
+  TenantBillingProfile,
   TenantStatistics,
-} from "@/types/central/tenant"
+} from "@/features/central/tenants/types"
 import {
   type StoreTenantFormValues,
   type UpdateTenantFormValues,
@@ -142,15 +143,6 @@ export async function getTenantStatistics(): Promise<TenantStatistics> {
     "/tenants/statistics"
   )
   return response.data
-}
-
-export type TenantBillingProfile = {
-  id: number
-  tenant_id: string
-  country_iso2: string | null
-  currency: string | null
-  preferred_gateway: string | null
-  metadata?: Record<string, unknown> | null
 }
 
 export async function getTenantBillingProfile(

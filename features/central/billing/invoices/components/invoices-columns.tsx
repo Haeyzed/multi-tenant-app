@@ -7,7 +7,7 @@ import {DataTableColumnHeader} from "@/components/data-table/data-table-column-h
 import {Badge} from "@/components/ui/badge"
 import {DataTableRowActions} from "@/features/central/billing/invoices/components/invoices-row-actions"
 import {formatMoney} from "@/features/central/shared/lib/format"
-import type {Invoice, InvoiceStatus} from "@/types/central/invoice"
+import type {Invoice, InvoiceStatus} from "@/features/central/billing/invoices/types"
 
 const statusVariantMap: Record<
     InvoiceStatus,

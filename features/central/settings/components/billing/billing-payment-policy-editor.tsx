@@ -17,8 +17,8 @@ import {
 import {Field, FieldContent, FieldDescription, FieldGroup, FieldLabel,} from "@/components/ui/field"
 import {Input} from "@/components/ui/input"
 import {useCurrencyOptions} from "@/features/central/world/hooks/use-world-query"
-import type {Setting} from "@/types/central/setting"
-import type {CurrencyOption} from "@/types/central/world"
+import type {Setting} from "@/features/central/settings/types"
+import type {CurrencyOption} from "@/features/central/world/types"
 
 const GATEWAYS = ["paystack", "flutterwave", "stripe"] as const
 

@@ -8,7 +8,7 @@ import {ActionBar, ActionBarClose, ActionBarGroup, ActionBarItem, ActionBarSelec
 import {PermissionGate} from "@/features/central/auth/components/permission-gate"
 import {permissions} from "@/features/central/auth/permissions"
 import {usePlans} from "@/features/central/billing/plans/components/plans-provider"
-import type {Plan} from "@/types/central/plan"
+import type {Plan} from "@/features/central/billing/plans/types"
 
 type PlansBulkActionsProps<TData> = {
     table: Table<TData>

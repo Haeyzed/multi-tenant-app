@@ -14,7 +14,7 @@ import {
 import {PermissionGate} from "@/features/central/auth/components/permission-gate"
 import {permissions} from "@/features/central/auth/permissions"
 import {useCities} from "@/features/central/world/cities/components/cities-provider"
-import type {City} from "@/types/central/world"
+import type {City} from "@/features/central/world/types"
 
 type DataTableRowActionsProps<TData> = {
     row: Row<TData>

@@ -44,7 +44,7 @@ import {
 import { catalogQueryOptions } from "@/lib/query/query-options"
 import { getPaymentGatewayOptions } from "@/lib/services/central/payment-gateway-service"
 import { toastApiError, toastApiSuccess } from "@/lib/toast-api"
-import type { Invoice } from "@/types/central/invoice"
+import type { Invoice } from "@/features/central/billing/invoices/types"
 
 type InvoicesChargeDialogProps = {
   open: boolean

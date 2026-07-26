@@ -2,16 +2,15 @@ import {
   type ApiEnvelope,
   centralApiClient,
 } from "@/lib/api/central-client"
-import type { PaginatedMeta } from "@/types/central/user"
 import type {
-  CentralRole,
   PaginatedPermissions,
   PermissionGroup,
   PermissionItem,
   PermissionMatrix,
   PermissionStatistics,
-  RoleStatistics,
-} from "@/types/central/rbac"
+} from "@/features/central/permissions/types"
+import type { CentralRole, RoleStatistics } from "@/features/central/roles/types"
+import type { PaginatedMeta } from "@/features/central/shared/types"
 import {
   type StorePermissionFormValues,
   type UpdatePermissionFormValues,

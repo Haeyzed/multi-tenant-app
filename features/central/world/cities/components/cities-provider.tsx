@@ -3,7 +3,7 @@
 import React, {useState} from "react"
 
 import useDialogState from "@/hooks/use-dialog-state"
-import type {City} from "@/types/central/world"
+import type {City} from "@/features/central/world/types"
 
 export type CitiesDialogType = "create" | "update" | "view" | "delete"
 

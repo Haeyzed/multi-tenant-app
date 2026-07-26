@@ -6,7 +6,7 @@ import type {
   DashboardActivity,
   DashboardCharts,
   DashboardOverview,
-} from "@/types/central/dashboard"
+} from "@/features/central/dashboard/types"
 
 export async function getDashboardOverview(
   signal?: AbortSignal

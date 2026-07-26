@@ -17,7 +17,7 @@ import {Spinner} from "@/components/ui/spinner"
 import {useGetRoles} from "@/features/central/roles/hooks/use-role-query"
 import {useSyncUserRoles,} from "@/features/central/users/hooks/use-user-query"
 import {toastApiError, toastApiSuccess} from "@/lib/toast-api"
-import type {CentralUser} from "@/types/central/user"
+import type {CentralUser} from "@/features/central/users/types"
 
 type UsersAssignRolesDialogProps = {
     open: boolean

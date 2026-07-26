@@ -50,8 +50,8 @@ import {type SignupFormValues, signupSchema,} from "@/features/central/auth/sche
 import {centralRoutes} from "@/features/central/shell/routes"
 import {useCountryOptions} from "@/features/central/world/hooks/use-world-query"
 import {handleFormApiError} from "@/lib/form-api-errors"
-import type {PlanOption, PublicSignupResult, SignupGatewayOption,} from "@/types/central/signup"
-import type {CountryOption} from "@/types/central/world"
+import type {PlanOption, PublicSignupResult, SignupGatewayOption,} from "@/features/central/auth/types"
+import type {CountryOption} from "@/features/central/world/types"
 import {cn} from "@/lib/utils"
 
 const steps = [

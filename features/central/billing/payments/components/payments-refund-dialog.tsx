@@ -30,7 +30,7 @@ import {
   refundPaymentSchema,
 } from "@/features/central/billing/payments/schemas"
 import { toastApiError, toastApiSuccess } from "@/lib/toast-api"
-import type { Payment } from "@/types/central/payment"
+import type { Payment } from "@/features/central/billing/payments/types"
 
 type PaymentsRefundDialogProps = {
   open: boolean

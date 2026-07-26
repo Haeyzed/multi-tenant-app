@@ -10,7 +10,7 @@ import {
   ResponsiveDialogHeader,
   ResponsiveDialogTitle,
 } from "@/components/ui/responsive-dialog"
-import type { Timezone } from "@/types/central/world"
+import type { Timezone } from "@/features/central/world/types"
 
 type TimezonesViewDialogProps = {
   open: boolean

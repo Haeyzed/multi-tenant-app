@@ -7,7 +7,7 @@ import {DataTableColumnHeader} from "@/components/data-table/data-table-column-h
 import {Badge} from "@/components/ui/badge"
 import {Checkbox} from "@/components/ui/checkbox"
 import {DataTableRowActions} from "@/features/central/billing/features/components/features-row-actions"
-import type {Feature, FeatureStatus} from "@/types/central/feature"
+import type {Feature, FeatureStatus} from "@/features/central/billing/features/types"
 
 const statusVariantMap: Record<
     FeatureStatus,

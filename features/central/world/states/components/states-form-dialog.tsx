@@ -42,7 +42,7 @@ import {
 } from "@/features/central/world/schemas"
 import { handleFormApiError } from "@/lib/form-api-errors"
 import { toastApiSuccess } from "@/lib/toast-api"
-import type { CountryOption, State } from "@/types/central/world"
+import type { CountryOption, State } from "@/features/central/world/types"
 
 const emptyValues: StateFormValues = {
   country_id: "",

@@ -1,5 +1,5 @@
 import type { SelectOption } from "@/features/central/shared/select-option"
-import type { FeatureLimitType, FeatureStatus } from "@/types/central/feature"
+import type { FeatureLimitType, FeatureStatus } from "@/features/central/billing/features/types"
 
 export const featureStatusOptions: SelectOption<FeatureStatus>[] = [
   { label: "Active", value: "active" },

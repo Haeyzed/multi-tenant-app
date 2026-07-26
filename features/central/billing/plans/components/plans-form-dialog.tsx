@@ -63,7 +63,7 @@ import type {
   Plan,
   PlanStatus,
   PlanVisibility,
-} from "@/types/central/plan"
+} from "@/features/central/billing/plans/types"
 
 type PlansFormDialogProps = {
   open: boolean

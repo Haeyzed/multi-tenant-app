@@ -11,7 +11,7 @@ import {
     ResponsiveDialogHeader,
     ResponsiveDialogTitle,
 } from "@/components/ui/responsive-dialog"
-import type {PermissionItem} from "@/types/central/rbac"
+import type {PermissionItem} from "@/features/central/permissions/types"
 
 type PermissionsViewDialogProps = {
     open: boolean

@@ -26,7 +26,7 @@ import {
 import {PermissionGate} from "@/features/central/auth/components/permission-gate"
 import {permissions} from "@/features/central/auth/permissions"
 import {useSubscriptions} from "@/features/central/billing/subscriptions/components/subscriptions-provider"
-import type {Subscription} from "@/types/central/subscription"
+import type {Subscription} from "@/features/central/billing/subscriptions/types"
 
 type DataTableRowActionsProps<TData> = {
     row: Row<TData>

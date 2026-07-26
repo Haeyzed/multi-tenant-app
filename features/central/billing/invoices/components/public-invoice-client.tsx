@@ -23,7 +23,7 @@ import {
     type PublicInvoiceGatewayOption,
 } from "@/lib/services/central/public-billing-service"
 import {cn} from "@/lib/utils"
-import type {Invoice} from "@/types/central/invoice"
+import type {Invoice} from "@/features/central/billing/invoices/types"
 
 type PublicInvoiceClientProps = {
     invoiceId: number

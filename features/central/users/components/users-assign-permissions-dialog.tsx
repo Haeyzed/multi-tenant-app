@@ -17,7 +17,7 @@ import {Spinner} from "@/components/ui/spinner"
 import {useGetPermissions} from "@/features/central/roles/hooks/use-role-query"
 import {useSyncUserPermissions} from "@/features/central/users/hooks/use-user-query"
 import {toastApiError, toastApiSuccess} from "@/lib/toast-api"
-import type {CentralUser} from "@/types/central/user"
+import type {CentralUser} from "@/features/central/users/types"
 
 type UsersAssignPermissionsDialogProps = {
     open: boolean
@@ -139,7 +139,7 @@ export function UsersAssignPermissionsDialog({
                     <UserPermissionsEditor
                         key={user.id}
                         user={user}
-                        permissionGroups={permissionGroups}
+                        permissionGroups={permissionGroups ?? []}
                         isLoading={isLoading}
                         onOpenChange={onOpenChange}
                     />

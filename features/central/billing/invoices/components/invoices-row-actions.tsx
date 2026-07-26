@@ -14,7 +14,7 @@ import {
 import {PermissionGate} from "@/features/central/auth/components/permission-gate"
 import {permissions} from "@/features/central/auth/permissions"
 import {useInvoices} from "@/features/central/billing/invoices/components/invoices-provider"
-import type {Invoice} from "@/types/central/invoice"
+import type {Invoice} from "@/features/central/billing/invoices/types"
 
 type DataTableRowActionsProps<TData> = {
     row: Row<TData>

@@ -3,7 +3,7 @@
 import React, {useState} from "react"
 
 import useDialogState from "@/hooks/use-dialog-state"
-import type {Plan} from "@/types/central/plan"
+import type {Plan} from "@/features/central/billing/plans/types"
 
 export type PlansDialogType =
     | "create"

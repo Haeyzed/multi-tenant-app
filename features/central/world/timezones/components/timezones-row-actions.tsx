@@ -14,7 +14,7 @@ import {
 import {PermissionGate} from "@/features/central/auth/components/permission-gate"
 import {permissions} from "@/features/central/auth/permissions"
 import {useTimezones} from "@/features/central/world/timezones/components/timezones-provider"
-import type {Timezone} from "@/types/central/world"
+import type {Timezone} from "@/features/central/world/types"
 
 type DataTableRowActionsProps<TData> = {
     row: Row<TData>

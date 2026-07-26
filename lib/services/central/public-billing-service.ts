@@ -2,8 +2,8 @@ import {
   type ApiEnvelope,
   centralApiClient,
 } from "@/lib/api/central-client"
-import type { Invoice } from "@/types/central/invoice"
-import type { Payment } from "@/types/central/payment"
+import type { Invoice } from "@/features/central/billing/invoices/types"
+import type { Payment } from "@/features/central/billing/payments/types"
 
 export type PublicCheckoutResult = {
   checkout_url: string | null

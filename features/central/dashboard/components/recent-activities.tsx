@@ -4,7 +4,7 @@ import {Card, CardContent, CardDescription, CardHeader, CardTitle,} from "@/comp
 import {ScrollArea} from "@/components/ui/scroll-area"
 import {Skeleton} from "@/components/ui/skeleton"
 import {formatRelativeTime} from "@/features/central/shared/lib/format"
-import type {DashboardActivity} from "@/types/central/dashboard"
+import type {DashboardActivity} from "@/features/central/dashboard/types"
 
 type RecentActivitiesProps = {
     activities?: DashboardActivity[]

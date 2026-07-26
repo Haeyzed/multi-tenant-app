@@ -24,7 +24,7 @@ import {useCreateRole, useGetPermissions, useUpdateRole,} from "@/features/centr
 import {type StoreRoleFormValues, storeRoleSchema, type UpdateRoleFormValues,} from "@/features/central/roles/schemas"
 import {handleFormApiError} from "@/lib/form-api-errors"
 import {toastApiSuccess} from "@/lib/toast-api"
-import type {CentralRole} from "@/types/central/rbac"
+import type {CentralRole} from "@/features/central/roles/types"
 import {LockIcon} from "lucide-react"
 
 type RolesFormDialogProps = {

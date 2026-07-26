@@ -4,7 +4,7 @@ import type {
   PlanPriceInterval,
   PlanStatus,
   PlanVisibility,
-} from "@/types/central/plan"
+} from "@/features/central/billing/plans/types"
 
 export const planStatusOptions: SelectOption<PlanStatus>[] = [
   { label: "Draft", value: "draft" },

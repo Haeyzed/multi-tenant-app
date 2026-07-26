@@ -16,7 +16,7 @@ import {
 import {Spinner} from "@/components/ui/spinner"
 import {useGetPermissions, useSyncRolePermissions,} from "@/features/central/roles/hooks/use-role-query"
 import {toastApiError, toastApiSuccess} from "@/lib/toast-api"
-import type {CentralRole} from "@/types/central/rbac"
+import type {CentralRole} from "@/features/central/roles/types"
 
 type RolesAssignPermissionsDialogProps = {
     open: boolean
@@ -135,7 +135,7 @@ export function RolesAssignPermissionsDialog({
                     <RolePermissionsEditor
                         key={role.id}
                         role={role}
-                        permissionGroups={permissionGroups}
+                        permissionGroups={permissionGroups ?? []}
                         isLoading={isLoading}
                         onOpenChange={onOpenChange}
                     />

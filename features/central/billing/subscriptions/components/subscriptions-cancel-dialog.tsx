@@ -29,7 +29,7 @@ import {
   cancelSubscriptionSchema,
 } from "@/features/central/billing/subscriptions/schemas"
 import { toastApiError, toastApiSuccess } from "@/lib/toast-api"
-import type { Subscription } from "@/types/central/subscription"
+import type { Subscription } from "@/features/central/billing/subscriptions/types"
 
 type SubscriptionsCancelDialogProps = {
   open: boolean

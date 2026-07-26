@@ -3,12 +3,12 @@ import {
   centralApiClient,
 } from "@/lib/api/central-client"
 import type {
-  PaginatedMeta,
   PaginatedPayments,
   Payment,
   PaymentStatistics,
   Refund,
-} from "@/types/central/payment"
+} from "@/features/central/billing/payments/types"
+import type { PaginatedMeta } from "@/features/central/shared/types"
 
 export async function getPayments(
   params?: {

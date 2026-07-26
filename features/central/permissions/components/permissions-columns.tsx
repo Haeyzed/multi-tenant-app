@@ -7,7 +7,7 @@ import {DataTableColumnHeader} from "@/components/data-table/data-table-column-h
 import {Badge} from "@/components/ui/badge"
 import {Checkbox} from "@/components/ui/checkbox"
 import {DataTableRowActions} from "@/features/central/permissions/components/permissions-row-actions"
-import type {PermissionItem} from "@/types/central/rbac"
+import type {PermissionItem} from "@/features/central/permissions/types"
 
 export const columns: ColumnDef<PermissionItem>[] = [
     {

@@ -3,7 +3,7 @@
 import React, {useState} from "react"
 
 import useDialogState from "@/hooks/use-dialog-state"
-import type {Language} from "@/types/central/world"
+import type {Language} from "@/features/central/world/types"
 
 export type LanguagesDialogType = "create" | "update" | "view" | "delete"
 

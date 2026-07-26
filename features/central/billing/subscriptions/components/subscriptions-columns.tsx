@@ -18,7 +18,7 @@ import {Badge} from "@/components/ui/badge"
 import {DataTableRowActions} from "@/features/central/billing/subscriptions/components/subscriptions-row-actions"
 import {PAYMENT_GATEWAY_FILTER_OPTIONS} from "@/features/central/billing/shared/gateway-options"
 import {formatMoney} from "@/features/central/shared/lib/format"
-import type {Subscription, SubscriptionStatus,} from "@/types/central/subscription"
+import type {Subscription, SubscriptionStatus,} from "@/features/central/billing/subscriptions/types"
 
 const statusVariantMap: Record<
     SubscriptionStatus,

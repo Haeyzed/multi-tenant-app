@@ -3,7 +3,7 @@
 import React, {useState} from "react"
 
 import useDialogState from "@/hooks/use-dialog-state"
-import type {FeatureCategory} from "@/types/central/feature-category"
+import type {FeatureCategory} from "@/features/central/billing/feature-categories/types"
 
 export type FeatureCategoriesDialogType = "create" | "update" | "view" | "delete"
 

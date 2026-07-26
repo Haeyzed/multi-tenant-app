@@ -8,7 +8,7 @@ import {
     logout,
     resetPassword,
 } from "@/lib/services/central/auth-service"
-import type {ConfirmTwoFactorPayload, ResetPasswordPayload,} from "@/types/central/auth"
+import type {ConfirmTwoFactorPayload, ResetPasswordPayload,} from "@/features/central/auth/types"
 
 export const centralProfileQueryKey = ["central", "profile"] as const
 

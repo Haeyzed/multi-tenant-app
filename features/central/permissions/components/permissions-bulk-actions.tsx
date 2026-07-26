@@ -8,7 +8,7 @@ import {ActionBar, ActionBarClose, ActionBarGroup, ActionBarItem, ActionBarSelec
 import {PermissionGate} from "@/features/central/auth/components/permission-gate"
 import {permissions} from "@/features/central/auth/permissions"
 import {usePermissions} from "@/features/central/permissions/components/permissions-provider"
-import type {PermissionItem} from "@/types/central/rbac"
+import type {PermissionItem} from "@/features/central/permissions/types"
 
 type PermissionsBulkActionsProps<TData> = {
     table: Table<TData>

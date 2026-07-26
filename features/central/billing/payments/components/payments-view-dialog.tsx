@@ -12,7 +12,7 @@ import {
     ResponsiveDialogTitle,
 } from "@/components/ui/responsive-dialog"
 import {formatMoney} from "@/features/central/shared/lib/format"
-import type {Payment} from "@/types/central/payment"
+import type {Payment} from "@/features/central/billing/payments/types"
 
 type PaymentsViewDialogProps = {
     open: boolean

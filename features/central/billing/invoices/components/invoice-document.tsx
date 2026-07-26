@@ -5,7 +5,7 @@ import {Badge} from "@/components/ui/badge"
 import {formatMoney} from "@/features/central/shared/lib/format"
 import {useInvoiceSettings} from "@/features/central/settings/hooks/use-setting-query"
 import {cn} from "@/lib/utils"
-import type {Invoice, InvoiceStatus} from "@/types/central/invoice"
+import type {Invoice, InvoiceStatus} from "@/features/central/billing/invoices/types"
 
 type InvoiceDocumentProps = {
     invoice: Invoice

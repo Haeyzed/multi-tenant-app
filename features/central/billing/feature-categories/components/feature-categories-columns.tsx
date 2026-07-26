@@ -6,7 +6,7 @@ import {CheckCircle2, EyeOff, Search} from "lucide-react"
 import {DataTableColumnHeader} from "@/components/data-table/data-table-column-header"
 import {Badge} from "@/components/ui/badge"
 import {DataTableRowActions} from "@/features/central/billing/feature-categories/components/feature-categories-row-actions"
-import type {FeatureCategory} from "@/types/central/feature-category"
+import type {FeatureCategory} from "@/features/central/billing/feature-categories/types"
 
 export const columns: ColumnDef<FeatureCategory>[] = [
     {

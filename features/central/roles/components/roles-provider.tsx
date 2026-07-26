@@ -3,7 +3,7 @@
 import React, {useState} from "react"
 
 import useDialogState from "@/hooks/use-dialog-state"
-import type {CentralRole} from "@/types/central/rbac"
+import type {CentralRole} from "@/features/central/roles/types"
 
 export type RolesDialogType =
     | "create"

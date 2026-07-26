@@ -3,7 +3,7 @@
 import React, {useState} from "react"
 
 import useDialogState from "@/hooks/use-dialog-state"
-import type {Tenant} from "@/types/central/tenant"
+import type {Tenant} from "@/features/central/tenants/types"
 
 export type TenantsDialogType =
     | "create"

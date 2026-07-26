@@ -3,12 +3,12 @@ import {
   centralApiClient,
 } from "@/lib/api/central-client"
 import type {
-  PaginatedMeta,
   PaginatedSubscriptions,
   Subscription,
   SubscriptionHistory,
   SubscriptionStatistics,
-} from "@/types/central/subscription"
+} from "@/features/central/billing/subscriptions/types"
+import type { PaginatedMeta } from "@/features/central/shared/types"
 
 export type SubscriptionOption = {
   value: string

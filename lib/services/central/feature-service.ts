@@ -9,8 +9,8 @@ import type {
 import type {
   Feature,
   PaginatedFeatures,
-  PaginatedMeta,
-} from "@/types/central/feature"
+} from "@/features/central/billing/features/types"
+import type { PaginatedMeta } from "@/features/central/shared/types"
 
 function toPayload(values: StoreFeatureFormValues | UpdateFeatureFormValues) {
   return {

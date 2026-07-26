@@ -3,7 +3,7 @@
 import React, {useState} from "react"
 
 import useDialogState from "@/hooks/use-dialog-state"
-import type {Subscription} from "@/types/central/subscription"
+import type {Subscription} from "@/features/central/billing/subscriptions/types"
 
 export type SubscriptionsDialogType =
     | "create"

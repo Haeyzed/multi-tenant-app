@@ -56,7 +56,7 @@ import {
 import { handleFormApiError } from "@/lib/form-api-errors"
 import { getTenantBaseDomain } from "@/lib/tenant-domain"
 import { toastApiSuccess } from "@/lib/toast-api"
-import type { Tenant, TenantStatus } from "@/types/central/tenant"
+import type { Tenant, TenantStatus } from "@/features/central/tenants/types"
 import { PermissionGate } from "@/features/central/auth/components/permission-gate"
 import { permissions } from "@/features/central/auth/permissions"
 import { LockIcon } from "lucide-react"

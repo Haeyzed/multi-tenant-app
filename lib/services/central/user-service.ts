@@ -2,16 +2,16 @@ import {
   type ApiEnvelope,
   centralApiClient,
 } from "@/lib/api/central-client"
+import type { PaginatedMeta } from "@/features/central/shared/types"
 import type {
   CentralUser,
-  PaginatedMeta,
   PaginatedUserActivities,
   PaginatedUsers,
   UserActivity,
   UserSecurity,
   UserStatistics,
   UserStatus,
-} from "@/types/central/user"
+} from "@/features/central/users/types"
 import {
   type StoreUserFormValues,
   type UpdateUserFormValues,

@@ -3,7 +3,7 @@
 import React, {useState} from "react"
 
 import useDialogState from "@/hooks/use-dialog-state"
-import type {FailedJob} from "@/types/central/monitoring"
+import type {FailedJob} from "@/features/central/monitoring/types"
 
 export type MonitoringDialogType = "viewException" | "retry" | "flush"
 

@@ -16,7 +16,7 @@ import {permissions} from "@/features/central/auth/permissions"
 import {
     useFeatureCategories
 } from "@/features/central/billing/feature-categories/components/feature-categories-provider"
-import type {FeatureCategory} from "@/types/central/feature-category"
+import type {FeatureCategory} from "@/features/central/billing/feature-categories/types"
 
 type DataTableRowActionsProps<TData> = {
     row: Row<TData>

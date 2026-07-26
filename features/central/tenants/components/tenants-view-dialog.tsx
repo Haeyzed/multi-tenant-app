@@ -32,19 +32,13 @@ import {
 } from "@/lib/services/central/tenant-service"
 import {catalogQueryOptions} from "@/lib/query/query-options"
 import {toastApiError, toastApiSuccess} from "@/lib/toast-api"
-import type {Tenant} from "@/types/central/tenant"
-import type {CountryOption, CurrencyOption} from "@/types/central/world"
+import type {Tenant, TenantBillingProfile} from "@/features/central/tenants/types"
+import type {CountryOption, CurrencyOption} from "@/features/central/world/types"
 
 type TenantsViewDialogProps = {
     open: boolean
     onOpenChange: (open: boolean) => void
     tenant: Tenant
-}
-
-type TenantBillingProfile = {
-    country_iso2?: string | null
-    currency?: string | null
-    preferred_gateway?: string | null
 }
 
 function TenantBillingProfileForm({
@@ -55,7 +49,7 @@ function TenantBillingProfileForm({
     gateways,
     onSaved,
 }: {
-    tenantId: number
+    tenantId: string
     profile: TenantBillingProfile
     countries: CountryOption[]
     currencies: CurrencyOption[]

@@ -16,7 +16,7 @@ import {
 import { Spinner } from "@/components/ui/spinner"
 import { useSuspendTenant } from "@/features/central/tenants/hooks/use-tenant-query"
 import { toastApiError, toastApiSuccess } from "@/lib/toast-api"
-import type { Tenant } from "@/types/central/tenant"
+import type { Tenant } from "@/features/central/tenants/types"
 
 type TenantsSuspendDialogProps = {
   open: boolean

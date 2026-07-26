@@ -3,7 +3,7 @@
 import React, {useState} from "react"
 
 import useDialogState from "@/hooks/use-dialog-state"
-import type {PermissionItem} from "@/types/central/rbac"
+import type {PermissionItem} from "@/features/central/permissions/types"
 
 export type PermissionsDialogType =
     | "create"

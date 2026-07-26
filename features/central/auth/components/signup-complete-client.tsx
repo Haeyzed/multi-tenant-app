@@ -9,7 +9,7 @@ import {Spinner} from "@/components/ui/spinner"
 import {usePublicSignupComplete} from "@/features/central/auth/hooks/use-signup-query"
 import {centralRoutes} from "@/features/central/shell/routes"
 import {cn} from "@/lib/utils"
-import type {PublicSignupResult} from "@/types/central/signup"
+import type {PublicSignupResult} from "@/features/central/auth/types"
 
 function tenantLoginUrl(domain: string | null): string | null {
     if (!domain) {

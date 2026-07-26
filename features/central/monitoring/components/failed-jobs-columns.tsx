@@ -6,7 +6,7 @@ import {DataTableColumnHeader} from "@/components/data-table/data-table-column-h
 import {Badge} from "@/components/ui/badge"
 import {DataTableRowActions} from "@/features/central/monitoring/components/failed-jobs-row-actions"
 import {formatRelativeTime} from "@/features/central/shared/lib/format"
-import type {FailedJob} from "@/types/central/monitoring"
+import type {FailedJob} from "@/features/central/monitoring/types"
 
 export const columns: ColumnDef<FailedJob>[] = [
     {

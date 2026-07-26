@@ -47,9 +47,9 @@ import {
 import { useCountryOptions } from "@/features/central/world/hooks/use-world-query"
 import { getPlans } from "@/lib/services/central/plan-service"
 import { toastApiError, toastApiSuccess } from "@/lib/toast-api"
-import type { Plan, PlanPrice } from "@/types/central/plan"
-import type { Subscription } from "@/types/central/subscription"
-import type { CountryOption } from "@/types/central/world"
+import type { Plan, PlanPrice } from "@/features/central/billing/plans/types"
+import type { Subscription } from "@/features/central/billing/subscriptions/types"
+import type { CountryOption } from "@/features/central/world/types"
 
 type ChangePlanMode = "upgrade" | "downgrade"
 

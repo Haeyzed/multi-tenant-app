@@ -11,7 +11,7 @@ import {
     ResponsiveDialogHeader,
     ResponsiveDialogTitle,
 } from "@/components/ui/responsive-dialog"
-import type {FeatureCategory} from "@/types/central/feature-category"
+import type {FeatureCategory} from "@/features/central/billing/feature-categories/types"
 
 type FeatureCategoriesViewDialogProps = {
     open: boolean

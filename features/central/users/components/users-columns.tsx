@@ -8,7 +8,7 @@ import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar"
 import {Badge} from "@/components/ui/badge"
 import {Checkbox} from "@/components/ui/checkbox"
 import {DataTableRowActions} from "@/features/central/users/components/users-row-actions"
-import type {CentralUser, UserStatus} from "@/types/central/user"
+import type {CentralUser, UserStatus} from "@/features/central/users/types"
 
 const statusVariantMap: Record<
     UserStatus,

@@ -13,7 +13,7 @@ import {BillingPaymentPolicyEditor} from "@/features/central/settings/components
 import {PaymentGatewaysCatalogCard} from "@/features/central/settings/components/billing/payment-gateways-catalog-card"
 import {useBulkUpdateSettings, useSendTestMail,} from "@/features/central/settings/hooks/use-setting-query"
 import {toastApiError, toastApiSuccess} from "@/lib/toast-api"
-import type {Setting} from "@/types/central/setting"
+import type {Setting} from "@/features/central/settings/types"
 
 function stringifyValue(setting: Setting): string {
     if (setting.type === "json" || setting.type === "array") {

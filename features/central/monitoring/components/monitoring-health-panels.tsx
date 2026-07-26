@@ -8,7 +8,7 @@ import {Skeleton} from "@/components/ui/skeleton"
 import {formatBytes} from "@/hooks/use-file-upload"
 import {useGetMonitoringOverview} from "@/features/central/monitoring/hooks/use-monitoring-query"
 import {useQueryErrorToast} from "@/hooks/use-query-error-toast"
-import type {MonitoringStatus} from "@/types/central/monitoring"
+import type {MonitoringStatus} from "@/features/central/monitoring/types"
 
 function statusVariant(status?: MonitoringStatus | boolean) {
     if (status === true || status === "healthy") {

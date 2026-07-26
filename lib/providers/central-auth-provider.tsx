@@ -1,7 +1,7 @@
 "use client"
 
 import { useGetProfile } from "@/features/central/auth/hooks/use-auth-query"
-import type { CentralUser } from "@/types/central/user"
+import type { CentralUser } from "@/features/central/users/types"
 import { createContext, useCallback, useContext, useMemo } from "react"
 import {Permission} from "@/features/central/auth/permissions";
 

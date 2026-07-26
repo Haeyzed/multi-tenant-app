@@ -8,7 +8,7 @@ import {Badge} from "@/components/ui/badge"
 import {DataTableRowActions} from "@/features/central/billing/payments/components/payments-row-actions"
 import {PAYMENT_GATEWAY_FILTER_OPTIONS} from "@/features/central/billing/shared/gateway-options"
 import {formatMoney} from "@/features/central/shared/lib/format"
-import type {Payment, PaymentStatus} from "@/types/central/payment"
+import type {Payment, PaymentStatus} from "@/features/central/billing/payments/types"
 
 const statusVariantMap: Record<
     PaymentStatus,

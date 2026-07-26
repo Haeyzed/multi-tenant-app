@@ -3,7 +3,7 @@
 import React, {useState} from "react"
 
 import useDialogState from "@/hooks/use-dialog-state"
-import type {Currency} from "@/types/central/world"
+import type {Currency} from "@/features/central/world/types"
 
 export type CurrenciesDialogType = "create" | "update" | "view" | "delete"
 
