@@ -1,7 +1,7 @@
 "use client"
 
 import { useGetProfile } from "@/features/tenant/auth/hooks/use-auth-query"
-import type { Permission } from "@/features/tenant/auth/components/permissions"
+import type { Permission } from "@/features/tenant/auth/permissions"
 import type { TenantUser } from "@/types/tenant/user"
 import { createContext, useContext, useMemo } from "react"
 

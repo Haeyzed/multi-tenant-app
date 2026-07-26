@@ -1,11 +1,16 @@
-import { GalleryVerticalEndIcon, LayoutDashboardIcon } from "lucide-react"
+import {
+  GalleryVerticalEndIcon,
+  LayoutDashboardIcon,
+  SettingsIcon,
+  TagsIcon,
+} from "lucide-react"
 
 import type { SidebarData } from "@/components/layout/types"
-import { permissions } from "@/features/tenant/auth/components/permissions"
+import { permissions } from "@/features/tenant/auth/permissions"
 import { tenantRoutes } from "@/features/tenant/shell/routes"
 
 /**
- * Tenant sidebar — start with dashboard; add catalog/inventory groups as modules land.
+ * Tenant sidebar — dashboard + catalog stubs (CRUD modules land later).
  */
 export const sidebarData: SidebarData = {
   teams: [
@@ -17,13 +22,37 @@ export const sidebarData: SidebarData = {
   ],
   navGroups: [
     {
-      title: "Dashboard",
+      title: "General",
       items: [
         {
           title: "Overview",
           url: tenantRoutes.dashboard,
           icon: LayoutDashboardIcon,
           permissions: [permissions.dashboard.view],
+        },
+      ],
+    },
+    {
+      title: "Catalog",
+      permissions: [permissions.brands.view],
+      items: [
+        {
+          title: "Brands",
+          url: tenantRoutes.dashboard,
+          icon: TagsIcon,
+          permissions: [permissions.brands.view],
+        },
+      ],
+    },
+    {
+      title: "Settings",
+      permissions: [permissions.settings.view],
+      items: [
+        {
+          title: "Store settings",
+          url: tenantRoutes.dashboard,
+          icon: SettingsIcon,
+          permissions: [permissions.settings.view],
         },
       ],
     },

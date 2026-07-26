@@ -5,13 +5,13 @@ import { Header } from "@/components/layout/header"
 import { Main } from "@/components/layout/main"
 import { Search } from "@/components/search"
 import { ThemeSwitch } from "@/components/theme-switch"
-import { TenantAuthGuard } from "@/features/tenant/auth/components/auth-guard"
-import { permissions } from "@/features/tenant/auth/components/permissions"
+import { PermissionGate } from "@/features/tenant/auth/components/permission-gate"
+import { permissions } from "@/features/tenant/auth/permissions"
 import { ProfileDropdown } from "@/features/tenant/shell/profile-dropdown"
 
 export default function TenantDashboardPage() {
   return (
-    <TenantAuthGuard permissions={[permissions.dashboard.view]}>
+    <PermissionGate permissions={[permissions.dashboard.view]}>
       <Header>
         <Search className="me-auto" />
         <ThemeSwitch />
@@ -29,6 +29,6 @@ export default function TenantDashboardPage() {
           </div>
         </div>
       </Main>
-    </TenantAuthGuard>
+    </PermissionGate>
   )
 }

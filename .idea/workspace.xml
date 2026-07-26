@@ -4,7 +4,24 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b9199642-5776-47cf-a420-93777d317808" name="Changes" comment="" />
+    <list default="true" id="b9199642-5776-47cf-a420-93777d317808" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/tenant/(dashboard)/dashboard/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/tenant/(dashboard)/dashboard/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/tenant/auth/components/auth-guard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/features/tenant/auth/components/auth-guard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/tenant/auth/components/permissions.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/tenant/auth/hooks/use-auth-query.ts" beforeDir="false" afterPath="$PROJECT_DIR$/features/tenant/auth/hooks/use-auth-query.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/tenant/auth/schemas.ts" beforeDir="false" afterPath="$PROJECT_DIR$/features/tenant/auth/schemas.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/tenant/shell/app-sidebar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/features/tenant/shell/app-sidebar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/tenant/shell/hooks/use-filtered-sidebar-data.ts" beforeDir="false" afterPath="$PROJECT_DIR$/features/tenant/shell/hooks/use-filtered-sidebar-data.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/tenant/shell/routes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/features/tenant/shell/routes.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/tenant/shell/sidebar-data.ts" beforeDir="false" afterPath="$PROJECT_DIR$/features/tenant/shell/sidebar-data.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/providers/tenant-auth-provider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/lib/providers/tenant-auth-provider.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/services/central/tenant-service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/lib/services/central/tenant-service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/services/tenant/auth-service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/lib/services/tenant/auth-service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/tenant-domain.ts" beforeDir="false" afterPath="$PROJECT_DIR$/lib/tenant-domain.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/tenant-host.ts" beforeDir="false" afterPath="$PROJECT_DIR$/lib/tenant-host.ts" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -106,7 +123,7 @@
       <workItem from="1784503937131" duration="17516000" />
       <workItem from="1784677617073" duration="6389000" />
       <workItem from="1784944055177" duration="232000" />
-      <workItem from="1785027810450" duration="9782000" />
+      <workItem from="1785027810450" duration="13693000" />
     </task>
     <servers />
   </component>

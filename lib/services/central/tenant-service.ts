@@ -13,6 +13,7 @@ import {
   type StoreTenantFormValues,
   type UpdateTenantFormValues,
 } from "@/features/central/tenants/schemas"
+import { toTenantHostname } from "@/lib/tenant-domain"
 
 export type TenantOption = {
   value: string
@@ -33,7 +34,7 @@ function toPayload(values: StoreTenantFormValues | UpdateTenantFormValues) {
   }
 
   if ("subdomain" in values && values.subdomain?.trim()) {
-    payload.domain = values.subdomain.trim().toLowerCase()
+    payload.domain = toTenantHostname(values.subdomain)
   }
 
   return payload

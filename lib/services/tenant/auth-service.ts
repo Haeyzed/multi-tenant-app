@@ -21,6 +21,35 @@ export async function login(credentials: {
   return response.data
 }
 
+export async function setupPassword(payload: {
+  token: string
+  password: string
+  password_confirmation: string
+}): Promise<TenantLoginData> {
+  const response = await tenantApiClient.post<ApiEnvelope<TenantLoginData>>(
+    "/auth/setup-password",
+    payload
+  )
+
+  if (response.data.token) {
+    tenantApiClient.setToken(response.data.token)
+  }
+
+  return response.data
+}
+
+export async function redeemImpersonation(token: string): Promise<TenantLoginData> {
+  const response = await tenantApiClient.post<
+    ApiEnvelope<TenantLoginData & { impersonating?: boolean }>
+  >("/auth/impersonate", { token })
+
+  if (response.data.token) {
+    tenantApiClient.setToken(response.data.token)
+  }
+
+  return response.data
+}
+
 export async function logout() {
   try {
     await tenantApiClient.post<ApiEnvelope<null>>("/auth/logout", {})

@@ -1,7 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
 import { tenantApiClient } from "@/lib/api/tenant-client"
-import { getProfile, login, logout } from "@/lib/services/tenant/auth-service"
+import {
+  getProfile,
+  login,
+  logout,
+  redeemImpersonation,
+  setupPassword,
+} from "@/lib/services/tenant/auth-service"
 
 export const tenantProfileQueryKey = ["tenant", "profile"] as const
 
@@ -10,6 +16,30 @@ export function useLogin() {
   return useMutation({
     mutationFn: (credentials: { email: string; password: string }) =>
       login(credentials),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: tenantProfileQueryKey })
+    },
+  })
+}
+
+export function useSetupPassword() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (payload: {
+      token: string
+      password: string
+      password_confirmation: string
+    }) => setupPassword(payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: tenantProfileQueryKey })
+    },
+  })
+}
+
+export function useRedeemImpersonation() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (token: string) => redeemImpersonation(token),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: tenantProfileQueryKey })
     },

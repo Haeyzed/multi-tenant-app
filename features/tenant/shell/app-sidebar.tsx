@@ -17,21 +17,23 @@ import { sidebarData } from "@/features/tenant/shell/sidebar-data"
 import { TeamSwitcher } from "@/features/tenant/shell/team-switcher"
 import { useDirection } from "@/lib/providers/direction-provider"
 import { useLayout } from "@/lib/providers/layout-provider"
+import { useTenantAuth } from "@/lib/providers/tenant-auth-provider"
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { collapsible, variant } = useLayout()
   const { dir } = useDirection()
+  const { user } = useTenantAuth()
   const filteredData = useFilteredSidebarData(sidebarData)
 
   const teams = React.useMemo(
     () => [
       {
-        name: filteredData.teams[0]?.name ?? "Tenant",
+        name: user?.name ? `${user.name}'s store` : (filteredData.teams[0]?.name ?? "Tenant"),
         logo: filteredData.teams[0]?.logo ?? GalleryVerticalEndIcon,
         plan: filteredData.teams[0]?.plan ?? "Store",
       },
     ],
-    [filteredData.teams]
+    [filteredData.teams, user?.name]
   )
 
   return (

@@ -8,7 +8,7 @@ import type {
   NavLink,
   SidebarData,
 } from "@/components/layout/types"
-import type { Permission } from "@/features/tenant/auth/components/permissions"
+import type { Permission } from "@/features/tenant/auth/permissions"
 import { useTenantAuth } from "@/lib/providers/tenant-auth-provider"
 
 export function useFilteredSidebarData(data: SidebarData): SidebarData {

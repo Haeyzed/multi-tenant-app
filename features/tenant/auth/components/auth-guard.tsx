@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation"
 import { useEffect } from "react"
 
-import type { Permission } from "@/features/tenant/auth/components/permissions"
+import type { Permission } from "@/features/tenant/auth/permissions"
 import { tenantRoutes } from "@/features/tenant/shell/routes"
 import { tenantApiClient } from "@/lib/api/tenant-client"
 import { useTenantAuth } from "@/lib/providers/tenant-auth-provider"
