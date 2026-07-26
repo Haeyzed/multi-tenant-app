@@ -44,7 +44,7 @@ function GatewayEnvironmentFields({
                 is_active: isActive,
             }),
         onSuccess: (result) => {
-            toastApiSuccess(result.message, "Gateway credentials saved")
+            toastApiSuccess(result.message, "Gateway credentials saved successfully")
             setSecretKey("")
             setWebhookSecret("")
             queryClient.invalidateQueries({queryKey: ["central", "payment-gateways"]})

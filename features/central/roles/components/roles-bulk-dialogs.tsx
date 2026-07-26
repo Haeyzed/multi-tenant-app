@@ -36,7 +36,7 @@ export function RolesBulkDialogs() {
           onSuccess: (result) => {
             toastApiSuccess(
               result.message,
-              `Deleted ${count} ${count === 1 ? "role" : "roles"}`
+              `Deleted ${count} ${count === 1 ? "role" : "roles"} successfully`
             )
             bulkSelection?.onComplete?.()
             handleClose()

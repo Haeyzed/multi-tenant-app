@@ -122,7 +122,7 @@ export function PlansPricesManager({ planId }: { planId: number }) {
     if (editingId === "new") {
       createPrice.mutate(payload, {
         onSuccess: (result) => {
-          toastApiSuccess(result.message, "Price added")
+          toastApiSuccess(result.message, "Price added successfully")
           cancelEdit()
         },
         onError: (error) => toastApiError(error, "Failed to add price"),
@@ -135,7 +135,7 @@ export function PlansPricesManager({ planId }: { planId: number }) {
         { priceId: editingId, values: payload },
         {
           onSuccess: (result) => {
-            toastApiSuccess(result.message, "Price updated")
+            toastApiSuccess(result.message, "Price updated successfully")
             cancelEdit()
           },
           onError: (error) => toastApiError(error, "Failed to update price"),
@@ -146,7 +146,8 @@ export function PlansPricesManager({ planId }: { planId: number }) {
 
   function remove(priceId: number) {
     deletePrice.mutate(priceId, {
-      onSuccess: (result) => toastApiSuccess(result.message, "Price removed"),
+      onSuccess: (result) =>
+        toastApiSuccess(result.message, "Price removed successfully"),
       onError: (error) => toastApiError(error, "Failed to remove price"),
     })
   }

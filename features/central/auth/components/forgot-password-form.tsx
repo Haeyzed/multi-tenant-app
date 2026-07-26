@@ -3,7 +3,6 @@
 import {zodResolver} from "@hookform/resolvers/zod"
 import Link from "next/link"
 import {useForm} from "react-hook-form"
-import {toast} from "sonner"
 import {z} from "zod"
 
 import {Button} from "@/components/ui/button"
@@ -14,6 +13,7 @@ import {useForgotPassword} from "@/features/central/auth/hooks/use-auth-query"
 import {forgotPasswordSchema} from "@/features/central/auth/schemas"
 import {centralRoutes} from "@/features/central/shell/routes"
 import {handleFormApiError} from "@/lib/form-api-errors"
+import {toastApiSuccess} from "@/lib/toast-api"
 import {cn} from "@/lib/utils"
 
 export function ForgotPasswordForm({
@@ -30,8 +30,9 @@ export function ForgotPasswordForm({
     const onSubmit = (values: z.infer<typeof forgotPasswordSchema>) => {
         forgotPasswordMutation.mutate(values.email, {
             onSuccess: (response) => {
-                toast.success(
-                    response.message || "Password reset link sent to your email"
+                toastApiSuccess(
+                    response.message,
+                    "Password reset link sent successfully"
                 )
             },
             onError: (error) => {

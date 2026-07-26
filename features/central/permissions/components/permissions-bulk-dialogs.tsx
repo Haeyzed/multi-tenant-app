@@ -36,7 +36,7 @@ export function PermissionsBulkDialogs() {
           onSuccess: (result) => {
             toastApiSuccess(
               result.message,
-              `Deleted ${count} ${count === 1 ? "permission" : "permissions"}`
+              `Deleted ${count} ${count === 1 ? "permission" : "permissions"} successfully`
             )
             bulkSelection?.onComplete?.()
             handleClose()

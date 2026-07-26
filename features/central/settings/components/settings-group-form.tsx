@@ -367,7 +367,7 @@ export function SettingsGroupForm({
                                         onSuccess: (result) => {
                                             toastApiSuccess(
                                                 result.message,
-                                                `Test email sent to ${testEmail.trim()}`
+                                                "Test email sent successfully"
                                             )
                                         },
                                         onError: (error) =>

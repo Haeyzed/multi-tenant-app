@@ -4,7 +4,6 @@ import {zodResolver} from "@hookform/resolvers/zod"
 import Link from "next/link"
 import {useRouter, useSearchParams} from "next/navigation"
 import {useForm} from "react-hook-form"
-import {toast} from "sonner"
 import {z} from "zod"
 
 import {PasswordInput} from "@/components/ui/password-input"
@@ -16,6 +15,7 @@ import {useResetPassword} from "@/features/central/auth/hooks/use-auth-query"
 import {resetPasswordSchema} from "@/features/central/auth/schemas"
 import {centralRoutes} from "@/features/central/shell/routes"
 import {handleFormApiError} from "@/lib/form-api-errors"
+import {toastApiSuccess} from "@/lib/toast-api"
 import {cn} from "@/lib/utils"
 
 export function ResetPasswordForm({
@@ -39,7 +39,7 @@ export function ResetPasswordForm({
     const onSubmit = (values: z.infer<typeof resetPasswordSchema>) => {
         resetPasswordMutation.mutate(values, {
             onSuccess: (response) => {
-                toast.success(response.message || "Password reset successfully")
+                toastApiSuccess(response.message, "Password reset successfully")
                 router.push(centralRoutes.login)
             },
             onError: (error) => {

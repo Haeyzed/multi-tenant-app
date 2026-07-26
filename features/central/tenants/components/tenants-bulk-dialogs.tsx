@@ -63,7 +63,7 @@ export function TenantsBulkDialogs() {
             onSuccess: (result) =>
               finishSuccess(
                 result.message,
-                `Deleted ${count} ${count === 1 ? "tenant" : "tenants"}`
+                `Deleted ${count} ${count === 1 ? "tenant" : "tenants"} successfully`
               ),
             onError: (error) =>
               toastApiError(error, "Failed to delete tenants"),
@@ -91,7 +91,7 @@ export function TenantsBulkDialogs() {
               onSuccess: (result) =>
                 finishSuccess(
                   result.message,
-                  `Suspended ${count} ${count === 1 ? "tenant" : "tenants"}`
+                  `Suspended ${count} ${count === 1 ? "tenant" : "tenants"} successfully`
                 ),
               onError: (error) =>
                 toastApiError(error, "Failed to suspend tenants"),
@@ -125,7 +125,7 @@ export function TenantsBulkDialogs() {
             onSuccess: (result) =>
               finishSuccess(
                 result.message,
-                `Activated ${count} ${count === 1 ? "tenant" : "tenants"}`
+                `Activated ${count} ${count === 1 ? "tenant" : "tenants"} successfully`
               ),
             onError: (error) =>
               toastApiError(error, "Failed to activate tenants"),

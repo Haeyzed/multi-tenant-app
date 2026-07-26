@@ -100,11 +100,10 @@ function PermissionMatrixEditor({
 
         try {
             for (const roleId of dirtyRoles) {
-                const result = await syncRolePermissions.mutateAsync({
+                await syncRolePermissions.mutateAsync({
                     id: roleId,
                     permissions: draftMatrix[String(roleId)] ?? [],
                 })
-                toastApiSuccess(result.message)
             }
             setDirtyRoles(new Set())
             toastApiSuccess(undefined, "Permission matrix saved successfully")

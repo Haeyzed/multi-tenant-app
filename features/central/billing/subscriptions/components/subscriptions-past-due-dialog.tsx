@@ -61,7 +61,7 @@ export function SubscriptionsPastDueDialog({
       { id: subscription.id, values },
       {
         onSuccess: (result) => {
-          toastApiSuccess(result.message, "Subscription marked past due")
+          toastApiSuccess(result.message, "Subscription marked past due successfully")
           onSuccess()
         },
         onError: (error) => {

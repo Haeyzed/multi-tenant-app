@@ -27,8 +27,8 @@ export function SubscriptionsDialogs() {
 
   const handleClose = useEntityDialogClose({ setOpen, setCurrentRow })
 
-  const runSimpleAction = (
-    label: string,
+  const runAction = (
+    action: "renew" | "pause" | "resume" | "expire",
     mutate: (
       id: number,
       options: {
@@ -41,13 +41,25 @@ export function SubscriptionsDialogs() {
       return
     }
 
+    const pastLabel =
+      action === "renew"
+        ? "renewed"
+        : action === "pause"
+          ? "paused"
+          : action === "resume"
+            ? "resumed"
+            : "expired"
+
     mutate(currentRow.id, {
       onSuccess: (result) => {
-        toastApiSuccess(result.message, `Subscription ${label} successfully`)
+        toastApiSuccess(
+          result.message,
+          `Subscription ${pastLabel} successfully`
+        )
         handleClose()
       },
       onError: (error) => {
-        toastApiError(error, `Failed to ${label} subscription`)
+        toastApiError(error, `Failed to ${action} subscription`)
       },
     })
   }
@@ -88,7 +100,7 @@ export function SubscriptionsDialogs() {
             confirmLabel="Renew"
             isPending={renewSubscription.isPending}
             onConfirm={() =>
-              runSimpleAction("renewed", (id, options) =>
+              runAction("renew", (id, options) =>
                 renewSubscription.mutate(id, options)
               )
             }
@@ -106,7 +118,7 @@ export function SubscriptionsDialogs() {
             confirmLabel="Pause"
             isPending={pauseSubscription.isPending}
             onConfirm={() =>
-              runSimpleAction("paused", (id, options) =>
+              runAction("pause", (id, options) =>
                 pauseSubscription.mutate(id, options)
               )
             }
@@ -124,7 +136,7 @@ export function SubscriptionsDialogs() {
             confirmLabel="Resume"
             isPending={resumeSubscription.isPending}
             onConfirm={() =>
-              runSimpleAction("resumed", (id, options) =>
+              runAction("resume", (id, options) =>
                 resumeSubscription.mutate(id, options)
               )
             }
@@ -143,7 +155,7 @@ export function SubscriptionsDialogs() {
             variant="destructive"
             isPending={expireSubscription.isPending}
             onConfirm={() =>
-              runSimpleAction("expired", (id, options) =>
+              runAction("expire", (id, options) =>
                 expireSubscription.mutate(id, options)
               )
             }

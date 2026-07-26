@@ -1,7 +1,6 @@
 "use client"
 
 import {useRouter} from "next/navigation"
-import {toast} from "sonner"
 
 import {
     AlertDialog,
@@ -16,6 +15,7 @@ import {
 import {Spinner} from "@/components/ui/spinner"
 import {useLogout} from "@/features/central/auth/hooks/use-auth-query"
 import {centralRoutes} from "@/features/central/shell/routes"
+import {toastApiError} from "@/lib/toast-api"
 
 type SignOutDialogProps = {
     open: boolean
@@ -33,7 +33,7 @@ export function SignOutDialog({open, onOpenChange}: SignOutDialogProps) {
                 router.push(centralRoutes.login)
             },
             onError: (error) => {
-                toast.error(error.message || "Failed to sign out")
+                toastApiError(error, "Failed to sign out")
             },
         })
     }

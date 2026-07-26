@@ -18,43 +18,38 @@ export function TenantsDialogs() {
   const activateTenant = useActivateTenant()
   const handleClose = useEntityDialogClose({ setOpen, setCurrentRow })
 
-  const runDelete = () => {
+  const runAction = (action: "delete" | "activate") => {
     if (!currentRow) {
       return
     }
 
-    deleteTenant.mutate(currentRow.id, {
-      onSuccess: (result) => {
-        toastApiSuccess(
-          result.message,
-          `Tenant "${currentRow.name}" deleted successfully`
-        )
-        handleClose()
-      },
-      onError: (error) => {
-        toastApiError(error, "Failed to delete tenant")
-      },
-    })
-  }
+    const onSuccess = (message?: string) => {
+      toastApiSuccess(
+        message,
+        `Tenant "${currentRow.name}" ${action}d successfully`
+      )
+      handleClose()
+    }
 
-  const runActivate = () => {
-    if (!currentRow) {
+    const onError = (error: unknown) => {
+      toastApiError(error, `Failed to ${action} tenant`)
+    }
+
+    if (action === "delete") {
+      deleteTenant.mutate(currentRow.id, {
+        onSuccess: (result) => onSuccess(result.message),
+        onError,
+      })
       return
     }
 
     activateTenant.mutate(currentRow.id, {
-      onSuccess: (result) => {
-        toastApiSuccess(
-          result.message,
-          `Tenant "${currentRow.name}" activated successfully`
-        )
-        handleClose()
-      },
-      onError: (error) => {
-        toastApiError(error, "Failed to activate tenant")
-      },
+      onSuccess: (result) => onSuccess(result.message),
+      onError,
     })
   }
+
+  const isPending = deleteTenant.isPending || activateTenant.isPending
 
   return (
     <>
@@ -107,8 +102,8 @@ export function TenantsDialogs() {
             }
             confirmLabel="Delete"
             variant="destructive"
-            isPending={deleteTenant.isPending}
-            onConfirm={runDelete}
+            isPending={isPending}
+            onConfirm={() => runAction("delete")}
           />
 
           <ConfirmActionDialog
@@ -126,8 +121,8 @@ export function TenantsDialogs() {
               </>
             }
             confirmLabel="Activate"
-            isPending={activateTenant.isPending}
-            onConfirm={runActivate}
+            isPending={isPending}
+            onConfirm={() => runAction("activate")}
           />
 
           <TenantsSuspendDialog

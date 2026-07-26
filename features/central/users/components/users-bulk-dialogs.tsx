@@ -50,7 +50,7 @@ export function UsersBulkDialogs() {
             onSuccess: (result) =>
               finishSuccess(
                 result.message,
-                `Deleted ${count} ${count === 1 ? "user" : "users"}`
+                `Deleted ${count} ${count === 1 ? "user" : "users"} successfully`
               ),
             onError: (error) => toastApiError(error, "Failed to delete users"),
           })
@@ -75,7 +75,7 @@ export function UsersBulkDialogs() {
             onSuccess: (result) =>
               finishSuccess(
                 result.message,
-                `Suspended ${count} ${count === 1 ? "user" : "users"}`
+                `Suspended ${count} ${count === 1 ? "user" : "users"} successfully`
               ),
             onError: (error) =>
               toastApiError(error, "Failed to suspend users"),
@@ -100,7 +100,7 @@ export function UsersBulkDialogs() {
             onSuccess: (result) =>
               finishSuccess(
                 result.message,
-                `Activated ${count} ${count === 1 ? "user" : "users"}`
+                `Activated ${count} ${count === 1 ? "user" : "users"} successfully`
               ),
             onError: (error) =>
               toastApiError(error, "Failed to activate users"),

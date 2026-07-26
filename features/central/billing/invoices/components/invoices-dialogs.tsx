@@ -19,30 +19,27 @@ export function InvoicesDialogs() {
 
   const handleClose = useEntityDialogClose({ setOpen, setCurrentRow })
 
-  const runSendLink = () => {
+  const runAction = (action: "send-link" | "void") => {
     if (!currentRow) {
       return
     }
 
-    sendPaymentLink.mutate(
-      { id: currentRow.id },
-      {
-        onSuccess: (result) => {
-          toastApiSuccess(
-            result.message,
-            `Payment link sent to ${result.data.email}`
-          )
-          handleClose()
-        },
-        onError: (error) => {
-          toastApiError(error, "Failed to send payment link")
-        },
-      }
-    )
-  }
-
-  const runVoid = () => {
-    if (!currentRow) {
+    if (action === "send-link") {
+      sendPaymentLink.mutate(
+        { id: currentRow.id },
+        {
+          onSuccess: (result) => {
+            toastApiSuccess(
+              result.message,
+              "Payment link sent successfully"
+            )
+            handleClose()
+          },
+          onError: (error) => {
+            toastApiError(error, "Failed to send payment link")
+          },
+        }
+      )
       return
     }
 
@@ -100,7 +97,7 @@ export function InvoicesDialogs() {
             }
             confirmLabel="Send link"
             isPending={sendPaymentLink.isPending}
-            onConfirm={runSendLink}
+            onConfirm={() => runAction("send-link")}
           />
 
           <ConfirmActionDialog
@@ -120,7 +117,7 @@ export function InvoicesDialogs() {
             confirmLabel="Void"
             variant="destructive"
             isPending={voidInvoice.isPending}
-            onConfirm={runVoid}
+            onConfirm={() => runAction("void")}
           />
 
           <InvoicesChargeDialog

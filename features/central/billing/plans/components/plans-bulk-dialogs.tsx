@@ -50,7 +50,7 @@ export function PlansBulkDialogs() {
             onSuccess: (result) =>
               finishSuccess(
                 result.message,
-                `Deleted ${count} ${count === 1 ? "plan" : "plans"}`
+                `Deleted ${count} ${count === 1 ? "plan" : "plans"} successfully`
               ),
             onError: (error) => toastApiError(error, "Failed to delete plans"),
           })
@@ -74,7 +74,7 @@ export function PlansBulkDialogs() {
             onSuccess: (result) =>
               finishSuccess(
                 result.message,
-                `Activated ${count} ${count === 1 ? "plan" : "plans"}`
+                `Activated ${count} ${count === 1 ? "plan" : "plans"} successfully`
               ),
             onError: (error) =>
               toastApiError(error, "Failed to activate plans"),
@@ -100,7 +100,7 @@ export function PlansBulkDialogs() {
             onSuccess: (result) =>
               finishSuccess(
                 result.message,
-                `Archived ${count} ${count === 1 ? "plan" : "plans"}`
+                `Archived ${count} ${count === 1 ? "plan" : "plans"} successfully`
               ),
             onError: (error) =>
               toastApiError(error, "Failed to archive plans"),

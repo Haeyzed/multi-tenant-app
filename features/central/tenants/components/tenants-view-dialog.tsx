@@ -74,7 +74,7 @@ function TenantBillingProfileForm({
                 preferred_gateway: gateway || null,
             }),
         onSuccess: (result) => {
-            toastApiSuccess(result.message, "Billing profile updated")
+            toastApiSuccess(result.message, "Billing profile updated successfully")
             onSaved()
         },
         onError: (error) => toastApiError(error, "Failed to update billing profile"),
