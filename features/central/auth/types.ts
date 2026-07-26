@@ -1,9 +1,9 @@
-import type { CentralUser } from "@/features/central/users/types"
+import type { User } from "@/features/central/users/types"
 
 export type LoginSuccessData = {
   token: string
   token_type: string
-  user: CentralUser
+  user: User
   requires_two_factor: false
 }
 

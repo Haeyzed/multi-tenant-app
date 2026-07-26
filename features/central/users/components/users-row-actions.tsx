@@ -26,7 +26,7 @@ import {
 import {PermissionGate} from "@/features/central/auth/components/permission-gate"
 import {permissions} from "@/features/central/auth/permissions"
 import {useUsers} from "@/features/central/users/components/users-provider"
-import type {CentralUser} from "@/features/central/users/types"
+import type {User} from "@/features/central/users/types"
 
 type DataTableRowActionsProps<TData> = {
     row: Row<TData>
@@ -35,7 +35,7 @@ type DataTableRowActionsProps<TData> = {
 export function DataTableRowActions<TData>({
                                                row,
                                            }: DataTableRowActionsProps<TData>) {
-    const user = row.original as CentralUser
+    const user = row.original as User
     const {setOpen, setCurrentRow} = useUsers()
 
     return (

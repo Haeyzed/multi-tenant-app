@@ -8,7 +8,7 @@ import {ActionBar, ActionBarClose, ActionBarGroup, ActionBarItem, ActionBarSelec
 import {PermissionGate} from "@/features/central/auth/components/permission-gate"
 import {permissions} from "@/features/central/auth/permissions"
 import {useUsers} from "@/features/central/users/components/users-provider"
-import type {CentralUser} from "@/features/central/users/types"
+import type {User} from "@/features/central/users/types"
 
 type UsersBulkActionsProps<TData> = {
     table: Table<TData>
@@ -31,7 +31,7 @@ export function UsersBulkActions<TData>({
 
     const openBulk = (type: "deleteMany" | "suspendMany" | "activateMany") => {
         setBulkSelection({
-            ids: selectedRows.map((row) => (row.original as CentralUser).id),
+            ids: selectedRows.map((row) => (row.original as User).id),
             onComplete: () => table.resetRowSelection(),
         })
         setOpen(type)

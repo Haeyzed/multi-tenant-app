@@ -1,12 +1,12 @@
 "use client"
 
 import { useGetProfile } from "@/features/central/auth/hooks/use-auth-query"
-import type { CentralUser } from "@/features/central/users/types"
+import type { User } from "@/features/central/users/types"
 import { createContext, useCallback, useContext, useMemo } from "react"
 import {Permission} from "@/features/central/auth/permissions";
 
 type AuthContextType = {
-  user: CentralUser | null
+  user: User | null
   isLoading: boolean
   hasPermission: (permission: Permission) => boolean
   isSuperAdmin: boolean

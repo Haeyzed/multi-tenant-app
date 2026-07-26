@@ -54,13 +54,13 @@ import {
 } from "@/features/central/shared/select-option"
 import { handleFormApiError } from "@/lib/form-api-errors"
 import { toastApiError, toastApiSuccess } from "@/lib/toast-api"
-import type { CentralUser, UserStatus } from "@/features/central/users/types"
+import type { User, UserStatus } from "@/features/central/users/types"
 import { LockIcon } from "lucide-react"
 
 type UsersFormDialogProps = {
   open: boolean
   onOpenChange: (open: boolean) => void
-  currentRow?: CentralUser
+  currentRow?: User
 }
 
 export function UsersFormDialog({

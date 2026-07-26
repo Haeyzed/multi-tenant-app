@@ -8,7 +8,7 @@ import type {
   LoginSuccessData,
   ResetPasswordPayload,
 } from "@/features/central/auth/types"
-import type { CentralUser } from "@/features/central/users/types"
+import type { User } from "@/features/central/users/types"
 
 const TWO_FACTOR_TOKEN_KEY = "central_two_factor_token"
 
@@ -85,8 +85,8 @@ export async function logout() {
   }
 }
 
-export async function getProfile(signal?: AbortSignal): Promise<CentralUser> {
-  const response = await centralApiClient.get<ApiEnvelope<CentralUser>>(
+export async function getProfile(signal?: AbortSignal): Promise<User> {
+  const response = await centralApiClient.get<ApiEnvelope<User>>(
     "/profile",
     undefined,
     { signal }

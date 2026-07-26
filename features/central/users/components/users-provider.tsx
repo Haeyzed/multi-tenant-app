@@ -3,7 +3,7 @@
 import React, {useState} from "react"
 
 import useDialogState from "@/hooks/use-dialog-state"
-import type {CentralUser} from "@/features/central/users/types"
+import type {User} from "@/features/central/users/types"
 
 export type UsersDialogType =
     | "create"
@@ -28,8 +28,8 @@ export type BulkSelection = {
 type UsersContextType = {
     open: UsersDialogType | null
     setOpen: (str: UsersDialogType | null) => void
-    currentRow: CentralUser | null
-    setCurrentRow: React.Dispatch<React.SetStateAction<CentralUser | null>>
+    currentRow: User | null
+    setCurrentRow: React.Dispatch<React.SetStateAction<User | null>>
     bulkSelection: BulkSelection | null
     setBulkSelection: React.Dispatch<React.SetStateAction<BulkSelection | null>>
 }
@@ -38,7 +38,7 @@ const UsersContext = React.createContext<UsersContextType | null>(null)
 
 export function UsersProvider({children}: { children: React.ReactNode }) {
     const [open, setOpen] = useDialogState<UsersDialogType>(null)
-    const [currentRow, setCurrentRow] = useState<CentralUser | null>(null)
+    const [currentRow, setCurrentRow] = useState<User | null>(null)
     const [bulkSelection, setBulkSelection] = useState<BulkSelection | null>(null)
 
     return (

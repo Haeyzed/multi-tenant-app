@@ -17,12 +17,12 @@ import {Spinner} from "@/components/ui/spinner"
 import {useGetPermissions} from "@/features/central/roles/hooks/use-role-query"
 import {useSyncUserPermissions} from "@/features/central/users/hooks/use-user-query"
 import {toastApiError, toastApiSuccess} from "@/lib/toast-api"
-import type {CentralUser} from "@/features/central/users/types"
+import type {User} from "@/features/central/users/types"
 
 type UsersAssignPermissionsDialogProps = {
     open: boolean
     onOpenChange: (open: boolean) => void
-    user: CentralUser
+    user: User
 }
 
 function UserPermissionsEditor({
@@ -31,7 +31,7 @@ function UserPermissionsEditor({
     isLoading,
     onOpenChange,
 }: {
-    user: CentralUser
+    user: User
     permissionGroups: NonNullable<
         ReturnType<typeof useGetPermissions>["data"]
     >

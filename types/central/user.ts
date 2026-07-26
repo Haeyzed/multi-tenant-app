@@ -1,6 +1,6 @@
 export type {
   UserStatus,
-  CentralUser,
+  User,
   PaginatedUsers,
   UserStatistics,
   UserSecurity,

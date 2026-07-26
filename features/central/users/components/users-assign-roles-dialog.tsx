@@ -17,12 +17,12 @@ import {Spinner} from "@/components/ui/spinner"
 import {useGetRoles} from "@/features/central/roles/hooks/use-role-query"
 import {useSyncUserRoles,} from "@/features/central/users/hooks/use-user-query"
 import {toastApiError, toastApiSuccess} from "@/lib/toast-api"
-import type {CentralUser} from "@/features/central/users/types"
+import type {User} from "@/features/central/users/types"
 
 type UsersAssignRolesDialogProps = {
     open: boolean
     onOpenChange: (open: boolean) => void
-    user: CentralUser
+    user: User
 }
 
 function UserRolesEditor({
@@ -31,7 +31,7 @@ function UserRolesEditor({
     isLoading,
     onOpenChange,
 }: {
-    user: CentralUser
+    user: User
     roleOptions: NonNullable<ReturnType<typeof useGetRoles>["data"]>["data"]
     isLoading: boolean
     onOpenChange: (open: boolean) => void

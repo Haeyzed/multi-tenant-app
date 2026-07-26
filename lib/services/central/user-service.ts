@@ -4,7 +4,7 @@ import {
 } from "@/lib/api/central-client"
 import type { PaginatedMeta } from "@/features/central/shared/types"
 import type {
-  CentralUser,
+  User,
   PaginatedUserActivities,
   PaginatedUsers,
   UserActivity,
@@ -49,7 +49,7 @@ export async function getUsers(
   signal?: AbortSignal
 ): Promise<PaginatedUsers> {
   const response = await centralApiClient.get<
-    ApiEnvelope<CentralUser[]> & { meta?: PaginatedMeta }
+    ApiEnvelope<User[]> & { meta?: PaginatedMeta }
   >("/users", params, { signal })
 
   return {
@@ -63,15 +63,15 @@ export async function getUsers(
   }
 }
 
-export async function getUser(id: number): Promise<CentralUser> {
-  const response = await centralApiClient.get<ApiEnvelope<CentralUser>>(
+export async function getUser(id: number): Promise<User> {
+  const response = await centralApiClient.get<ApiEnvelope<User>>(
     `/users/${id}`
   )
   return response.data
 }
 
 export async function createUser(values: StoreUserFormValues) {
-  const response = await centralApiClient.post<ApiEnvelope<CentralUser>>(
+  const response = await centralApiClient.post<ApiEnvelope<User>>(
     "/users",
     toPayload(values)
   )
@@ -79,7 +79,7 @@ export async function createUser(values: StoreUserFormValues) {
 }
 
 export async function updateUser(id: number, values: UpdateUserFormValues) {
-  const response = await centralApiClient.put<ApiEnvelope<CentralUser>>(
+  const response = await centralApiClient.put<ApiEnvelope<User>>(
     `/users/${id}`,
     toPayload(values)
   )
@@ -94,7 +94,7 @@ export async function deleteUser(id: number) {
 }
 
 export async function updateUserStatus(id: number, status: UserStatus) {
-  const response = await centralApiClient.put<ApiEnvelope<CentralUser>>(
+  const response = await centralApiClient.put<ApiEnvelope<User>>(
     `/users/${id}/status`,
     { status }
   )
@@ -138,7 +138,7 @@ export async function getUserStatistics(): Promise<UserStatistics> {
 }
 
 export async function syncUserRoles(id: number, roles: string[]) {
-  const response = await centralApiClient.put<ApiEnvelope<CentralUser>>(
+  const response = await centralApiClient.put<ApiEnvelope<User>>(
     `/users/${id}/roles`,
     { roles }
   )
@@ -146,7 +146,7 @@ export async function syncUserRoles(id: number, roles: string[]) {
 }
 
 export async function syncUserPermissions(id: number, permissions: string[]) {
-  const response = await centralApiClient.put<ApiEnvelope<CentralUser>>(
+  const response = await centralApiClient.put<ApiEnvelope<User>>(
     `/users/${id}/permissions`,
     { permissions }
   )
@@ -157,7 +157,7 @@ export async function uploadUserAvatar(id: number, file: File) {
   const formData = new FormData()
   formData.append("avatar", file)
 
-  const response = await centralApiClient.upload<ApiEnvelope<CentralUser>>(
+  const response = await centralApiClient.upload<ApiEnvelope<User>>(
     `/users/${id}/avatar`,
     formData
   )

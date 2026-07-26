@@ -12,12 +12,12 @@ import {
     ResponsiveDialogHeader,
     ResponsiveDialogTitle,
 } from "@/components/ui/responsive-dialog"
-import type {CentralUser} from "@/features/central/users/types"
+import type {User} from "@/features/central/users/types"
 
 type UsersViewDialogProps = {
     open: boolean
     onOpenChange: (open: boolean) => void
-    user: CentralUser
+    user: User
 }
 
 function getInitials(name?: string | null): string {

@@ -2,7 +2,7 @@ import type { PaginatedMeta } from "@/features/central/shared/types"
 
 export type UserStatus = "active" | "inactive" | "suspended"
 
-export type CentralUser = {
+export type User = {
   id: number
   name: string
   email: string
@@ -25,7 +25,7 @@ export type CentralUser = {
 }
 
 export type PaginatedUsers = {
-  data: CentralUser[]
+  data: User[]
   meta: PaginatedMeta
 }
 

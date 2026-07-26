@@ -14,12 +14,12 @@ import {
 import {Skeleton} from "@/components/ui/skeleton"
 import {useGetUserSecurity} from "@/features/central/users/hooks/use-user-query"
 import {useQueryErrorToast} from "@/hooks/use-query-error-toast"
-import type {CentralUser} from "@/features/central/users/types"
+import type {User} from "@/features/central/users/types"
 
 type UsersSecurityDialogProps = {
     open: boolean
     onOpenChange: (open: boolean) => void
-    user: CentralUser
+    user: User
 }
 
 export function UsersSecurityDialog({
