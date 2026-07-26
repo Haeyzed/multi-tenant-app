@@ -6,7 +6,7 @@ import {AlertTriangle, Archive, CheckCircle2, Clock, FlaskConical, Search, XCirc
 import {DataTableColumnHeader} from "@/components/data-table/data-table-column-header"
 import {Badge} from "@/components/ui/badge"
 import {Checkbox} from "@/components/ui/checkbox"
-import {DataTableRowActions} from "@/features/central/tenants/components/data-table-row-actions"
+import {DataTableRowActions} from "@/features/central/tenants/components/tenants-row-actions"
 import type {Tenant, TenantStatus} from "@/types/central/tenant"
 
 const statusVariantMap: Record<

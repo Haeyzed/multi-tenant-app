@@ -4,7 +4,7 @@ import {LockIcon, Plus} from "lucide-react"
 
 import {Button} from "@/components/ui/button"
 import {PermissionGate} from "@/features/central/auth/components/permission-gate"
-import {permissions} from "@/features/central/auth/components/permissions"
+import {permissions} from "@/features/central/auth/permissions"
 import {useTenants} from "@/features/central/tenants/components/tenants-provider"
 
 export function TenantsPrimaryButtons() {

@@ -8,6 +8,10 @@ export type ApiEnvelope<T> = {
   errors?: Record<string, string[]> | null
 }
 
+export type ApiRequestOptions = {
+  signal?: AbortSignal
+}
+
 class CentralApiClient {
   private readonly baseURL: string
   private token: string | null = null
@@ -41,31 +45,59 @@ class CentralApiClient {
     return this.token
   }
 
-  public get<T>(path: string, params?: Record<string, unknown>): Promise<T> {
-    return this.request<T>("GET", path, undefined, params)
+  public get<T>(
+    path: string,
+    params?: Record<string, unknown>,
+    options?: ApiRequestOptions
+  ): Promise<T> {
+    return this.request<T>("GET", path, undefined, params, options)
   }
 
-  public post<T>(path: string, body?: unknown): Promise<T> {
-    return this.request<T>("POST", path, body)
+  public post<T>(
+    path: string,
+    body?: unknown,
+    options?: ApiRequestOptions
+  ): Promise<T> {
+    return this.request<T>("POST", path, body, undefined, options)
   }
 
-  public put<T>(path: string, body?: unknown): Promise<T> {
-    return this.request<T>("PUT", path, body)
+  public put<T>(
+    path: string,
+    body?: unknown,
+    options?: ApiRequestOptions
+  ): Promise<T> {
+    return this.request<T>("PUT", path, body, undefined, options)
   }
 
-  public patch<T>(path: string, body?: unknown): Promise<T> {
-    return this.request<T>("PATCH", path, body)
+  public patch<T>(
+    path: string,
+    body?: unknown,
+    options?: ApiRequestOptions
+  ): Promise<T> {
+    return this.request<T>("PATCH", path, body, undefined, options)
   }
 
-  public delete<T>(path: string, body?: unknown): Promise<T> {
-    return this.request<T>("DELETE", path, body)
+  public delete<T>(
+    path: string,
+    body?: unknown,
+    options?: ApiRequestOptions
+  ): Promise<T> {
+    return this.request<T>("DELETE", path, body, undefined, options)
   }
 
-  public upload<T>(path: string, formData: FormData): Promise<T> {
-    return this.uploadRequest<T>(path, formData)
+  public upload<T>(
+    path: string,
+    formData: FormData,
+    options?: ApiRequestOptions
+  ): Promise<T> {
+    return this.uploadRequest<T>(path, formData, options)
   }
 
-  private async uploadRequest<T>(path: string, formData: FormData): Promise<T> {
+  private async uploadRequest<T>(
+    path: string,
+    formData: FormData,
+    options?: ApiRequestOptions
+  ): Promise<T> {
     const headers: HeadersInit = {
       Accept: "application/json",
     }
@@ -79,6 +111,7 @@ class CentralApiClient {
       method: "POST",
       headers,
       body: formData,
+      signal: options?.signal,
     })
 
     const responseData = await response.json().catch(() => null)
@@ -99,7 +132,8 @@ class CentralApiClient {
     method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH",
     path: string,
     body?: unknown,
-    params?: Record<string, unknown>
+    params?: Record<string, unknown>,
+    options?: ApiRequestOptions
   ): Promise<T> {
     const headers: HeadersInit = {
       "Content-Type": "application/json",
@@ -115,14 +149,22 @@ class CentralApiClient {
     if (params) {
       const filteredParams = Object.fromEntries(
         Object.entries(params).filter(
-          ([, value]) => value !== undefined && value !== null
+          ([, value]) => value !== undefined && value !== null && value !== ""
         )
       )
-      const query = new URLSearchParams(
-        filteredParams as Record<string, string>
-      ).toString()
-      if (query) {
-        url += `?${query}`
+      const query = new URLSearchParams()
+      for (const [key, value] of Object.entries(filteredParams)) {
+        if (Array.isArray(value)) {
+          for (const item of value) {
+            query.append(key, String(item))
+          }
+        } else {
+          query.set(key, String(value))
+        }
+      }
+      const queryString = query.toString()
+      if (queryString) {
+        url += `?${queryString}`
       }
     }
 
@@ -130,7 +172,12 @@ class CentralApiClient {
       method,
       headers,
       body: body !== undefined ? JSON.stringify(body) : undefined,
+      signal: options?.signal,
     })
+
+    if (options?.signal?.aborted) {
+      throw new DOMException("The operation was aborted.", "AbortError")
+    }
 
     const responseData = await response.json().catch(() => null)
 

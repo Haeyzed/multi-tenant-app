@@ -6,6 +6,7 @@ import {DataTable} from "@/components/data-table/data-table"
 import {DataTableSkeleton} from "@/components/data-table/data-table-skeleton"
 import {DataTableToolbar} from "@/components/data-table/data-table-toolbar"
 import {PermissionGate} from "@/features/central/auth/components/permission-gate"
+import {permissions} from "@/features/central/auth/permissions"
 import {columns} from "@/features/central/billing/subscriptions/components/subscriptions-columns"
 import {useGetSubscriptions} from "@/features/central/billing/subscriptions/hooks/use-subscription-query"
 import {useDataTable} from "@/hooks/use-data-table"
@@ -85,7 +86,7 @@ export function SubscriptionsTable() {
     }
 
     return (
-        <PermissionGate permissions="subscriptions.view">
+        <PermissionGate permissions={[permissions.subscriptions.view]}>
             <div className="data-table-container space-y-4">
                 <DataTable table={table}>
                     <DataTableToolbar table={table}/>

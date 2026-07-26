@@ -9,43 +9,55 @@ import type {
   SettingGroupOption,
 } from "@/types/central/setting"
 
-export async function getSettings(params?: {
-  group?: string
-  search?: string
-  public?: boolean
-}): Promise<Setting[]> {
+export async function getSettings(
+  params?: {
+    group?: string
+    search?: string
+    public?: boolean
+  },
+  signal?: AbortSignal
+): Promise<Setting[]> {
   const response = await centralApiClient.get<ApiEnvelope<Setting[]>>(
     "/settings",
-    params
+    params,
+    { signal }
   )
   return response.data
 }
 
 export async function getPublicSettings(
-  group?: string
+  group?: string,
+  signal?: AbortSignal
 ): Promise<PublicSettings> {
   const response = await centralApiClient.get<ApiEnvelope<PublicSettings>>(
     "/public/settings",
-    group ? { group } : undefined
+    group ? { group } : undefined,
+    { signal }
   )
   return response.data
 }
 
-export async function getSettingGroups(): Promise<SettingGroupOption[]> {
+export async function getSettingGroups(
+  signal?: AbortSignal
+): Promise<SettingGroupOption[]> {
   const response = await centralApiClient.get<
     ApiEnvelope<SettingGroupOption[]>
-  >("/settings/groups")
+  >("/settings/groups", undefined, { signal })
   return response.data
 }
 
-export async function getGroupedSettings(params?: {
-  group?: string
-  search?: string
-  public?: boolean
-}): Promise<GroupedSettings> {
+export async function getGroupedSettings(
+  params?: {
+    group?: string
+    search?: string
+    public?: boolean
+  },
+  signal?: AbortSignal
+): Promise<GroupedSettings> {
   const response = await centralApiClient.get<ApiEnvelope<GroupedSettings>>(
     "/settings/grouped",
-    params
+    params,
+    { signal }
   )
   return response.data
 }

@@ -11,7 +11,7 @@ import {
     ResponsiveDialogHeader,
     ResponsiveDialogTitle,
 } from "@/components/ui/responsive-dialog"
-import {formatMoney} from "@/features/central/dashboard/lib/format"
+import {formatMoney} from "@/features/central/shared/lib/format"
 import type {Subscription} from "@/types/central/subscription"
 
 type SubscriptionsViewDialogProps = {

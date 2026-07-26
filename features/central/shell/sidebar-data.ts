@@ -11,7 +11,7 @@ import {
 } from "lucide-react"
 
 import type {SidebarData} from "@/components/layout/types"
-import {permissions} from "@/features/central/auth/components/permissions"
+import {permissions} from "@/features/central/auth/permissions"
 import {centralRoutes} from "@/features/central/shell/routes"
 
 /**

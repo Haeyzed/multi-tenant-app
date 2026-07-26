@@ -9,6 +9,7 @@ import {
     sendTestMail,
     updateSetting,
 } from "@/lib/services/central/setting-service"
+import {catalogQueryOptions} from "@/lib/query/query-options"
 import type {InvoiceSettings} from "@/types/central/setting"
 
 export type RecurringBillingInterval = "monthly" | "quarterly" | "yearly"
@@ -23,7 +24,8 @@ export function useSettings(params?: {
 }) {
     return useQuery({
         queryKey: settingsQueryKey(params),
-        queryFn: () => getSettings(params),
+        queryFn: ({signal}) => getSettings(params, signal),
+        staleTime: 60_000,
     })
 }
 
@@ -39,8 +41,8 @@ export function useBillingDefaultInterval(): RecurringBillingInterval {
 export function usePublicSettings(group?: string) {
     return useQuery({
         queryKey: ["central", "settings", "public", group ?? "all"],
-        queryFn: () => getPublicSettings(group),
-        staleTime: 5 * 60 * 1000,
+        queryFn: ({signal}) => getPublicSettings(group, signal),
+        ...catalogQueryOptions,
     })
 }
 
@@ -85,7 +87,8 @@ export function usePlatformSettings() {
 export function useSettingGroups() {
     return useQuery({
         queryKey: ["central", "settings", "groups"],
-        queryFn: getSettingGroups,
+        queryFn: ({signal}) => getSettingGroups(signal),
+        ...catalogQueryOptions,
     })
 }
 
@@ -96,7 +99,9 @@ export function useGroupedSettings(params?: {
 }) {
     return useQuery({
         queryKey: ["central", "settings", "grouped", params ?? {}],
-        queryFn: () => getGroupedSettings(params),
+        queryFn: ({signal}) => getGroupedSettings(params, signal),
+        enabled: !params?.group || params.group.length > 0,
+        staleTime: 60_000,
     })
 }
 

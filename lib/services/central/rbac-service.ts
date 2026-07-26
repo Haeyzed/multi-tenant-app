@@ -21,14 +21,17 @@ import {
   type UpdateRoleFormValues,
 } from "@/features/central/roles/schemas"
 
-export async function getRoles(params?: {
-  search?: string
-  per_page?: number
-  page?: number
-}): Promise<{ data: CentralRole[]; meta: PaginatedMeta }> {
+export async function getRoles(
+  params?: {
+    search?: string
+    per_page?: number
+    page?: number
+  },
+  signal?: AbortSignal
+): Promise<{ data: CentralRole[]; meta: PaginatedMeta }> {
   const response = await centralApiClient.get<
     ApiEnvelope<CentralRole[]> & { meta?: PaginatedMeta }
-  >("/roles", { per_page: 100, ...params })
+  >("/roles", { per_page: 100, ...params }, { signal })
 
   return {
     data: response.data,
@@ -106,15 +109,18 @@ export async function getPermissions(): Promise<PermissionGroup[]> {
   return response.data
 }
 
-export async function getPaginatedPermissions(params?: {
-  search?: string
-  group?: string
-  per_page?: number
-  page?: number
-}): Promise<PaginatedPermissions> {
+export async function getPaginatedPermissions(
+  params?: {
+    search?: string
+    group?: string
+    per_page?: number
+    page?: number
+  },
+  signal?: AbortSignal
+): Promise<PaginatedPermissions> {
   const response = await centralApiClient.get<
     ApiEnvelope<PermissionItem[]> & { meta?: PaginatedMeta }
-  >("/permissions", params)
+  >("/permissions", params, { signal })
 
   return {
     data: response.data,

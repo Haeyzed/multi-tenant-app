@@ -25,15 +25,18 @@ export async function getMonitoringQueue(): Promise<MonitoringQueue> {
   return response.data
 }
 
-export async function getFailedJobs(params?: {
-  per_page?: number
-  page?: number
-}): Promise<PaginatedFailedJobs> {
+export async function getFailedJobs(
+  params?: {
+    per_page?: number
+    page?: number
+  },
+  signal?: AbortSignal
+): Promise<PaginatedFailedJobs> {
   const response = await centralApiClient.get<
     ApiEnvelope<PaginatedFailedJobs["data"]> & {
       meta?: PaginatedFailedJobs["meta"]
     }
-  >("/monitoring/failed-jobs", params)
+  >("/monitoring/failed-jobs", params, { signal })
 
   return {
     data: response.data,

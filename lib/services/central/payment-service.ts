@@ -10,17 +10,20 @@ import type {
   Refund,
 } from "@/types/central/payment"
 
-export async function getPayments(params?: {
-  tenant_id?: string
-  status?: string
-  gateway?: string
-  search?: string
-  per_page?: number
-  page?: number
-}): Promise<PaginatedPayments> {
+export async function getPayments(
+  params?: {
+    tenant_id?: string
+    status?: string
+    gateway?: string
+    search?: string
+    per_page?: number
+    page?: number
+  },
+  signal?: AbortSignal
+): Promise<PaginatedPayments> {
   const response = await centralApiClient.get<
     ApiEnvelope<Payment[]> & { meta?: PaginatedMeta }
-  >("/payments", params)
+  >("/payments", params, { signal })
 
   return {
     data: response.data,

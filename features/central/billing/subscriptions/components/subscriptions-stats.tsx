@@ -4,9 +4,10 @@ import {AlertTriangleIcon, CheckCircle2Icon, RefreshCwIcon, SparklesIcon,} from 
 
 import {Skeleton} from "@/components/ui/skeleton"
 import {PermissionGate} from "@/features/central/auth/components/permission-gate"
+import {permissions} from "@/features/central/auth/permissions"
 import {useGetSubscriptionStatistics} from "@/features/central/billing/subscriptions/hooks/use-subscription-query"
-import {MetricCard} from "@/features/central/dashboard/components/metric-card"
-import {formatCompactNumber} from "@/features/central/dashboard/lib/format"
+import {MetricCard} from "@/features/central/shared/components/metric-card"
+import {formatCompactNumber} from "@/features/central/shared/lib/format"
 import {useQueryErrorToast} from "@/hooks/use-query-error-toast"
 
 export function SubscriptionsStats() {
@@ -25,7 +26,7 @@ export function SubscriptionsStats() {
     }
 
     return (
-        <PermissionGate permissions="subscriptions.view">
+        <PermissionGate permissions={[permissions.subscriptions.view]}>
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
                 <MetricCard
                     title="Total subscriptions"

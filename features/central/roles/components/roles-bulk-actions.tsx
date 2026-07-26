@@ -6,6 +6,7 @@ import {Trash2} from "lucide-react"
 
 import {ActionBar, ActionBarClose, ActionBarGroup, ActionBarItem, ActionBarSelection,} from "@/components/ui/action-bar"
 import {PermissionGate} from "@/features/central/auth/components/permission-gate"
+import {permissions} from "@/features/central/auth/permissions"
 import {useRoles} from "@/features/central/roles/components/roles-provider"
 import type {CentralRole} from "@/types/central/rbac"
 
@@ -51,7 +52,7 @@ export function RolesBulkActions<TData>({table}: RolesBulkActionsProps<TData>) {
                 <ActionBarSelection>
                     {selectedRows.length} selected
                 </ActionBarSelection>
-                <PermissionGate permissions="roles.delete">
+                <PermissionGate permissions={[permissions.roles.delete]}>
                     <ActionBarItem onClick={openBulkDelete}>
                         <Trash2 className="size-4"/>
                         Delete

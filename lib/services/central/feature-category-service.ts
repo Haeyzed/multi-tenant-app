@@ -26,19 +26,23 @@ export type FeatureCategoryOption = {
   label: string
 }
 
-export async function getFeatureCategories(): Promise<FeatureCategory[]> {
+export async function getFeatureCategories(
+  signal?: AbortSignal
+): Promise<FeatureCategory[]> {
   const response = await centralApiClient.get<ApiEnvelope<FeatureCategory[]>>(
-    "/feature-categories"
+    "/feature-categories",
+    undefined,
+    { signal }
   )
   return response.data
 }
 
-export async function getFeatureCategoryOptions(): Promise<
-  FeatureCategoryOption[]
-> {
+export async function getFeatureCategoryOptions(
+  signal?: AbortSignal
+): Promise<FeatureCategoryOption[]> {
   const response = await centralApiClient.get<
     ApiEnvelope<FeatureCategoryOption[]>
-  >("/feature-categories/options")
+  >("/feature-categories/options", undefined, { signal })
   return response.data
 }
 

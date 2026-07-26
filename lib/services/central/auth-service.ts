@@ -85,9 +85,11 @@ export async function logout() {
   }
 }
 
-export async function getProfile(): Promise<CentralUser> {
+export async function getProfile(signal?: AbortSignal): Promise<CentralUser> {
   const response = await centralApiClient.get<ApiEnvelope<CentralUser>>(
-    "/profile"
+    "/profile",
+    undefined,
+    { signal }
   )
   return response.data
 }

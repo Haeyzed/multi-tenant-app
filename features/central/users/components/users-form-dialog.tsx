@@ -29,7 +29,7 @@ import {
 } from "@/components/ui/responsive-dialog"
 import {Spinner} from "@/components/ui/spinner"
 import {PermissionGate} from "@/features/central/auth/components/permission-gate"
-import {permissions} from "@/features/central/auth/components/permissions"
+import {permissions} from "@/features/central/auth/permissions"
 import {useGetRoles} from "@/features/central/roles/hooks/use-role-query"
 import {useCreateUser, useUpdateUser, useUploadUserAvatar,} from "@/features/central/users/hooks/use-user-query"
 import {type StoreUserFormValues, storeUserSchema, type UpdateUserFormValues,} from "@/features/central/users/schemas"

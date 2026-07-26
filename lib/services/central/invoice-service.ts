@@ -10,17 +10,20 @@ import type {
 } from "@/types/central/invoice"
 import type { Payment } from "@/types/central/payment"
 
-export async function getInvoices(params?: {
-  tenant_id?: string
-  status?: string
-  subscription_id?: number
-  search?: string
-  per_page?: number
-  page?: number
-}): Promise<PaginatedInvoices> {
+export async function getInvoices(
+  params?: {
+    tenant_id?: string
+    status?: string
+    subscription_id?: number
+    search?: string
+    per_page?: number
+    page?: number
+  },
+  signal?: AbortSignal
+): Promise<PaginatedInvoices> {
   const response = await centralApiClient.get<
     ApiEnvelope<Invoice[]> & { meta?: PaginatedMeta }
-  >("/invoices", params)
+  >("/invoices", params, { signal })
 
   return {
     data: response.data,

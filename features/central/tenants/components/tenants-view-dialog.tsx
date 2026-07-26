@@ -30,6 +30,7 @@ import {
     getTenantBillingProfile,
     updateTenantBillingProfile,
 } from "@/lib/services/central/tenant-service"
+import {catalogQueryOptions} from "@/lib/query/query-options"
 import {toastApiError, toastApiSuccess} from "@/lib/toast-api"
 import type {Tenant} from "@/types/central/tenant"
 import type {CountryOption, CurrencyOption} from "@/types/central/world"
@@ -193,6 +194,7 @@ export function TenantsViewDialog({
         queryKey: ["central", "payment-gateway-options"],
         queryFn: getPaymentGatewayOptions,
         enabled: open,
+        ...catalogQueryOptions,
     })
     const {data: profile, isLoading: profileLoading} = useQuery({
         queryKey: ["central", "tenants", tenant.id, "billing-profile"],

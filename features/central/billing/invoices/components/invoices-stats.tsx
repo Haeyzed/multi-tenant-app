@@ -4,8 +4,8 @@ import {CheckCircle2Icon, ClockIcon, FileTextIcon, XCircleIcon,} from "lucide-re
 
 import {Skeleton} from "@/components/ui/skeleton"
 import {useGetInvoiceStatistics} from "@/features/central/billing/invoices/hooks/use-invoice-query"
-import {MetricCard} from "@/features/central/dashboard/components/metric-card"
-import {formatCompactNumber, formatMoney,} from "@/features/central/dashboard/lib/format"
+import {MetricCard} from "@/features/central/shared/components/metric-card"
+import {formatCompactNumber, formatMoney,} from "@/features/central/shared/lib/format"
 import {useQueryErrorToast} from "@/hooks/use-query-error-toast"
 
 export function InvoicesStats() {

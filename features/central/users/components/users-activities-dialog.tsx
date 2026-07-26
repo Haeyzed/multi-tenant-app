@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/responsive-dialog"
 import {ScrollArea} from "@/components/ui/scroll-area"
 import {Skeleton} from "@/components/ui/skeleton"
-import {formatRelativeTime} from "@/features/central/dashboard/lib/format"
+import {formatRelativeTime} from "@/features/central/shared/lib/format"
 import {useGetUserActivities} from "@/features/central/users/hooks/use-user-query"
 import {useQueryErrorToast} from "@/hooks/use-query-error-toast"
 import type {CentralUser} from "@/types/central/user"

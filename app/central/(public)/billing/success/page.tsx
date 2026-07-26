@@ -1,10 +1,12 @@
+import type { Metadata } from "next"
 import {Suspense} from "react"
-
-
 import {Spinner} from "@/components/ui/spinner"
-
 import {BillingSuccessClient} from "@/features/central/billing/checkout/components/billing-success-client"
 
+export const metadata: Metadata = {
+  title: "Payment successful",
+  description: "Your payment completed successfully.",
+}
 
 export default function BillingSuccessPage() {
 

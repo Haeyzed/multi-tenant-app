@@ -53,6 +53,8 @@ import {type ChargeInvoiceFormValues, chargeInvoiceSchema,} from "@/features/cen
 
 import {getPaymentGatewayOptions} from "@/lib/services/central/payment-gateway-service"
 
+import {catalogQueryOptions} from "@/lib/query/query-options"
+
 import {toastApiError, toastApiSuccess} from "@/lib/toast-api"
 
 
@@ -86,6 +88,8 @@ export function InvoicesDialogs() {
         queryFn: () => getPaymentGatewayOptions(),
 
         enabled: open === "charge",
+
+        ...catalogQueryOptions,
 
     })
 

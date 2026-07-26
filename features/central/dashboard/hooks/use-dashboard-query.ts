@@ -17,20 +17,23 @@ export const dashboardActivitiesQueryKey = (
 export function useDashboardOverview() {
     return useQuery({
         queryKey: dashboardOverviewQueryKey,
-        queryFn: getDashboardOverview,
+        queryFn: ({signal}) => getDashboardOverview(signal),
+        staleTime: 30_000,
     })
 }
 
 export function useDashboardCharts(days = 30) {
     return useQuery({
         queryKey: dashboardChartsQueryKey(days),
-        queryFn: () => getDashboardCharts(days),
+        queryFn: ({signal}) => getDashboardCharts(days, signal),
+        staleTime: 60_000,
     })
 }
 
 export function useDashboardActivities(limit = 15) {
     return useQuery({
         queryKey: dashboardActivitiesQueryKey(limit),
-        queryFn: () => getDashboardActivities(limit),
+        queryFn: ({signal}) => getDashboardActivities(limit, signal),
+        staleTime: 30_000,
     })
 }

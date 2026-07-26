@@ -5,9 +5,9 @@ import {AlertOctagon, Ban, CheckCircle2, Clock, CreditCard, Loader, RotateCcw, S
 
 import {DataTableColumnHeader} from "@/components/data-table/data-table-column-header"
 import {Badge} from "@/components/ui/badge"
-import {DataTableRowActions} from "@/features/central/billing/payments/components/data-table-row-actions"
+import {DataTableRowActions} from "@/features/central/billing/payments/components/payments-row-actions"
 import {PAYMENT_GATEWAY_FILTER_OPTIONS} from "@/features/central/billing/shared/gateway-options"
-import {formatMoney} from "@/features/central/dashboard/lib/format"
+import {formatMoney} from "@/features/central/shared/lib/format"
 import type {Payment, PaymentStatus} from "@/types/central/payment"
 
 const statusVariantMap: Record<

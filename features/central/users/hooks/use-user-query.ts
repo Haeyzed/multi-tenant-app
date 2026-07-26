@@ -18,6 +18,7 @@ import {
     updateUser,
     uploadUserAvatar,
 } from "@/lib/services/central/user-service"
+import {listQueryOptions} from "@/lib/query/query-options"
 
 export const usersQueryKey = (params?: Record<string, unknown>) =>
     ["central", "users", params ?? {}] as const
@@ -42,7 +43,8 @@ export function useGetUsers(params?: {
 }) {
     return useQuery({
         queryKey: usersQueryKey(params),
-        queryFn: () => getUsers(params),
+        queryFn: ({signal}) => getUsers(params, signal),
+        ...listQueryOptions,
     })
 }
 

@@ -2,6 +2,7 @@ import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query"
 
 import type {StoreFeatureFormValues, UpdateFeatureFormValues,} from "@/features/central/billing/features/schemas"
 import {createFeature, deleteFeature, getFeatures, updateFeature,} from "@/lib/services/central/feature-service"
+import {listQueryOptions} from "@/lib/query/query-options"
 
 export const featuresQueryKey = (params?: Record<string, unknown>) =>
     ["central", "features", params ?? {}] as const
@@ -15,7 +16,8 @@ export function useGetFeatures(params?: {
 }) {
     return useQuery({
         queryKey: featuresQueryKey(params),
-        queryFn: () => getFeatures(params),
+        queryFn: ({signal}) => getFeatures(params, signal),
+        ...listQueryOptions,
     })
 }
 

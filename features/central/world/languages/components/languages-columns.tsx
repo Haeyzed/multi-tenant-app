@@ -5,7 +5,7 @@ import {ArrowLeftToLine, ArrowRightToLine, Search,} from "lucide-react"
 
 import {DataTableColumnHeader} from "@/components/data-table/data-table-column-header"
 import {Badge} from "@/components/ui/badge"
-import {DataTableRowActions} from "@/features/central/world/languages/components/data-table-row-actions"
+import {DataTableRowActions} from "@/features/central/world/languages/components/languages-row-actions"
 import type {Language} from "@/types/central/world"
 
 export const columns: ColumnDef<Language>[] = [

@@ -6,7 +6,7 @@ import {Archive, CheckCircle2, EyeOff, Search} from "lucide-react"
 import {DataTableColumnHeader} from "@/components/data-table/data-table-column-header"
 import {Badge} from "@/components/ui/badge"
 import {Checkbox} from "@/components/ui/checkbox"
-import {DataTableRowActions} from "@/features/central/billing/features/components/data-table-row-actions"
+import {DataTableRowActions} from "@/features/central/billing/features/components/features-row-actions"
 import type {Feature, FeatureStatus} from "@/types/central/feature"
 
 const statusVariantMap: Record<

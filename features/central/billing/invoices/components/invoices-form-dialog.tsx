@@ -33,6 +33,7 @@ import {type StoreInvoiceFormValues, storeInvoiceSchema,} from "@/features/centr
 import {handleFormApiError} from "@/lib/form-api-errors"
 import {getSubscriptionOptions} from "@/lib/services/central/subscription-service"
 import {getTenantOptions} from "@/lib/services/central/tenant-service"
+import {catalogQueryOptions} from "@/lib/query/query-options"
 import {toastApiSuccess} from "@/lib/toast-api"
 
 type InvoicesFormDialogProps = {
@@ -62,6 +63,7 @@ export function InvoicesFormDialog({
         queryKey: ["central", "tenants", "options"],
         queryFn: () => getTenantOptions(),
         enabled: open,
+        ...catalogQueryOptions,
     })
 
     const form = useForm<StoreInvoiceFormValues>({
@@ -80,6 +82,7 @@ export function InvoicesFormDialog({
         queryKey: ["central", "subscriptions", "options", {tenant_id: tenantId}],
         queryFn: () => getSubscriptionOptions({tenant_id: tenantId}),
         enabled: open && !!tenantId,
+        ...catalogQueryOptions,
     })
 
     React.useEffect(() => {

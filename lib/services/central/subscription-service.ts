@@ -34,20 +34,23 @@ export type ChangeSubscriptionPlanPayload = {
   billing_interval?: string | null
 }
 
-export async function getSubscriptions(params?: {
-  tenant_id?: string
-  status?: string
-  plan_id?: number
-  gateway?: string
-  search?: string
-  start_date?: string
-  end_date?: string
-  per_page?: number
-  page?: number
-}): Promise<PaginatedSubscriptions> {
+export async function getSubscriptions(
+  params?: {
+    tenant_id?: string
+    status?: string
+    plan_id?: number
+    gateway?: string
+    search?: string
+    start_date?: string
+    end_date?: string
+    per_page?: number
+    page?: number
+  },
+  signal?: AbortSignal
+): Promise<PaginatedSubscriptions> {
   const response = await centralApiClient.get<
       ApiEnvelope<Subscription[]> & { meta?: PaginatedMeta }
-  >("/subscriptions", params)
+  >("/subscriptions", params, { signal })
 
   return {
     data: response.data,

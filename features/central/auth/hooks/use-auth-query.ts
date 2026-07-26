@@ -61,8 +61,9 @@ export function useLogout() {
 export function useGetProfile() {
     return useQuery({
         queryKey: centralProfileQueryKey,
-        queryFn: getProfile,
+        queryFn: ({signal}) => getProfile(signal),
         enabled: !!centralApiClient.getToken(),
         retry: false,
+        staleTime: 5 * 60_000,
     })
 }

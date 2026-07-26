@@ -13,6 +13,7 @@ import {
     suspendTenant,
     updateTenant,
 } from "@/lib/services/central/tenant-service"
+import {listQueryOptions} from "@/lib/query/query-options"
 
 export const tenantsQueryKey = (params?: Record<string, unknown>) =>
     ["central", "tenants", params ?? {}] as const
@@ -28,7 +29,8 @@ export function useGetTenants(params?: {
 }) {
     return useQuery({
         queryKey: tenantsQueryKey(params),
-        queryFn: () => getTenants(params),
+        queryFn: ({signal}) => getTenants(params, signal),
+        ...listQueryOptions,
     })
 }
 

@@ -8,28 +8,35 @@ import type {
   DashboardOverview,
 } from "@/types/central/dashboard"
 
-export async function getDashboardOverview(): Promise<DashboardOverview> {
+export async function getDashboardOverview(
+  signal?: AbortSignal
+): Promise<DashboardOverview> {
   const response = await centralApiClient.get<ApiEnvelope<DashboardOverview>>(
-    "/dashboard"
+    "/dashboard",
+    undefined,
+    { signal }
   )
   return response.data
 }
 
 export async function getDashboardCharts(
-  days = 30
+  days = 30,
+  signal?: AbortSignal
 ): Promise<DashboardCharts> {
   const response = await centralApiClient.get<ApiEnvelope<DashboardCharts>>(
     "/dashboard/charts",
-    { days }
+    { days },
+    { signal }
   )
   return response.data
 }
 
 export async function getDashboardActivities(
-  limit = 15
+  limit = 15,
+  signal?: AbortSignal
 ): Promise<DashboardActivity[]> {
   const response = await centralApiClient.get<
     ApiEnvelope<DashboardActivity[]>
-  >("/dashboard/activities", { limit })
+  >("/dashboard/activities", { limit }, { signal })
   return response.data
 }

@@ -106,11 +106,12 @@ export async function getLanguages(search?: string): Promise<Language[]> {
 
 async function getPaginated<T>(
   path: string,
-  params?: Record<string, unknown>
+  params?: Record<string, unknown>,
+  signal?: AbortSignal
 ): Promise<WorldPaginated<T>> {
   const response = await centralApiClient.get<
     ApiEnvelope<T[]> & { meta?: WorldPaginatedMeta }
-  >(path, params)
+  >(path, params, { signal })
 
   return {
     data: response.data,
@@ -144,14 +145,17 @@ function countryToPayload(values: CountryFormValues) {
   }
 }
 
-export async function getPaginatedCountries(params?: {
-  search?: string
-  status?: string
-  region?: string
-  per_page?: number
-  page?: number
-}): Promise<WorldPaginated<Country>> {
-  return getPaginated<Country>("/world/admin/countries", params)
+export async function getPaginatedCountries(
+  params?: {
+    search?: string
+    status?: string
+    region?: string
+    per_page?: number
+    page?: number
+  },
+  signal?: AbortSignal
+): Promise<WorldPaginated<Country>> {
+  return getPaginated<Country>("/world/admin/countries", params, signal)
 }
 
 export async function getAdminCountryOptions(
@@ -197,13 +201,16 @@ function stateToPayload(values: StateFormValues) {
   }
 }
 
-export async function getPaginatedStates(params?: {
-  search?: string
-  country_id?: number
-  per_page?: number
-  page?: number
-}): Promise<WorldPaginated<State>> {
-  return getPaginated<State>("/world/admin/states", params)
+export async function getPaginatedStates(
+  params?: {
+    search?: string
+    country_id?: number
+    per_page?: number
+    page?: number
+  },
+  signal?: AbortSignal
+): Promise<WorldPaginated<State>> {
+  return getPaginated<State>("/world/admin/states", params, signal)
 }
 
 export async function getAdminStateOptions(
@@ -250,14 +257,17 @@ function cityToPayload(values: CityFormValues) {
   }
 }
 
-export async function getPaginatedCities(params?: {
-  search?: string
-  country_id?: number
-  state_id?: number
-  per_page?: number
-  page?: number
-}): Promise<WorldPaginated<City>> {
-  return getPaginated<City>("/world/admin/cities", params)
+export async function getPaginatedCities(
+  params?: {
+    search?: string
+    country_id?: number
+    state_id?: number
+    per_page?: number
+    page?: number
+  },
+  signal?: AbortSignal
+): Promise<WorldPaginated<City>> {
+  return getPaginated<City>("/world/admin/cities", params, signal)
 }
 
 export async function createCity(values: CityFormValues) {
@@ -294,13 +304,16 @@ function currencyToPayload(values: CurrencyFormValues) {
   }
 }
 
-export async function getPaginatedCurrencies(params?: {
-  search?: string
-  country_id?: number
-  per_page?: number
-  page?: number
-}): Promise<WorldPaginated<Currency>> {
-  return getPaginated<Currency>("/world/admin/currencies", params)
+export async function getPaginatedCurrencies(
+  params?: {
+    search?: string
+    country_id?: number
+    per_page?: number
+    page?: number
+  },
+  signal?: AbortSignal
+): Promise<WorldPaginated<Currency>> {
+  return getPaginated<Currency>("/world/admin/currencies", params, signal)
 }
 
 export async function createCurrency(values: CurrencyFormValues) {
@@ -333,13 +346,16 @@ function timezoneToPayload(values: TimezoneFormValues) {
   }
 }
 
-export async function getPaginatedTimezones(params?: {
-  search?: string
-  country_id?: number
-  per_page?: number
-  page?: number
-}): Promise<WorldPaginated<Timezone>> {
-  return getPaginated<Timezone>("/world/admin/timezones", params)
+export async function getPaginatedTimezones(
+  params?: {
+    search?: string
+    country_id?: number
+    per_page?: number
+    page?: number
+  },
+  signal?: AbortSignal
+): Promise<WorldPaginated<Timezone>> {
+  return getPaginated<Timezone>("/world/admin/timezones", params, signal)
 }
 
 export async function createTimezone(values: TimezoneFormValues) {
@@ -374,13 +390,16 @@ function languageToPayload(values: LanguageFormValues) {
   }
 }
 
-export async function getPaginatedLanguages(params?: {
-  search?: string
-  dir?: string
-  per_page?: number
-  page?: number
-}): Promise<WorldPaginated<Language>> {
-  return getPaginated<Language>("/world/admin/languages", params)
+export async function getPaginatedLanguages(
+  params?: {
+    search?: string
+    dir?: string
+    per_page?: number
+    page?: number
+  },
+  signal?: AbortSignal
+): Promise<WorldPaginated<Language>> {
+  return getPaginated<Language>("/world/admin/languages", params, signal)
 }
 
 export async function createLanguage(values: LanguageFormValues) {

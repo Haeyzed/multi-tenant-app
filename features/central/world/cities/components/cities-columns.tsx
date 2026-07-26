@@ -4,7 +4,7 @@ import {type ColumnDef} from "@tanstack/react-table"
 import {Search} from "lucide-react"
 
 import {DataTableColumnHeader} from "@/components/data-table/data-table-column-header"
-import {DataTableRowActions} from "@/features/central/world/cities/components/data-table-row-actions"
+import {DataTableRowActions} from "@/features/central/world/cities/components/cities-row-actions"
 import type {City, CountryOption, StateOption} from "@/types/central/world"
 
 export function buildColumns(

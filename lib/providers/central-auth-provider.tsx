@@ -2,8 +2,8 @@
 
 import { useGetProfile } from "@/features/central/auth/hooks/use-auth-query"
 import type { CentralUser } from "@/types/central/user"
-import { createContext, useContext, useMemo } from "react"
-import {Permission} from "@/features/central/auth/components/permissions";
+import { createContext, useCallback, useContext, useMemo } from "react"
+import {Permission} from "@/features/central/auth/permissions";
 
 type AuthContextType = {
   user: CentralUser | null
@@ -25,19 +25,25 @@ export function CentralAuthProvider({
     return user?.roles?.includes("super-admin") ?? false
   }, [user])
 
-  const hasPermission = (permission: Permission) => {
-    if (isSuperAdmin) {
-      return true
-    }
-    return user?.permissions?.includes(permission) ?? false
-  }
+  const hasPermission = useCallback(
+    (permission: Permission) => {
+      if (isSuperAdmin) {
+        return true
+      }
+      return user?.permissions?.includes(permission) ?? false
+    },
+    [isSuperAdmin, user?.permissions]
+  )
 
-  const value = {
-    user: user || null,
-    isLoading,
-    hasPermission,
-    isSuperAdmin,
-  }
+  const value = useMemo(
+    () => ({
+      user: user || null,
+      isLoading,
+      hasPermission,
+      isSuperAdmin,
+    }),
+    [user, isLoading, hasPermission, isSuperAdmin]
+  )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

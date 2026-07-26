@@ -39,7 +39,7 @@ import {getTenantBaseDomain} from "@/lib/tenant-domain"
 import {toastApiSuccess} from "@/lib/toast-api"
 import type {Tenant, TenantStatus} from "@/types/central/tenant"
 import {PermissionGate} from "@/features/central/auth/components/permission-gate";
-import {permissions} from "@/features/central/auth/components/permissions";
+import {permissions} from "@/features/central/auth/permissions";
 import {LockIcon} from "lucide-react";
 
 type TenantsFormDialogProps = {

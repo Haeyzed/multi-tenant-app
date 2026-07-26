@@ -11,6 +11,7 @@ import {
     getMonitoringStorage,
     retryFailedJob,
 } from "@/lib/services/central/monitoring-service"
+import {listQueryOptions} from "@/lib/query/query-options"
 
 export const monitoringQueryKey = ["central", "monitoring"] as const
 
@@ -29,6 +30,7 @@ export function useGetMonitoringOverview() {
     return useQuery({
         queryKey: monitoringOverviewQueryKey,
         queryFn: getMonitoringOverview,
+        staleTime: 15_000,
     })
 }
 
@@ -36,6 +38,7 @@ export function useGetMonitoringQueue() {
     return useQuery({
         queryKey: monitoringSubsystemQueryKey("queue"),
         queryFn: getMonitoringQueue,
+        staleTime: 15_000,
     })
 }
 
@@ -45,7 +48,9 @@ export function useGetFailedJobs(params?: {
 }) {
     return useQuery({
         queryKey: failedJobsQueryKey(params),
-        queryFn: () => getFailedJobs(params),
+        queryFn: ({signal}) => getFailedJobs(params, signal),
+        ...listQueryOptions,
+        staleTime: 15_000,
     })
 }
 

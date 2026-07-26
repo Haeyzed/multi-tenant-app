@@ -3,8 +3,8 @@
 import {ClockIcon, GlobeIcon, LanguagesIcon, MapIcon,} from "lucide-react"
 
 import {Skeleton} from "@/components/ui/skeleton"
-import {MetricCard} from "@/features/central/dashboard/components/metric-card"
-import {formatCompactNumber} from "@/features/central/dashboard/lib/format"
+import {MetricCard} from "@/features/central/shared/components/metric-card"
+import {formatCompactNumber} from "@/features/central/shared/lib/format"
 import {useWorldStatistics} from "@/features/central/world/hooks/use-world-query"
 import {useQueryErrorToast} from "@/hooks/use-query-error-toast"
 

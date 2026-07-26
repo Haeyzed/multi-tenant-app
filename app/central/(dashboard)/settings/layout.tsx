@@ -8,9 +8,9 @@ import {Search} from "@/components/search"
 import {ThemeSwitch} from "@/components/theme-switch"
 import {Separator} from "@/components/ui/separator"
 import {CentralAuthGuard} from "@/features/central/auth/components/auth-guard"
-import {permissions} from "@/features/central/auth/components/permissions"
+import {permissions} from "@/features/central/auth/permissions"
 import {SettingsSidebarNav} from "@/features/central/settings/components/settings-sidebar-nav"
-import {ProfileDropdown} from "@/features/central/shell/profile-dropdown"
+import {ProfileDropdown} from "@/features/central/shell/components/profile-dropdown"
 
 export default function SettingsLayout({
                                            children,

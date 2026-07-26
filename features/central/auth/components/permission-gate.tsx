@@ -5,14 +5,12 @@ import {LockIcon} from "lucide-react"
 
 import {Badge} from "@/components/ui/badge"
 import {useCentralAuth} from "@/lib/providers/central-auth-provider"
-import {Permission} from "@/features/central/auth/components/permissions";
+import {Permission} from "@/features/central/auth/permissions";
 
 type PermissionGateProps = {
     permissions: Permission | Permission[]
     children: React.ReactNode
-    /** Optional custom UI to render when access is denied. */
     fallback?: React.ReactNode
-    /** If true, user must have ALL listed permissions. If false (default), ANY permission grants access. */
     requireAll?: boolean
 }
 
@@ -39,7 +37,6 @@ export function PermissionGate({
     const {hasPermission, isSuperAdmin} = useCentralAuth()
     const required = Array.isArray(permissions) ? permissions : [permissions]
 
-    // Uses .some() for OR checks (default), .every() for AND checks
     const canAccess =
         isSuperAdmin ||
         (requireAll ? required.every(hasPermission) : required.some(hasPermission))

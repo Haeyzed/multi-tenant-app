@@ -38,15 +38,18 @@ function toPayload(values: StoreTenantFormValues | UpdateTenantFormValues) {
   return payload
 }
 
-export async function getTenants(params?: {
-  search?: string
-  status?: string
-  per_page?: number
-  page?: number
-}): Promise<PaginatedTenants> {
+export async function getTenants(
+  params?: {
+    search?: string
+    status?: string
+    per_page?: number
+    page?: number
+  },
+  signal?: AbortSignal
+): Promise<PaginatedTenants> {
   const response = await centralApiClient.get<
     ApiEnvelope<Tenant[]> & { meta?: PaginatedMeta }
-  >("/tenants", params)
+  >("/tenants", params, { signal })
 
   return {
     data: response.data,

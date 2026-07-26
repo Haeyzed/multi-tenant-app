@@ -10,6 +10,7 @@ import {
     sendInvoicePaymentLink,
     voidInvoice,
 } from "@/lib/services/central/invoice-service"
+import {listQueryOptions} from "@/lib/query/query-options"
 
 export const invoicesQueryKey = (params?: Record<string, unknown>) =>
     ["central", "invoices", params ?? {}] as const
@@ -36,7 +37,8 @@ export function useGetInvoices(params?: {
 }) {
     return useQuery({
         queryKey: invoicesQueryKey(params),
-        queryFn: () => getInvoices(params),
+        queryFn: ({signal}) => getInvoices(params, signal),
+        ...listQueryOptions,
     })
 }
 

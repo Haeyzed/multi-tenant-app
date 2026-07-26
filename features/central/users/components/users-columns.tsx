@@ -7,7 +7,7 @@ import {DataTableColumnHeader} from "@/components/data-table/data-table-column-h
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar"
 import {Badge} from "@/components/ui/badge"
 import {Checkbox} from "@/components/ui/checkbox"
-import {DataTableRowActions} from "@/features/central/users/components/data-table-row-actions"
+import {DataTableRowActions} from "@/features/central/users/components/users-row-actions"
 import type {CentralUser, UserStatus} from "@/types/central/user"
 
 const statusVariantMap: Record<

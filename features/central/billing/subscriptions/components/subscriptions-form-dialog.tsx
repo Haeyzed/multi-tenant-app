@@ -35,10 +35,12 @@ import {useCountryOptions} from "@/features/central/world/hooks/use-world-query"
 import {handleFormApiError} from "@/lib/form-api-errors"
 import {getPlans} from "@/lib/services/central/plan-service"
 import {getTenantOptions} from "@/lib/services/central/tenant-service"
+import {catalogQueryOptions} from "@/lib/query/query-options"
 import {toastApiSuccess} from "@/lib/toast-api"
 import type {Plan, PlanPrice} from "@/types/central/plan"
 import type {CountryOption} from "@/types/central/world"
 import {PermissionGate} from "@/features/central/auth/components/permission-gate"
+import {permissions} from "@/features/central/auth/permissions"
 
 type SubscriptionsFormDialogProps = {
     open: boolean
@@ -75,6 +77,7 @@ export function SubscriptionsFormDialog({
         queryKey: ["central", "tenants", "options"],
         queryFn: () => getTenantOptions(),
         enabled: open,
+        ...catalogQueryOptions,
     })
 
     const {data: plans = []} = useQuery({
@@ -82,6 +85,7 @@ export function SubscriptionsFormDialog({
         queryFn: () => getPlans({status: "active", per_page: 100}),
         enabled: open,
         select: (result) => result.data as Plan[],
+        ...catalogQueryOptions,
     })
 
     const form = useForm<StoreSubscriptionFormValues>({
@@ -385,7 +389,7 @@ export function SubscriptionsFormDialog({
                     <ResponsiveDialogClose
                         render={<Button variant="outline">Cancel</Button>}
                     />
-                    <PermissionGate permissions="subscriptions.create">
+                    <PermissionGate permissions={[permissions.subscriptions.create]}>
                         <Button
                             type="submit"
                             form="subscription-form"

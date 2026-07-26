@@ -4,8 +4,8 @@ import {type ColumnDef} from "@tanstack/react-table"
 
 import {DataTableColumnHeader} from "@/components/data-table/data-table-column-header"
 import {Badge} from "@/components/ui/badge"
-import {DataTableRowActions} from "@/features/central/monitoring/components/data-table-row-actions"
-import {formatRelativeTime} from "@/features/central/dashboard/lib/format"
+import {DataTableRowActions} from "@/features/central/monitoring/components/failed-jobs-row-actions"
+import {formatRelativeTime} from "@/features/central/shared/lib/format"
 import type {FailedJob} from "@/types/central/monitoring"
 
 export const columns: ColumnDef<FailedJob>[] = [

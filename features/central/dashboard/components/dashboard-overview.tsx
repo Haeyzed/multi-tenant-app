@@ -1,14 +1,30 @@
 "use client"
 
 import {Building2Icon, CreditCardIcon, TrendingUpIcon, UsersIcon,} from "lucide-react"
+import dynamic from "next/dynamic"
 
 import {Skeleton} from "@/components/ui/skeleton"
-import {DashboardChartsPanel} from "@/features/central/dashboard/components/dashboard-charts"
-import {MetricCard} from "@/features/central/dashboard/components/metric-card"
+import {MetricCard} from "@/features/central/shared/components/metric-card"
 import {PlatformHealthCard} from "@/features/central/dashboard/components/platform-health"
 import {useDashboardCharts, useDashboardOverview,} from "@/features/central/dashboard/hooks/use-dashboard-query"
-import {formatCompactNumber, formatMoney, formatPercent,} from "@/features/central/dashboard/lib/format"
+import {formatCompactNumber, formatMoney, formatPercent,} from "@/features/central/shared/lib/format"
 import {useQueryErrorToast} from "@/hooks/use-query-error-toast"
+
+const DashboardChartsPanel = dynamic(
+    () =>
+        import("@/features/central/dashboard/components/dashboard-charts").then(
+            (mod) => mod.DashboardChartsPanel
+        ),
+    {
+        ssr: false,
+        loading: () => (
+            <div className="grid gap-4 lg:grid-cols-2">
+                <Skeleton className="h-72 rounded-xl"/>
+                <Skeleton className="h-72 rounded-xl"/>
+            </div>
+        ),
+    }
+)
 
 export function DashboardOverview() {
     const overviewQuery = useDashboardOverview()

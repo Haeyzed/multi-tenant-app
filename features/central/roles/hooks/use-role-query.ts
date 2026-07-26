@@ -11,6 +11,7 @@ import {
     syncRolePermissions,
     updateRole,
 } from "@/lib/services/central/rbac-service"
+import {catalogQueryOptions} from "@/lib/query/query-options"
 
 export {
     useGetPermissionMatrix,
@@ -30,8 +31,9 @@ export const roleStatisticsQueryKey = () =>
 export function useGetRoles(enabled = true) {
     return useQuery({
         queryKey: rolesQueryKey({per_page: 100}),
-        queryFn: () => getRoles({per_page: 100}),
+        queryFn: ({signal}) => getRoles({per_page: 100}, signal),
         enabled,
+        ...catalogQueryOptions,
     })
 }
 

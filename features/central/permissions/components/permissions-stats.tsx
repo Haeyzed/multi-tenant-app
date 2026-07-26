@@ -4,9 +4,9 @@ import {LayersIcon, ListIcon, LockIcon, ShieldIcon,} from "lucide-react"
 
 import {Skeleton} from "@/components/ui/skeleton"
 import {PermissionGate} from "@/features/central/auth/components/permission-gate"
-import {permissions} from "@/features/central/auth/components/permissions"
-import {MetricCard} from "@/features/central/dashboard/components/metric-card"
-import {formatCompactNumber} from "@/features/central/dashboard/lib/format"
+import {permissions} from "@/features/central/auth/permissions"
+import {MetricCard} from "@/features/central/shared/components/metric-card"
+import {formatCompactNumber} from "@/features/central/shared/lib/format"
 import {useGetPermissionStatistics} from "@/features/central/permissions/hooks/use-permission-query"
 import {useQueryErrorToast} from "@/hooks/use-query-error-toast"
 

@@ -30,16 +30,19 @@ function toPayload(values: StoreFeatureFormValues | UpdateFeatureFormValues) {
   }
 }
 
-export async function getFeatures(params?: {
-  search?: string
-  status?: string
-  category_id?: number
-  per_page?: number
-  page?: number
-}): Promise<PaginatedFeatures> {
+export async function getFeatures(
+  params?: {
+    search?: string
+    status?: string
+    category_id?: number
+    per_page?: number
+    page?: number
+  },
+  signal?: AbortSignal
+): Promise<PaginatedFeatures> {
   const response = await centralApiClient.get<
     ApiEnvelope<Feature[]> & { meta?: PaginatedMeta }
-  >("/features", params)
+  >("/features", params, { signal })
 
   return {
     data: response.data,

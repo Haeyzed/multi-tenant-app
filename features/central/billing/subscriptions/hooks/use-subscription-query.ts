@@ -17,6 +17,7 @@ import {
     resumeSubscription,
     upgradeSubscription,
 } from "@/lib/services/central/subscription-service"
+import {listQueryOptions} from "@/lib/query/query-options"
 
 export const subscriptionsQueryKey = (params?: Record<string, unknown>) =>
     ["central", "subscriptions", params ?? {}] as const
@@ -49,7 +50,8 @@ export function useGetSubscriptions(params?: {
 }) {
     return useQuery({
         queryKey: subscriptionsQueryKey(params),
-        queryFn: () => getSubscriptions(params),
+        queryFn: ({signal}) => getSubscriptions(params, signal),
+        ...listQueryOptions,
     })
 }
 

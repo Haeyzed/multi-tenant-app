@@ -46,11 +46,13 @@ import {
     updateState,
     updateTimezone,
 } from "@/lib/services/central/world-service"
+import {catalogQueryOptions, listQueryOptions} from "@/lib/query/query-options"
 
 export function useCountries(params?: { search?: string; status?: number }) {
     return useQuery({
         queryKey: ["central", "world", "countries", params ?? {}],
         queryFn: () => getCountries(params),
+        ...catalogQueryOptions,
     })
 }
 
@@ -58,6 +60,7 @@ export function useCountryOptions(search?: string) {
     return useQuery({
         queryKey: ["central", "world", "country-options", search ?? ""],
         queryFn: () => getCountryOptions(search),
+        ...catalogQueryOptions,
     })
 }
 
@@ -65,7 +68,7 @@ export function useCurrencyOptions(search?: string) {
     return useQuery({
         queryKey: ["central", "world", "currency-options", search ?? ""],
         queryFn: () => getCurrencyOptions(search),
-        staleTime: 5 * 60 * 1000,
+        ...catalogQueryOptions,
     })
 }
 
@@ -147,7 +150,7 @@ export function useCountrySelectOptions(search?: string) {
     return useQuery({
         queryKey: worldAdminQueryKey("countries", {options: true, search}),
         queryFn: () => getAdminCountryOptions(search),
-        staleTime: 5 * 60 * 1000,
+        ...catalogQueryOptions,
     })
 }
 
@@ -160,7 +163,7 @@ export function useStateSelectOptions(countryId?: number, search?: string) {
         }),
         queryFn: () => getAdminStateOptions(countryId as number, search),
         enabled: !!countryId,
-        staleTime: 5 * 60 * 1000,
+        ...catalogQueryOptions,
     })
 }
 
@@ -173,7 +176,8 @@ export function useGetPaginatedCountries(params?: {
 }) {
     return useQuery({
         queryKey: worldAdminQueryKey("countries", params),
-        queryFn: () => getPaginatedCountries(params),
+        queryFn: ({signal}) => getPaginatedCountries(params, signal),
+        ...listQueryOptions,
     })
 }
 
@@ -210,7 +214,8 @@ export function useGetPaginatedStates(params?: {
 }) {
     return useQuery({
         queryKey: worldAdminQueryKey("states", params),
-        queryFn: () => getPaginatedStates(params),
+        queryFn: ({signal}) => getPaginatedStates(params, signal),
+        ...listQueryOptions,
     })
 }
 
@@ -248,7 +253,8 @@ export function useGetPaginatedCities(params?: {
 }) {
     return useQuery({
         queryKey: worldAdminQueryKey("cities", params),
-        queryFn: () => getPaginatedCities(params),
+        queryFn: ({signal}) => getPaginatedCities(params, signal),
+        ...listQueryOptions,
     })
 }
 
@@ -285,7 +291,8 @@ export function useGetPaginatedCurrencies(params?: {
 }) {
     return useQuery({
         queryKey: worldAdminQueryKey("currencies", params),
-        queryFn: () => getPaginatedCurrencies(params),
+        queryFn: ({signal}) => getPaginatedCurrencies(params, signal),
+        ...listQueryOptions,
     })
 }
 
@@ -322,7 +329,8 @@ export function useGetPaginatedTimezones(params?: {
 }) {
     return useQuery({
         queryKey: worldAdminQueryKey("timezones", params),
-        queryFn: () => getPaginatedTimezones(params),
+        queryFn: ({signal}) => getPaginatedTimezones(params, signal),
+        ...listQueryOptions,
     })
 }
 
@@ -359,7 +367,8 @@ export function useGetPaginatedLanguages(params?: {
 }) {
     return useQuery({
         queryKey: worldAdminQueryKey("languages", params),
-        queryFn: () => getPaginatedLanguages(params),
+        queryFn: ({signal}) => getPaginatedLanguages(params, signal),
+        ...listQueryOptions,
     })
 }
 

@@ -11,6 +11,7 @@ import {
     getPermissionStatistics,
     updatePermission,
 } from "@/lib/services/central/rbac-service"
+import {catalogQueryOptions, listQueryOptions} from "@/lib/query/query-options"
 
 export const permissionsQueryKey = () => ["central", "permissions"] as const
 
@@ -31,6 +32,7 @@ export function useGetPermissions(enabled = true) {
         queryKey: permissionsGroupedQueryKey(),
         queryFn: getPermissions,
         enabled,
+        ...catalogQueryOptions,
     })
 }
 
@@ -42,7 +44,8 @@ export function useGetPaginatedPermissions(params?: {
 }) {
     return useQuery({
         queryKey: permissionsListQueryKey(params),
-        queryFn: () => getPaginatedPermissions(params),
+        queryFn: ({signal}) => getPaginatedPermissions(params, signal),
+        ...listQueryOptions,
     })
 }
 

@@ -1,4 +1,10 @@
+import type { Metadata } from "next"
 import {PublicInvoiceClient} from "@/features/central/billing/invoices/components/public-invoice-client"
+
+export const metadata: Metadata = {
+  title: "Invoice",
+  description: "View and pay your invoice.",
+}
 
 type PublicInvoicePageProps = {
     params: Promise<{ invoiceId: string }>

@@ -6,7 +6,7 @@ import {PauseCircle, PlayCircle, Trash2} from "lucide-react"
 
 import {ActionBar, ActionBarClose, ActionBarGroup, ActionBarItem, ActionBarSelection,} from "@/components/ui/action-bar"
 import {PermissionGate} from "@/features/central/auth/components/permission-gate"
-import {permissions} from "@/features/central/auth/components/permissions"
+import {permissions} from "@/features/central/auth/permissions"
 import {useUsers} from "@/features/central/users/components/users-provider"
 import type {CentralUser} from "@/types/central/user"
 

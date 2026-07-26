@@ -38,16 +38,19 @@ function toPayload(values: StoreUserFormValues | UpdateUserFormValues) {
   return payload
 }
 
-export async function getUsers(params?: {
-  search?: string
-  status?: string
-  role?: string
-  per_page?: number
-  page?: number
-}): Promise<PaginatedUsers> {
+export async function getUsers(
+  params?: {
+    search?: string
+    status?: string
+    role?: string
+    per_page?: number
+    page?: number
+  },
+  signal?: AbortSignal
+): Promise<PaginatedUsers> {
   const response = await centralApiClient.get<
     ApiEnvelope<CentralUser[]> & { meta?: PaginatedMeta }
-  >("/users", params)
+  >("/users", params, { signal })
 
   return {
     data: response.data,

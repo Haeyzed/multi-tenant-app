@@ -11,6 +11,7 @@ import {
     getFeatureCategoryOptions,
     updateFeatureCategory,
 } from "@/lib/services/central/feature-category-service"
+import {catalogQueryOptions} from "@/lib/query/query-options"
 
 export const featureCategoriesQueryKey = () =>
     ["central", "feature-categories"] as const
@@ -29,15 +30,17 @@ function invalidateFeatureCategoryQueries(
 export function useGetFeatureCategories() {
     return useQuery({
         queryKey: featureCategoriesQueryKey(),
-        queryFn: () => getFeatureCategories(),
+        queryFn: ({signal}) => getFeatureCategories(signal),
+        ...catalogQueryOptions,
     })
 }
 
 export function useGetFeatureCategoryOptions(enabled = true) {
     return useQuery({
         queryKey: featureCategoryOptionsQueryKey(),
-        queryFn: () => getFeatureCategoryOptions(),
+        queryFn: ({signal}) => getFeatureCategoryOptions(signal),
         enabled,
+        ...catalogQueryOptions,
     })
 }
 

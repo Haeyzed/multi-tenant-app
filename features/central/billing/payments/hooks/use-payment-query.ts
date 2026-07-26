@@ -1,6 +1,7 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query"
 
 import {getPayment, getPayments, getPaymentStatistics, refundPayment,} from "@/lib/services/central/payment-service"
+import {listQueryOptions} from "@/lib/query/query-options"
 
 export const paymentsQueryKey = (params?: Record<string, unknown>) =>
     ["central", "payments", params ?? {}] as const
@@ -27,7 +28,8 @@ export function useGetPayments(params?: {
 }) {
     return useQuery({
         queryKey: paymentsQueryKey(params),
-        queryFn: () => getPayments(params),
+        queryFn: ({signal}) => getPayments(params, signal),
+        ...listQueryOptions,
     })
 }
 

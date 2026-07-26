@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/responsive-dialog"
 import {Spinner} from "@/components/ui/spinner"
 import {PermissionGate} from "@/features/central/auth/components/permission-gate"
-import {permissions} from "@/features/central/auth/components/permissions"
+import {permissions} from "@/features/central/auth/permissions"
 import {useCreatePermission, useUpdatePermission,} from "@/features/central/permissions/hooks/use-permission-query"
 import {
   type StorePermissionFormValues,

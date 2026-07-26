@@ -5,7 +5,7 @@ import {centralApiClient} from "@/lib/api/central-client"
 import {centralRoutes} from "@/features/central/shell/routes"
 import {useRouter} from "next/navigation"
 import {useEffect} from "react"
-import {Permission} from "@/features/central/auth/components/permissions";
+import {Permission} from "@/features/central/auth/permissions";
 
 export function CentralAuthGuard({
                                      children,

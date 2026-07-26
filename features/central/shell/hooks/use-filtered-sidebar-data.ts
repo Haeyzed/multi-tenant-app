@@ -3,7 +3,7 @@
 import {useMemo} from "react"
 import {useCentralAuth} from "@/lib/providers/central-auth-provider"
 import type {NavCollapsible, NavItem, NavLink, SidebarData,} from "@/components/layout/types"
-import type {Permission} from "@/features/central/auth/components/permissions";
+import type {Permission} from "@/features/central/auth/permissions";
 
 export function useFilteredSidebarData(data: SidebarData): SidebarData {
     const {hasPermission, isSuperAdmin} = useCentralAuth()

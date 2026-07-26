@@ -6,7 +6,7 @@ import {Search} from "lucide-react"
 import {DataTableColumnHeader} from "@/components/data-table/data-table-column-header"
 import {Badge} from "@/components/ui/badge"
 import {Checkbox} from "@/components/ui/checkbox"
-import {DataTableRowActions} from "@/features/central/roles/components/data-table-row-actions"
+import {DataTableRowActions} from "@/features/central/roles/components/roles-row-actions"
 import type {CentralRole} from "@/types/central/rbac"
 
 const SUPER_ADMIN_ROLE = "super-admin"

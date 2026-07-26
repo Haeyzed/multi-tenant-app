@@ -5,7 +5,7 @@ import {
 import type {
   StorePlanFormValues,
   UpdatePlanFormValues,
-} from "@/features/central/plans/schemas"
+} from "@/features/central/billing/plans/schemas"
 import type {
   PaginatedMeta,
   PaginatedPlans,
@@ -57,16 +57,19 @@ export async function getPlan(id: number): Promise<Plan> {
   return response.data
 }
 
-export async function getPlans(params?: {
-  search?: string
-  status?: string
-  visibility?: string
-  per_page?: number
-  page?: number
-}): Promise<PaginatedPlans> {
+export async function getPlans(
+  params?: {
+    search?: string
+    status?: string
+    visibility?: string
+    per_page?: number
+    page?: number
+  },
+  signal?: AbortSignal
+): Promise<PaginatedPlans> {
   const response = await centralApiClient.get<
     ApiEnvelope<Plan[]> & { meta?: PaginatedMeta }
-  >("/plans", params)
+  >("/plans", params, { signal })
 
   return {
     data: response.data,
