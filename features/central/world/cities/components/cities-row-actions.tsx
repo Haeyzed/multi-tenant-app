@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import {PermissionGate} from "@/features/central/auth/components/permission-gate"
 import {permissions} from "@/features/central/auth/permissions"
-import {useCitiesContext} from "@/features/central/world/cities/components/cities-provider"
+import {useCities} from "@/features/central/world/cities/components/cities-provider"
 import type {City} from "@/types/central/world"
 
 type DataTableRowActionsProps<TData> = {
@@ -24,7 +24,7 @@ export function DataTableRowActions<TData>({
                                                row,
                                            }: DataTableRowActionsProps<TData>) {
     const city = row.original as City
-    const {setOpen, setCurrentRow} = useCitiesContext()
+    const {setOpen, setCurrentRow} = useCities()
 
     return (
         <DropdownMenu>

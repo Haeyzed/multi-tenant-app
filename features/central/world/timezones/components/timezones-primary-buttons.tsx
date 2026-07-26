@@ -5,10 +5,10 @@ import {LockIcon, Plus} from "lucide-react"
 import {Button} from "@/components/ui/button"
 import {PermissionGate} from "@/features/central/auth/components/permission-gate"
 import {permissions} from "@/features/central/auth/permissions"
-import {useTimezonesContext} from "@/features/central/world/timezones/components/timezones-provider"
+import {useTimezones} from "@/features/central/world/timezones/components/timezones-provider"
 
 export function TimezonesPrimaryButtons() {
-    const {setOpen} = useTimezonesContext()
+    const {setOpen} = useTimezones()
 
     return (
         <PermissionGate

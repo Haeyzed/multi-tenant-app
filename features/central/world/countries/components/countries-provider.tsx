@@ -33,13 +33,11 @@ export function CountriesProvider({
     )
 }
 
-export function useCountriesContext() {
+export function useCountries() {
     const context = React.useContext(CountriesContext)
 
     if (!context) {
-        throw new Error(
-            "useCountriesContext has to be used within <CountriesProvider>"
-        )
+        throw new Error("useCountries has to be used within <CountriesProvider>")
     }
 
     return context

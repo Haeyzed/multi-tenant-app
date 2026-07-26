@@ -33,13 +33,11 @@ export function TimezonesProvider({
     )
 }
 
-export function useTimezonesContext() {
+export function useTimezones() {
     const context = React.useContext(TimezonesContext)
 
     if (!context) {
-        throw new Error(
-            "useTimezonesContext has to be used within <TimezonesProvider>"
-        )
+        throw new Error("useTimezones has to be used within <TimezonesProvider>")
     }
 
     return context

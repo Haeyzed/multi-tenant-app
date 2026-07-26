@@ -5,7 +5,7 @@ export const storeFeatureCategorySchema = z.object({
     slug: z.string().optional(),
     description: z.string().optional(),
     icon: z.string().optional(),
-    sort_order: z.coerce.number().int().min(0),
+    sort_order: z.number().int().min(0),
     is_active: z.boolean(),
 })
 

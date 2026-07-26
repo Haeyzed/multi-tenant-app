@@ -27,11 +27,11 @@ export function CitiesProvider({children}: { children: React.ReactNode }) {
     )
 }
 
-export function useCitiesContext() {
+export function useCities() {
     const context = React.useContext(CitiesContext)
 
     if (!context) {
-        throw new Error("useCitiesContext has to be used within <CitiesProvider>")
+        throw new Error("useCities has to be used within <CitiesProvider>")
     }
 
     return context

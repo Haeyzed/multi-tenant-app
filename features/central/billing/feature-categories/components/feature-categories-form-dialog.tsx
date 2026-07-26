@@ -218,7 +218,9 @@ export function FeatureCategoriesFormDialog({
                                     <Input
                                         type="number"
                                         min="0"
-                                        {...form.register("sort_order")}
+                                        {...form.register("sort_order", {
+                                            valueAsNumber: true,
+                                        })}
                                     />
                                 </FieldContent>
                             </Field>

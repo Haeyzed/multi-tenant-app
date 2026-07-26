@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import {PermissionGate} from "@/features/central/auth/components/permission-gate"
 import {permissions} from "@/features/central/auth/permissions"
-import {useTimezonesContext} from "@/features/central/world/timezones/components/timezones-provider"
+import {useTimezones} from "@/features/central/world/timezones/components/timezones-provider"
 import type {Timezone} from "@/types/central/world"
 
 type DataTableRowActionsProps<TData> = {
@@ -24,7 +24,7 @@ export function DataTableRowActions<TData>({
                                                row,
                                            }: DataTableRowActionsProps<TData>) {
     const timezone = row.original as Timezone
-    const {setOpen, setCurrentRow} = useTimezonesContext()
+    const {setOpen, setCurrentRow} = useTimezones()
 
     return (
         <DropdownMenu>

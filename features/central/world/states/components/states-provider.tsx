@@ -27,11 +27,11 @@ export function StatesProvider({children}: { children: React.ReactNode }) {
     )
 }
 
-export function useStatesContext() {
+export function useStates() {
     const context = React.useContext(StatesContext)
 
     if (!context) {
-        throw new Error("useStatesContext has to be used within <StatesProvider>")
+        throw new Error("useStates has to be used within <StatesProvider>")
     }
 
     return context

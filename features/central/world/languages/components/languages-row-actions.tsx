@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import {PermissionGate} from "@/features/central/auth/components/permission-gate"
 import {permissions} from "@/features/central/auth/permissions"
-import {useLanguagesContext} from "@/features/central/world/languages/components/languages-provider"
+import {useLanguages} from "@/features/central/world/languages/components/languages-provider"
 import type {Language} from "@/types/central/world"
 
 type DataTableRowActionsProps<TData> = {
@@ -24,7 +24,7 @@ export function DataTableRowActions<TData>({
                                                row,
                                            }: DataTableRowActionsProps<TData>) {
     const language = row.original as Language
-    const {setOpen, setCurrentRow} = useLanguagesContext()
+    const {setOpen, setCurrentRow} = useLanguages()
 
     return (
         <DropdownMenu>

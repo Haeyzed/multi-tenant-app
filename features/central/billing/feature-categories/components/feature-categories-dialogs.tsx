@@ -1,135 +1,99 @@
 "use client"
 
-import * as React from "react"
-
-import {Button} from "@/components/ui/button"
 import {
-    ResponsiveDialog,
-    ResponsiveDialogClose,
-    ResponsiveDialogContent,
-    ResponsiveDialogDescription,
-    ResponsiveDialogFooter,
-    ResponsiveDialogHeader,
-    ResponsiveDialogTitle,
-} from "@/components/ui/responsive-dialog"
-import {Spinner} from "@/components/ui/spinner"
-import {
-    FeatureCategoriesFormDialog
+  FeatureCategoriesFormDialog
 } from "@/features/central/billing/feature-categories/components/feature-categories-form-dialog"
 import {
-    useFeatureCategories
+  useFeatureCategories
 } from "@/features/central/billing/feature-categories/components/feature-categories-provider"
 import {
-    FeatureCategoriesViewDialog
+  FeatureCategoriesViewDialog
 } from "@/features/central/billing/feature-categories/components/feature-categories-view-dialog"
-import {useDeleteFeatureCategory} from "@/features/central/billing/feature-categories/hooks/use-feature-category-query"
-import {toastApiError, toastApiSuccess} from "@/lib/toast-api"
+import { useDeleteFeatureCategory } from "@/features/central/billing/feature-categories/hooks/use-feature-category-query"
+import { ConfirmActionDialog } from "@/features/central/shared/components/confirm-action-dialog"
+import { useEntityDialogClose } from "@/features/central/shared/use-entity-dialog-close"
+import { toastApiError, toastApiSuccess } from "@/lib/toast-api"
 
 export function FeatureCategoriesDialogs() {
-    const {open, setOpen, currentRow, setCurrentRow} = useFeatureCategories()
-    const deleteFeatureCategory = useDeleteFeatureCategory()
-    const [isSubmitting, setIsSubmitting] = React.useState(false)
+  const { open, setOpen, currentRow, setCurrentRow } = useFeatureCategories()
+  const deleteFeatureCategory = useDeleteFeatureCategory()
+  const handleClose = useEntityDialogClose({ setOpen, setCurrentRow })
 
-    const handleClose = React.useCallback(() => {
-        setOpen(null)
-        setTimeout(() => {
-            setCurrentRow(null)
-        }, 300)
-    }, [setOpen, setCurrentRow])
-
-    const runDelete = () => {
-        if (!currentRow) {
-            return
-        }
-
-        setIsSubmitting(true)
-
-        deleteFeatureCategory.mutate(currentRow.id, {
-            onSuccess: (result) => {
-                toastApiSuccess(
-                    result.message,
-                    `Feature category "${currentRow.name}" deleted successfully`
-                )
-                setIsSubmitting(false)
-                handleClose()
-            },
-            onError: (error) => {
-                toastApiError(error, "Failed to delete feature category")
-                setIsSubmitting(false)
-            },
-        })
+  const runDelete = () => {
+    if (!currentRow) {
+      return
     }
 
-    return (
+    deleteFeatureCategory.mutate(currentRow.id, {
+      onSuccess: (result) => {
+        toastApiSuccess(
+          result.message,
+          `Feature category "${currentRow.name}" deleted successfully`
+        )
+        handleClose()
+      },
+      onError: (error) => {
+        toastApiError(error, "Failed to delete feature category")
+      },
+    })
+  }
+
+  return (
+    <>
+      <FeatureCategoriesFormDialog
+        open={open === "create"}
+        onOpenChange={(val) => {
+          if (!val) {
+            setOpen(null)
+          }
+        }}
+      />
+
+      {currentRow ? (
         <>
-            <FeatureCategoriesFormDialog
-                open={open === "create"}
-                onOpenChange={(val) => {
-                    if (!val) {
-                        setOpen(null)
-                    }
-                }}
-            />
+          <FeatureCategoriesFormDialog
+            key={`feature-category-update-${currentRow.id}`}
+            open={open === "update"}
+            onOpenChange={(val) => {
+              if (!val) {
+                handleClose()
+              }
+            }}
+            currentRow={currentRow}
+          />
 
-            {currentRow ? (
-                <>
-                    <FeatureCategoriesFormDialog
-                        key={`feature-category-update-${currentRow.id}`}
-                        open={open === "update"}
-                        onOpenChange={(val) => {
-                            if (!val) {
-                                handleClose()
-                            }
-                        }}
-                        currentRow={currentRow}
-                    />
+          <FeatureCategoriesViewDialog
+            key={`feature-category-view-${currentRow.id}`}
+            open={open === "view"}
+            onOpenChange={(val) => {
+              if (!val) {
+                handleClose()
+              }
+            }}
+            category={currentRow}
+          />
 
-                    <FeatureCategoriesViewDialog
-                        key={`feature-category-view-${currentRow.id}`}
-                        open={open === "view"}
-                        onOpenChange={(val) => {
-                            if (!val) {
-                                handleClose()
-                            }
-                        }}
-                        category={currentRow}
-                    />
-
-                    <ResponsiveDialog
-                        open={open === "delete"}
-                        onOpenChange={(val) => {
-                            if (!val) {
-                                handleClose()
-                            }
-                        }}
-                    >
-                        <ResponsiveDialogContent className="sm:max-w-md">
-                            <ResponsiveDialogHeader>
-                                <ResponsiveDialogTitle>
-                                    Delete feature category
-                                </ResponsiveDialogTitle>
-                                <ResponsiveDialogDescription>
-                                    Delete <strong>{currentRow.name}</strong>? Categories with
-                                    assigned features cannot be deleted.
-                                </ResponsiveDialogDescription>
-                            </ResponsiveDialogHeader>
-                            <ResponsiveDialogFooter>
-                                <ResponsiveDialogClose
-                                    render={<Button variant="outline">Cancel</Button>}
-                                />
-                                <Button
-                                    variant="destructive"
-                                    disabled={isSubmitting}
-                                    onClick={runDelete}
-                                >
-                                    {isSubmitting ? <Spinner/> : null}
-                                    Delete
-                                </Button>
-                            </ResponsiveDialogFooter>
-                        </ResponsiveDialogContent>
-                    </ResponsiveDialog>
-                </>
-            ) : null}
+          <ConfirmActionDialog
+            open={open === "delete"}
+            onOpenChange={(val) => {
+              if (!val) {
+                handleClose()
+              }
+            }}
+            title="Delete feature category"
+            description={
+              <>
+                Delete <strong>{currentRow.name}</strong>? Categories with
+                assigned features cannot be deleted.
+              </>
+            }
+            confirmLabel="Delete"
+            variant="destructive"
+            isPending={deleteFeatureCategory.isPending}
+            onConfirm={runDelete}
+          />
         </>
-    )
+      ) : null}
+    </>
+  )
 }

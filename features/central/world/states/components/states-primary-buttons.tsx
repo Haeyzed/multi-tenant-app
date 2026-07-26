@@ -5,10 +5,10 @@ import {LockIcon, Plus} from "lucide-react"
 import {Button} from "@/components/ui/button"
 import {PermissionGate} from "@/features/central/auth/components/permission-gate"
 import {permissions} from "@/features/central/auth/permissions"
-import {useStatesContext} from "@/features/central/world/states/components/states-provider"
+import {useStates} from "@/features/central/world/states/components/states-provider"
 
 export function StatesPrimaryButtons() {
-    const {setOpen} = useStatesContext()
+    const {setOpen} = useStates()
 
     return (
         <PermissionGate

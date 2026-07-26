@@ -33,13 +33,11 @@ export function LanguagesProvider({
     )
 }
 
-export function useLanguagesContext() {
+export function useLanguages() {
     const context = React.useContext(LanguagesContext)
 
     if (!context) {
-        throw new Error(
-            "useLanguagesContext has to be used within <LanguagesProvider>"
-        )
+        throw new Error("useLanguages has to be used within <LanguagesProvider>")
     }
 
     return context

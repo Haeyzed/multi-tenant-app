@@ -35,13 +35,11 @@ export function CurrenciesProvider({
     )
 }
 
-export function useCurrenciesContext() {
+export function useCurrencies() {
     const context = React.useContext(CurrenciesContext)
 
     if (!context) {
-        throw new Error(
-            "useCurrenciesContext has to be used within <CurrenciesProvider>"
-        )
+        throw new Error("useCurrencies has to be used within <CurrenciesProvider>")
     }
 
     return context

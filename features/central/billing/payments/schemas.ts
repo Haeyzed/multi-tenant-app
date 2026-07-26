@@ -1,7 +1,7 @@
 import {z} from "zod"
 
 export const refundPaymentSchema = z.object({
-    amount: z.coerce.number().positive().optional(),
+    amount: z.number().positive().optional(),
     reason: z.string().optional(),
 })
 

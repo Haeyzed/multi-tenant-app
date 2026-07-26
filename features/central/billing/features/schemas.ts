@@ -16,11 +16,11 @@ export const storeFeatureSchema = z.object({
         "periodic",
         "boolean",
     ]),
-    default_limit_value: z.coerce.number().int().min(0).nullable().optional(),
+    default_limit_value: z.number().int().min(0).nullable().optional(),
     unit: z.string().optional(),
     is_available: z.boolean(),
     tracks_usage: z.boolean(),
-    sort_order: z.coerce.number().int().min(0),
+    sort_order: z.number().int().min(0),
 })
 
 export const updateFeatureSchema = storeFeatureSchema

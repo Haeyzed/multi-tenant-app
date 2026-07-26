@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import {PermissionGate} from "@/features/central/auth/components/permission-gate"
 import {permissions} from "@/features/central/auth/permissions"
-import {useCurrenciesContext} from "@/features/central/world/currencies/components/currencies-provider"
+import {useCurrencies} from "@/features/central/world/currencies/components/currencies-provider"
 import type {Currency} from "@/types/central/world"
 
 type DataTableRowActionsProps<TData> = {
@@ -24,7 +24,7 @@ export function DataTableRowActions<TData>({
                                                row,
                                            }: DataTableRowActionsProps<TData>) {
     const currency = row.original as Currency
-    const {setOpen, setCurrentRow} = useCurrenciesContext()
+    const {setOpen, setCurrentRow} = useCurrencies()
 
     return (
         <DropdownMenu>

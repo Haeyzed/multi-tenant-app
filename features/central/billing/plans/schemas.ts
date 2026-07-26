@@ -1,11 +1,11 @@
 import {z} from "zod"
 
 export const planFeatureAssignmentSchema = z.object({
-    feature_id: z.coerce.number().int().positive(),
+    feature_id: z.number().int().positive(),
     limit_type: z
         .enum(["unlimited", "count", "storage", "bandwidth", "periodic", "boolean"])
         .optional(),
-    limit_value: z.coerce.number().int().min(0).nullable().optional(),
+    limit_value: z.number().int().min(0).nullable().optional(),
     is_unlimited: z.boolean().optional(),
     is_enabled: z.boolean().optional(),
     tracks_usage: z.boolean().optional(),
@@ -28,11 +28,11 @@ export const storePlanSchema = z.object({
         "lifetime",
         "enterprise",
     ]),
-    trial_days: z.coerce.number().int().min(0).max(365),
+    trial_days: z.number().int().min(0).max(365),
     status: z.enum(["draft", "active", "inactive", "archived"]),
     visibility: z.enum(["public", "private", "hidden"]),
     is_featured: z.boolean(),
-    sort_order: z.coerce.number().int().min(0),
+    sort_order: z.number().int().min(0),
     features: z.array(planFeatureAssignmentSchema).optional(),
 })
 
@@ -45,10 +45,10 @@ export type StorePlanFormValues = z.infer<typeof storePlanSchema>
 export type UpdatePlanFormValues = z.infer<typeof updatePlanSchema>
 
 export const planPriceSchema = z.object({
-    amount: z.coerce.number().min(0),
+    amount: z.number().min(0),
     currency: z.string().length(3, {message: "Use a 3-letter currency code."}),
     billing_interval: z.enum(["monthly", "quarterly", "yearly"]),
-    trial_days: z.coerce.number().int().min(0).max(365).nullable().optional(),
+    trial_days: z.number().int().min(0).max(365).nullable().optional(),
     status: z.enum(["draft", "active", "inactive", "archived"]),
 })
 

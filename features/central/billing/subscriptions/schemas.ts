@@ -2,14 +2,14 @@ import {z} from "zod"
 
 export const storeSubscriptionSchema = z.object({
     tenant_id: z.string().min(1, {message: "Tenant is required."}),
-    plan_id: z.coerce.number().int().positive({message: "Plan is required."}),
+    plan_id: z.number().int().positive({message: "Plan is required."}),
     country: z
         .string()
         .length(2, {message: "Please select a country."})
         .toUpperCase()
         .optional()
         .or(z.literal("")),
-    plan_price_id: z.coerce.number().int().positive().nullable().optional(),
+    plan_price_id: z.number().int().positive().nullable().optional(),
     currency: z
         .string()
         .length(3)
@@ -21,23 +21,23 @@ export const storeSubscriptionSchema = z.object({
         .optional()
         .nullable(),
     gateway: z.string().optional(),
-    trial_days: z.coerce.number().int().min(0).nullable().optional(),
+    trial_days: z.number().int().min(0).nullable().optional(),
 })
 
 export const cancelSubscriptionSchema = z.object({
-    immediately: z.boolean().default(false),
+    immediately: z.boolean(),
     reason: z.string().optional(),
 })
 
 export const changeSubscriptionPlanSchema = z.object({
-    plan_id: z.coerce.number().int().positive({message: "Plan is required."}),
+    plan_id: z.number().int().positive({message: "Plan is required."}),
     country: z
         .string()
         .length(2, {message: "Please select a country."})
         .toUpperCase()
         .optional()
         .or(z.literal("")),
-    plan_price_id: z.coerce.number().int().positive().nullable().optional(),
+    plan_price_id: z.number().int().positive().nullable().optional(),
     currency: z
         .string()
         .length(3)
@@ -51,7 +51,7 @@ export const changeSubscriptionPlanSchema = z.object({
 })
 
 export const markPastDueSchema = z.object({
-    grace_days: z.coerce.number().int().min(1).max(30).optional(),
+    grace_days: z.number().int().min(1).max(30).optional(),
 })
 
 export type StoreSubscriptionFormValues = z.infer<
